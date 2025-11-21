@@ -1,0 +1,24 @@
+# robots.txt for Photo Sheet Maker
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://yourwebsite.com/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Disallow crawling of any potential admin or private areas
+# (add these if you create them in the future)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Allow crawling of main assets
+Allow: /*.css
+Allow: /*.js
+Allow: /*.jpg
+Allow: /*.png
+Allow: /*.svg
+Allow: /manifest.json
