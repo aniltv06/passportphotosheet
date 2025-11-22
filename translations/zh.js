@@ -2,6 +2,31 @@
 export default {
     skipToContent: "跳转到主要内容",
     title: "照片页制作器",
+
+    // Navigation - TODO: Translate these keys
+    photoMaker: "Photo Maker",
+    photoEditor: "Photo Editor",
+    help: "Help",
+
+    // Workflow Selector - TODO: Translate these keys
+    chooseWorkflow: "Choose Your Workflow",
+    haveReadyPhoto: "I Have a Ready Photo",
+    readyPhotoDesc: "Upload your 2×2\" passport photo and create a sheet",
+    continueToUpload: "Continue to Upload",
+    needToEdit: "I Need to Edit a Photo",
+    needToEditDesc: "Crop, resize, or remove background first",
+    openPhotoEditor: "Open Photo Editor",
+
+    // Editor Banner - TODO: Translate these keys
+    bannerTitle: "Don't have a 2×2\" photo?",
+    bannerDesc: "Use our Photo Editor to crop, resize, and prepare your photo",
+    tryPhotoEditor: "Try Photo Editor →",
+
+    // Progress Steps - TODO: Translate these keys
+    stepUpload: "Upload",
+    stepCustomize: "Customize",
+    stepDownload: "Download",
+    title: "照片页制作器",
     subtitle: "创建专业的护照照片页，可在世界任何地方打印",
     benefitsTitle: "为什么使用Photo Sheet Maker？",
     benefit1: "上传您的2×2英寸（51×51毫米）护照或身份证照片",

@@ -134,24 +134,14 @@ export function removeClass(element, className) {
 /**
  * Validate image file
  * @param {File} file - File to validate
- * @param {number} maxSize - Maximum file size in MB
  * @returns {Object} Validation result {valid: boolean, error: string}
  */
-export function validateImageFile(file, maxSize = 10) {
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-    const maxBytes = maxSize * 1024 * 1024;
-
-    if (!validTypes.includes(file.type)) {
+export function validateImageFile(file) {
+    // Basic check to ensure it's an image file
+    if (!file.type.startsWith('image/')) {
         return {
             valid: false,
-            error: 'Please upload a JPG or PNG image file.'
-        };
-    }
-
-    if (file.size > maxBytes) {
-        return {
-            valid: false,
-            error: `File size must be less than ${maxSize}MB.`
+            error: 'Please upload an image file.'
         };
     }
 

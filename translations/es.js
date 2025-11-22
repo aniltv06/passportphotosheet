@@ -1,6 +1,31 @@
 // Spanish translations
 export default {
     skipToContent: "Saltar al contenido principal",
+
+    // Navigation
+    photoMaker: "Creador de Hojas",
+    photoEditor: "Editor de Fotos",
+    help: "Ayuda",
+
+    // Workflow Selector
+    chooseWorkflow: "Elige tu flujo de trabajo",
+    haveReadyPhoto: "Tengo una foto lista",
+    readyPhotoDesc: "Sube tu foto de pasaporte de 2×2\" y crea una hoja",
+    continueToUpload: "Continuar a subir",
+    needToEdit: "Necesito editar una foto",
+    needToEditDesc: "Recorta, redimensiona o elimina el fondo primero",
+    openPhotoEditor: "Abrir Editor de Fotos",
+
+    // Editor Banner
+    bannerTitle: "¿No tienes una foto de 2×2\"?",
+    bannerDesc: "Usa nuestro Editor de Fotos para recortar, redimensionar y preparar tu foto",
+    tryPhotoEditor: "Probar Editor de Fotos →",
+
+    // Progress Steps
+    stepUpload: "Subir",
+    stepCustomize: "Personalizar",
+    stepDownload: "Descargar",
+
     title: "Creador de Hojas de Fotos",
     subtitle: "Crea hojas profesionales de fotos de pasaporte para imprimir en cualquier parte del mundo",
     benefitsTitle: "¿Por qué usar Photo Sheet Maker?",

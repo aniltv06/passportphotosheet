@@ -1,6 +1,31 @@
 // English translations
 export default {
     skipToContent: "Skip to main content",
+
+    // Navigation
+    photoMaker: "Photo Maker",
+    photoEditor: "Photo Editor",
+    help: "Help",
+
+    // Workflow Selector
+    chooseWorkflow: "Choose Your Workflow",
+    haveReadyPhoto: "I Have a Ready Photo",
+    readyPhotoDesc: "Upload your 2×2\" passport photo and create a sheet",
+    continueToUpload: "Continue to Upload",
+    needToEdit: "I Need to Edit a Photo",
+    needToEditDesc: "Crop, resize, or rotate first",
+    openPhotoEditor: "Open Photo Editor",
+
+    // Editor Banner
+    bannerTitle: "Don't have a 2×2\" photo?",
+    bannerDesc: "Use our Photo Editor to crop, resize, and prepare your photo",
+    tryPhotoEditor: "Try Photo Editor →",
+
+    // Progress Steps
+    stepUpload: "Upload",
+    stepCustomize: "Customize",
+    stepDownload: "Download",
+
     title: "Photo Sheet Maker",
     subtitle: "Create professional passport photo sheets for printing anywhere in the world",
     benefitsTitle: "Why Use Photo Sheet Maker?",
@@ -10,7 +35,7 @@ export default {
     benefit4: "Save money - print up to 20 photos on a single sheet!",
     benefit5: "100% free, no watermarks, no signup required",
     uploadText: "Choose Your Photo",
-    uploadHint: "Click here or drag and drop your 2×2\" photo (JPG or PNG)",
+    uploadHint: "Click here or drag and drop your 2×2\" photo",
     uploadSuccess: "✓ Photo uploaded successfully!",
     customizeTitle: "Customize Your Sheet",
     sheetSizeLabel: "Sheet Size",
@@ -22,15 +47,18 @@ export default {
     qualityHigh: "Professional (300 DPI) ⭐ Recommended",
     qualityMedium: "Standard (200 DPI)",
     qualityHint: "Higher quality for clearer photos",
-    spacingLabel: "Cutting Guide",
-    spacingNone: "Edge to Edge (More Photos)",
-    spacingSmall: "With Cutting Lines (Easier to Cut)",
-    spacingHint: "Lines help you cut accurately",
+    cuttingGuideLabel: "Cutting Guide",
+    guideNoGuides: "No Guides (Maximum Photos) ⭐",
+    guideCuttingLines: "Cutting Lines Between Photos",
+    guideBorderGuide: "Border Guide Inside Photos",
+    guideFullGuidance: "Full Guidance (Lines + Border)",
+    cuttingGuideHint: "Choose how you want to cut your photos",
+    cuttingGuideDisabledHint: "Not available for this sheet size",
     previewTitle: "Your Photo Sheet",
     statPhotos: "Photos Included",
     statSize: "Print Size",
     statSavings: "Great Savings",
-    canvasLabel: "Preview of your photo sheet (actual size when printed)",
+    canvasLabel: "Preview of your photo sheet",
     downloadBtn: "Download Photo Sheet",
     resetBtn: "Start Over",
     instructionsTitle: "How to Print Your Photos",

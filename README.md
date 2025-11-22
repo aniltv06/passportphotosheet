@@ -16,7 +16,7 @@ Passport Photo Maker is a client-side web application that arranges your 2×2 in
 
 ### Key Features
 
-- **📷 Universal Compatibility** - Upload JPG or PNG images
+- **📷 Universal Compatibility** - Upload any image format
 - **💰 Cost Effective** - Print 6-20 photos per sheet, saving 80-95% compared to single prints
 - **🌍 Multi-language** - 12 languages supported (English, Spanish, French, German, Portuguese, Italian, Japanese, Korean, Chinese, Arabic, Hindi, Russian)
 - **🔒 Privacy First** - All processing happens locally in your browser. Photos never leave your device

@@ -1,6 +1,31 @@
 // German translations
 export default {
     skipToContent: "Zum Hauptinhalt springen",
+
+    // Navigation - TODO: Translate these keys
+    photoMaker: "Photo Maker",
+    photoEditor: "Photo Editor",
+    help: "Help",
+
+    // Workflow Selector - TODO: Translate these keys
+    chooseWorkflow: "Choose Your Workflow",
+    haveReadyPhoto: "I Have a Ready Photo",
+    readyPhotoDesc: "Upload your 2×2\" passport photo and create a sheet",
+    continueToUpload: "Continue to Upload",
+    needToEdit: "I Need to Edit a Photo",
+    needToEditDesc: "Crop, resize, or remove background first",
+    openPhotoEditor: "Open Photo Editor",
+
+    // Editor Banner - TODO: Translate these keys
+    bannerTitle: "Don't have a 2×2\" photo?",
+    bannerDesc: "Use our Photo Editor to crop, resize, and prepare your photo",
+    tryPhotoEditor: "Try Photo Editor →",
+
+    // Progress Steps - TODO: Translate these keys
+    stepUpload: "Upload",
+    stepCustomize: "Customize",
+    stepDownload: "Download",
+
     title: "Foto-Blatt-Ersteller",
     subtitle: "Erstellen Sie professionelle Passfotos-Blätter zum Drucken überall auf der Welt",
     benefitsTitle: "Warum Photo Sheet Maker verwenden?",

@@ -2,6 +2,31 @@
 export default {
     skipToContent: "الانتقال إلى المحتوى الرئيسي",
     title: "صانع صفحة الصور",
+
+    // Navigation - TODO: Translate these keys
+    photoMaker: "Photo Maker",
+    photoEditor: "Photo Editor",
+    help: "Help",
+
+    // Workflow Selector - TODO: Translate these keys
+    chooseWorkflow: "Choose Your Workflow",
+    haveReadyPhoto: "I Have a Ready Photo",
+    readyPhotoDesc: "Upload your 2×2\" passport photo and create a sheet",
+    continueToUpload: "Continue to Upload",
+    needToEdit: "I Need to Edit a Photo",
+    needToEditDesc: "Crop, resize, or remove background first",
+    openPhotoEditor: "Open Photo Editor",
+
+    // Editor Banner - TODO: Translate these keys
+    bannerTitle: "Don't have a 2×2\" photo?",
+    bannerDesc: "Use our Photo Editor to crop, resize, and prepare your photo",
+    tryPhotoEditor: "Try Photo Editor →",
+
+    // Progress Steps - TODO: Translate these keys
+    stepUpload: "Upload",
+    stepCustomize: "Customize",
+    stepDownload: "Download",
+    title: "صانع صفحة الصور",
     subtitle: "إنشاء صفحات صور جواز سفر احترافية للطباعة في أي مكان في العالم",
     benefitsTitle: "لماذا تستخدم Photo Sheet Maker؟",
     benefit1: "قم بتحميل صورة جواز السفر أو الهوية الخاصة بك بحجم 2×2 بوصة (51×51 مم)",

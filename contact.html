@@ -597,25 +597,59 @@
             }
         }
     </style>
+
+    <!-- UX Component Styles -->
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/ux-components.css">
 </head>
 <body>
-    <!-- Language Selector -->
-    <div class="language-selector">
-        <select id="languageSelect" class="language-select" aria-label="Select language">
-            <option value="en">🇬🇧 English</option>
-            <option value="es">🇪🇸 Español</option>
-            <option value="fr">🇫🇷 Français</option>
-            <option value="de">🇩🇪 Deutsch</option>
-            <option value="pt">🇵🇹 Português</option>
-            <option value="it">🇮🇹 Italiano</option>
-            <option value="ja">🇯🇵 日本語</option>
-            <option value="ko">🇰🇷 한국어</option>
-            <option value="zh">🇨🇳 中文</option>
-            <option value="ar">🇸🇦 العربية</option>
-            <option value="hi">🇮🇳 हिन्दी</option>
-            <option value="ru">🇷🇺 Русский</option>
-        </select>
-    </div>
+    <!-- Skip Link for Screen Readers -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- NAVIGATION HEADER -->
+    <nav class="main-nav" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="index.html" class="nav-logo" aria-label="Home">
+                📸 Photo Sheet Maker
+            </a>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <span data-i18n="photoMaker">Photo Maker</span>
+                </a>
+                <a href="photo-editor.html" class="nav-link featured">
+                    ✂️ <span data-i18n="photoEditor">Photo Editor</span>
+                </a>
+                <a href="faq.html" class="nav-link">
+                    <span data-i18n="help">Help</span>
+                </a>
+            </div>
+
+            <!-- Language Selector -->
+            <select id="languageSelect" class="nav-language" aria-label="Select language">
+                <option value="en">🇺🇸 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="pt">🇵🇹 Português</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="zh">🇨🇳 中文</option>
+                <option value="ar">🇸🇦 العربية</option>
+                <option value="hi">🇮🇳 हिन्दी</option>
+                <option value="ru">🇷🇺 Русский</option>
+            </select>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+                ☰
+            </button>
+        </div>
+    </nav>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -709,14 +743,29 @@
         <p style="text-align: center;">
             <a href="index.html" class="btn" data-i18n="usePhotoMaker">Use Photo Sheet Maker</a>
         </p>
-
-        <p style="text-align: center; color: #666; font-size: 14px; margin-top: 20px;">
-            <a href="index.html" data-i18n="home">Home</a> |
-            <a href="faq.html" data-i18n="faq">FAQ</a> |
-            <a href="privacy-policy.html" data-i18n="privacyPolicy">Privacy Policy</a> |
-            <a href="terms-of-service.html" data-i18n="termsOfService">Terms of Service</a>
-        </p>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="privacy-policy.html" data-i18n="privacyPolicy">Privacy Policy</a></li>
+                <li><a href="terms-of-service.html" data-i18n="termsOfService">Terms of Service</a></li>
+                <li><a href="contact.html" data-i18n="contact">Contact Us</a></li>
+                <li><a href="faq.html" data-i18n="faq">FAQ</a></li>
+            </ul>
+            <p class="footer-text" data-i18n="footerText">
+                All processing happens in your browser. Your photos are never uploaded to any server.
+                This tool is completely free and respects your privacy.
+            </p>
+            <p class="footer-copyright">
+                &copy; <span id="currentYear"></span> Photo Sheet Maker. <span data-i18n="allRights">All rights reserved</span>.
+            </p>
+            <p class="footer-designer">
+                Designed by Anil Kumar Thatha Venkatachalapathy
+            </p>
+        </div>
+    </footer>
 
     <!-- Load translations from modular structure -->
     <script type="module" src="translations/index.js"></script>
@@ -1368,5 +1417,16 @@
             </div>
         </div>
     </a>
+
+    <!-- UX Components Initialization -->
+    <script type="module">
+        import { initMobileNav, initStickyNav } from './js/ux-components.js';
+
+        // Initialize basic UX components
+        document.addEventListener('DOMContentLoaded', () => {
+            initMobileNav();
+            initStickyNav();
+        });
+    </script>
 </body>
 </html>

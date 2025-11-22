@@ -1,6 +1,31 @@
 // French translations
 export default {
     skipToContent: "Passer au contenu principal",
+
+    // Navigation
+    photoMaker: "Créateur de Planches",
+    photoEditor: "Éditeur de Photos",
+    help: "Aide",
+
+    // Workflow Selector
+    chooseWorkflow: "Choisissez votre flux de travail",
+    haveReadyPhoto: "J'ai une photo prête",
+    readyPhotoDesc: "Téléchargez votre photo de passeport 2×2\" et créez une planche",
+    continueToUpload: "Continuer le téléchargement",
+    needToEdit: "Je dois éditer une photo",
+    needToEditDesc: "Recadrer, redimensionner ou supprimer l'arrière-plan d'abord",
+    openPhotoEditor: "Ouvrir l'Éditeur de Photos",
+
+    // Editor Banner
+    bannerTitle: "Vous n'avez pas de photo 2×2\" ?",
+    bannerDesc: "Utilisez notre Éditeur de Photos pour recadrer, redimensionner et préparer votre photo",
+    tryPhotoEditor: "Essayer l'Éditeur de Photos →",
+
+    // Progress Steps
+    stepUpload: "Télécharger",
+    stepCustomize: "Personnaliser",
+    stepDownload: "Télécharger",
+
     title: "Créateur de Planches Photos",
     subtitle: "Créez des planches professionnelles de photos de passeport pour l'impression partout dans le monde",
     benefitsTitle: "Pourquoi utiliser Photo Sheet Maker?",

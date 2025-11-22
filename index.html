@@ -166,6 +166,128 @@
             scroll-behavior: smooth;
         }
 
+        /* Navigation Camera Icon */
+        .nav-camera-icon {
+            width: 28px;
+            height: 28px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .nav-camera-body {
+            width: 100%;
+            height: 70%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            position: absolute;
+            bottom: 50%;
+            transform: translateY(50%);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+        .nav-lens {
+            width: 13px;
+            height: 13px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .nav-lens-inner {
+            width: 9px;
+            height: 9px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+        }
+        .nav-lens-glare {
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+        }
+        .nav-flash {
+            width: 5px;
+            height: 5px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 8%;
+            right: 10%;
+            box-shadow: 0 1px 3px rgba(255, 165, 0, 0.4);
+        }
+        .nav-viewfinder {
+            width: 4px;
+            height: 3px;
+            background: #333;
+            border-radius: 1px;
+            position: absolute;
+            top: 8%;
+            left: 10%;
+        }
+
+        /* Upload Card Specific Styles */
+        .workflow-card.upload-card {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .workflow-card.upload-card .upload-area {
+            margin: 0;
+            padding: 40px 30px;
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-lg);
+            background: var(--surface);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .workflow-card.upload-card .upload-area:hover {
+            border-color: var(--primary-color);
+            background: rgba(0, 122, 255, 0.02);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--shadow-md);
+        }
+
+        .workflow-card.upload-card .upload-area.drag-over {
+            border-color: var(--success-color);
+            background: rgba(52, 199, 89, 0.05);
+            transform: scale(1.02);
+        }
+
+        .workflow-card.upload-card .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .workflow-card.upload-card .upload-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .workflow-card.upload-card .upload-hint {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
         /* Skip Link for Accessibility */
         .skip-link {
             position: absolute;
@@ -737,6 +859,43 @@
             gap: var(--spacing-sm);
         }
 
+        /* Customize & Preview Layout */
+        .customize-preview-layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: var(--spacing-3xl);
+            margin-top: var(--spacing-2xl);
+            align-items: start;
+        }
+
+        .customize-panel {
+            position: sticky;
+            top: 100px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .customize-panel .section-title {
+            font-size: 22px;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .preview-panel {
+            min-width: 0;
+        }
+
+        /* Options Stack */
+        .options-stack {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+
         /* Options Grid */
         .options-grid {
             display: grid;
@@ -937,6 +1096,10 @@
             box-shadow: 0 2px 8px var(--shadow);
         }
 
+        .btn-secondary::before {
+            display: none;
+        }
+
         .btn-secondary:hover:not(:disabled) {
             background: var(--background);
             border-color: var(--primary-color);
@@ -1086,6 +1249,18 @@
         }
 
         /* Responsive */
+        @media (max-width: 1024px) {
+            .customize-preview-layout {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-xl);
+            }
+
+            .customize-panel {
+                position: relative;
+                top: 0;
+            }
+        }
+
         @media (max-width: 768px) {
             .hero {
                 min-height: 90vh;
@@ -1236,61 +1411,118 @@
             }
         }
     </style>
+
+    <!-- UX Component Styles -->
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/ux-components.css">
 </head>
 <body>
     <!-- Skip Link for Screen Readers -->
     <a href="#main-content" class="skip-link" data-i18n="skipToContent">Skip to main content</a>
 
-    <!-- Language Selector -->
-    <div class="language-selector">
-        <label for="languageSelect" class="visually-hidden">Select Language</label>
-        <select id="languageSelect" aria-label="Select Language">
-            <option value="en">🇬🇧 English</option>
-            <option value="es">🇪🇸 Español</option>
-            <option value="fr">🇫🇷 Français</option>
-            <option value="de">🇩🇪 Deutsch</option>
-            <option value="pt">🇵🇹 Português</option>
-            <option value="it">🇮🇹 Italiano</option>
-            <option value="ja">🇯🇵 日本語</option>
-            <option value="ko">🇰🇷 한국어</option>
-            <option value="zh">🇨🇳 中文</option>
-            <option value="ar">🇸🇦 العربية</option>
-            <option value="hi">🇮🇳 हिन्दी</option>
-            <option value="ru">🇷🇺 Русский</option>
-        </select>
-    </div>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-icon">
-                <div class="hero-camera-icon">
-                    <div class="hero-camera-body">
-                        <div class="hero-viewfinder"></div>
-                        <div class="hero-flash"></div>
-                        <div class="hero-lens">
-                            <div class="hero-lens-inner">
-                                <div class="hero-lens-glare"></div>
+    <!-- NAVIGATION HEADER -->
+    <nav class="main-nav" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="index.html" class="nav-logo" aria-label="Home">
+                <div class="nav-camera-icon">
+                    <div class="nav-camera-body">
+                        <div class="nav-viewfinder"></div>
+                        <div class="nav-flash"></div>
+                        <div class="nav-lens">
+                            <div class="nav-lens-inner">
+                                <div class="nav-lens-glare"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <h1 class="hero-title" data-i18n="title">Photo Sheet Maker</h1>
-            <p class="hero-subtitle" data-i18n="subtitle">Create professional passport photo sheets for printing anywhere in the world</p>
-            <a href="#main-content" class="hero-cta">
-                <span data-i18n="getStarted">Get Started</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-                </svg>
+                <span>Photo Sheet Maker</span>
             </a>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <a href="index.html" class="nav-link active" aria-current="page">
+                    <span data-i18n="photoMaker">Photo Maker</span>
+                </a>
+                <a href="photo-editor.html" class="nav-link featured">
+                    ✂️ <span data-i18n="photoEditor">Photo Editor</span>
+                </a>
+                <a href="faq.html" class="nav-link">
+                    <span data-i18n="help">Help</span>
+                </a>
+            </div>
+
+            <!-- Language Selector -->
+            <select id="languageSelect" class="nav-language" aria-label="Select language">
+                <option value="en">🇺🇸 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="pt">🇵🇹 Português</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="zh">🇨🇳 中文</option>
+                <option value="ar">🇸🇦 العربية</option>
+                <option value="hi">🇮🇳 हिन्दी</option>
+                <option value="ru">🇷🇺 Русский</option>
+            </select>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+                ☰
+            </button>
         </div>
-        <div class="scroll-indicator">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-        </div>
-    </section>
+    </nav>
+
+    <!-- Container for main content -->
+    <div class="container">
+        <!-- WORKFLOW SELECTOR -->
+        <section class="workflow-selector" aria-labelledby="workflow-title">
+            <h2 id="workflow-title" data-i18n="chooseWorkflow">Choose Your Workflow</h2>
+
+            <div class="workflow-options">
+                <!-- Option 1: Upload Ready Photo -->
+                <div class="workflow-card upload-card" tabindex="0" aria-label="I have a ready photo">
+                    <div class="upload-area"
+                         id="uploadArea"
+                         role="button"
+                         tabindex="0"
+                         aria-label="Upload your passport photo"
+                         aria-describedby="uploadHint">
+                        <h3 data-i18n="haveReadyPhoto" style="margin-bottom: 12px; font-size: 24px; color: var(--text-primary);">I Have a Ready Photo</h3>
+                        <p style="margin-bottom: 20px; color: var(--text-secondary); font-size: 15px;">Upload your 2×2" passport photo and create a professional photo sheet for printing</p>
+                        <div class="upload-icon" aria-hidden="true">📁</div>
+                        <div class="upload-text" data-i18n="uploadText">Choose Your Photo</div>
+                        <div class="upload-hint" id="uploadHint" data-i18n="uploadHint">Click here or drag and drop your 2×2" photo</div>
+                        <div class="upload-success" data-i18n="uploadSuccess">✓ Photo uploaded successfully!</div>
+                        <input type="file"
+                               id="fileInput"
+                               accept="image/*"
+                               aria-label="Choose photo file">
+                    </div>
+                </div>
+
+                <!-- Option 2: Need to Edit Photo (Featured) -->
+                <div class="workflow-card featured" tabindex="0" role="button" aria-label="I need to edit a photo">
+                    <div class="workflow-icon">✂️</div>
+                    <h3 data-i18n="needToEdit">I Need to Edit a Photo</h3>
+                    <p data-i18n="needToEditDesc">Crop, resize, or rotate first</p>
+                    <a href="photo-editor.html" class="btn">
+                        <span data-i18n="openPhotoEditor">Open Photo Editor</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Demo Button Below Workflow Cards -->
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="button" class="demo-btn" id="demoBtn" aria-label="Try with demo photo" style="font-size: 14px; padding: 10px 20px;">
+                    <span data-i18n="tryDemo">🎨 Try Demo Photo</span>
+                </button>
+            </div>
+        </section>
+    </div>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -1351,123 +1583,109 @@
                     </p>
                 </div>
 
-                <div class="upload-section-wrapper">
-                    <div class="upload-area"
-                         id="uploadArea"
-                         role="button"
-                         tabindex="0"
-                         aria-label="Upload your passport photo"
-                         aria-describedby="uploadHint">
-                        <div class="upload-icon" aria-hidden="true">📁</div>
-                        <div class="upload-text" data-i18n="uploadText">Choose Your Photo</div>
-                        <div class="upload-hint" id="uploadHint" data-i18n="uploadHint">Click here or drag and drop your 2×2" photo (JPG or PNG)</div>
-                        <div class="upload-success" data-i18n="uploadSuccess">✓ Photo uploaded successfully!</div>
-                        <input type="file"
-                               id="fileInput"
-                               accept="image/jpeg,image/png,image/jpg"
-                               aria-label="Choose photo file">
+                <!-- PROGRESS INDICATORS -->
+                <div class="progress-steps" id="progressSteps" style="display: none;">
+                    <div class="step completed" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-label" data-i18n="stepUpload">Upload</div>
                     </div>
 
-                    <div class="upload-actions">
-                        <div class="action-card">
-                            <p class="action-text" data-i18n="needToEdit">Need to crop or edit your photo first?</p>
-                            <a href="photo-editor.html" class="demo-btn" style="text-decoration: none;">
-                                <span data-i18n="openPhotoEditor">✂️ Open Photo Editor</span>
-                            </a>
-                        </div>
-                        <div class="action-card">
-                            <p class="action-text" data-i18n="tryDemoText">Don't have a photo ready?</p>
-                            <button type="button" class="demo-btn" id="demoBtn" aria-label="Try with demo photo">
-                                <span data-i18n="tryDemo">🎨 Try Demo Photo</span>
-                            </button>
-                        </div>
+                    <div class="step-connector"></div>
+
+                    <div class="step active" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-label" data-i18n="stepCustomize">Customize</div>
+                    </div>
+
+                    <div class="step-connector"></div>
+
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-label" data-i18n="stepDownload">Download</div>
                     </div>
                 </div>
 
-                <h2 class="section-title">
-                    <span aria-hidden="true">⚙️</span>
-                    <span data-i18n="customizeTitle">Customize Your Sheet</span>
-                </h2>
-
-                <form class="options-grid" id="optionsForm">
-                    <div class="form-group">
-                        <label for="paperSize" class="form-label" data-i18n="sheetSizeLabel">Sheet Size</label>
-                        <select id="paperSize" class="form-select" aria-label="Select print sheet size">
-                            <option value="4x6" data-i18n="size4x6">Standard 4×6" Print (6 photos)</option>
-                            <option value="5x7" data-i18n="size5x7">Medium 5×7" Print (6 photos)</option>
-                            <option value="8x10" selected data-i18n="size8x10">Large 8×10" Print (20 photos) ⭐ Best Value</option>
-                        </select>
-                        <div class="form-hint" data-i18n="sheetSizeHint">Choose the print size you want to order</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="quality" class="form-label" data-i18n="qualityLabel">Photo Quality</label>
-                        <select id="quality" class="form-select" aria-label="Select photo print quality">
-                            <option value="high" data-i18n="qualityHigh">Professional (300 DPI) ⭐ Recommended</option>
-                            <option value="medium" data-i18n="qualityMedium">Standard (200 DPI)</option>
-                        </select>
-                        <div class="form-hint" data-i18n="qualityHint">Higher quality for clearer photos</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="spacing" class="form-label" data-i18n="spacingLabel">Cutting Guide</label>
-                        <select id="spacing" class="form-select" aria-label="Select cutting guide option">
-                            <option value="none" selected data-i18n="spacingNone">Edge to Edge (More Photos)</option>
-                            <option value="small" data-i18n="spacingSmall">With Cutting Lines (Easier to Cut)</option>
-                        </select>
-                        <div class="form-hint" id="spacingHint">
-                            <span data-i18n="spacingHint">Lines help you cut accurately</span>
-                            <span id="spacingDisabledHint" style="display: none; color: var(--warning-color);" data-i18n="spacingDisabledHint">Not available for this size - photos are edge-to-edge</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="border" class="form-label" data-i18n="borderLabel">Photo Border</label>
-                        <select id="border" class="form-select" aria-label="Select photo border option">
-                            <option value="none" selected data-i18n="borderNone">No Border</option>
-                            <option value="thin" data-i18n="borderThin">Thin Border (Cutting Guide)</option>
-                        </select>
-                        <div class="form-hint" data-i18n="borderHint">Adds a thin border inside each photo for cutting reference</div>
-                    </div>
-                </form>
-
                 <section class="preview-section" id="previewSection" aria-label="Preview and download your photo sheet">
-                    <h2 class="section-title">
-                        <span aria-hidden="true">👁️</span>
-                        <span data-i18n="previewTitle">Your Photo Sheet</span>
-                    </h2>
+                    <div class="customize-preview-layout">
+                        <!-- Left Side: Customization Options -->
+                        <div class="customize-panel">
+                            <h2 class="section-title">
+                                <span aria-hidden="true">⚙️</span>
+                                <span data-i18n="customizeTitle">Customize Your Sheet</span>
+                            </h2>
 
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <span class="stat-value" id="photoCount">20</span>
-                            <span class="stat-label" data-i18n="statPhotos">Photos Included</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-value" id="sheetSize">8×10"</span>
-                            <span class="stat-label" data-i18n="statSize">Print Size</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-value" id="costEstimate">💰</span>
-                            <span class="stat-label" data-i18n="statSavings">Great Savings</span>
-                        </div>
-                    </div>
+                            <form class="options-stack" id="optionsForm">
+                                <div class="form-group">
+                                    <label for="paperSize" class="form-label" data-i18n="sheetSizeLabel">Sheet Size</label>
+                                    <select id="paperSize" class="form-select" aria-label="Select print sheet size">
+                                        <option value="4x6" data-i18n="size4x6">Standard 4×6" Print (6 photos)</option>
+                                        <option value="5x7" data-i18n="size5x7">Medium 5×7" Print (6 photos)</option>
+                                        <option value="8x10" selected data-i18n="size8x10">Large 8×10" Print (20 photos) ⭐ Best Value</option>
+                                    </select>
+                                    <div class="form-hint" data-i18n="sheetSizeHint">Choose the print size you want to order</div>
+                                </div>
 
-                    <div class="canvas-wrapper">
-                        <div class="canvas-label" data-i18n="canvasLabel">Preview of your photo sheet (actual size when printed)</div>
-                        <div class="canvas-container">
-                            <canvas id="canvas" role="img" aria-label="Preview of your photo sheet layout"></canvas>
-                        </div>
-                    </div>
+                                <div class="form-group">
+                                    <label for="quality" class="form-label" data-i18n="qualityLabel">Photo Quality</label>
+                                    <select id="quality" class="form-select" aria-label="Select photo print quality">
+                                        <option value="high" data-i18n="qualityHigh">Professional (300 DPI) ⭐ Recommended</option>
+                                        <option value="medium" data-i18n="qualityMedium">Standard (200 DPI)</option>
+                                    </select>
+                                    <div class="form-hint" data-i18n="qualityHint">Higher quality for clearer photos</div>
+                                </div>
 
-                    <div class="button-group">
-                        <button type="button" class="btn btn-primary" id="downloadBtn" aria-label="Download your photo sheet">
-                            <span aria-hidden="true">⬇️</span>
-                            <span data-i18n="downloadBtn">Download Photo Sheet</span>
-                        </button>
-                        <button type="button" class="btn btn-secondary" id="resetBtn" aria-label="Start over with a new photo">
-                            <span aria-hidden="true">↻</span>
-                            <span data-i18n="resetBtn">Start Over</span>
-                        </button>
+                                <div class="form-group">
+                                    <label for="cuttingGuide" class="form-label" data-i18n="cuttingGuideLabel">Cutting Guide</label>
+                                    <select id="cuttingGuide" class="form-select" aria-label="Select cutting guide option">
+                                        <option value="none-none" selected data-i18n="guideNoGuides">No Guides (Maximum Photos) ⭐</option>
+                                        <option value="small-none" data-i18n="guideCuttingLines">Cutting Lines Between Photos</option>
+                                        <option value="none-thin" data-i18n="guideBorderGuide">Border Guide Inside Photos</option>
+                                        <option value="small-thin" data-i18n="guideFullGuidance">Full Guidance (Lines + Border)</option>
+                                    </select>
+                                    <div class="form-hint" id="cuttingGuideHint">
+                                        <span data-i18n="cuttingGuideHint">Choose how you want to cut your photos</span>
+                                        <span id="cuttingGuideDisabledHint" style="display: none; color: var(--warning-color);" data-i18n="cuttingGuideDisabledHint">Not available for this sheet size</span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Right Side: Preview -->
+                        <div class="preview-panel">
+                            <h2 class="section-title">
+                                <span aria-hidden="true">👁️</span>
+                                <span data-i18n="previewTitle">Your Photo Sheet</span>
+                            </h2>
+
+                            <div class="canvas-wrapper">
+                                <div class="canvas-label" data-i18n="canvasLabel">Preview of your photo sheet</div>
+                                <div class="canvas-container">
+                                    <canvas id="canvas" role="img" aria-label="Preview of your photo sheet layout"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <span class="stat-value" id="photoCount">20</span>
+                                    <span class="stat-label" data-i18n="statPhotos">Photos Included</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-value" id="sheetSize">8×10"</span>
+                                    <span class="stat-label" data-i18n="statSize">Print Size</span>
+                                </div>
+                            </div>
+
+                            <div class="button-group">
+                                <button type="button" class="btn btn-primary" id="downloadBtn" aria-label="Download your photo sheet">
+                                    <span aria-hidden="true">⬇️</span>
+                                    <span data-i18n="downloadBtn">Download Photo Sheet</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="resetBtn" aria-label="Start over with a new photo">
+                                    <span aria-hidden="true">↻</span>
+                                    <span data-i18n="resetBtn">Start Over</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -1543,7 +1761,7 @@
                 benefit4: "Save money - print up to 20 photos on a single sheet!",
                 benefit5: "100% free, no watermarks, no signup required",
                 uploadText: "Choose Your Photo",
-                uploadHint: "Click here or drag and drop your 2×2\" photo (JPG or PNG)",
+                uploadHint: "Click here or drag and drop your 2×2\" photo",
                 uploadSuccess: "✓ Photo uploaded successfully!",
                 needToEdit: "Need to crop or edit your photo first?",
                 openPhotoEditor: "✂️ Open Photo Editor",
@@ -1559,20 +1777,18 @@
                 qualityHigh: "Professional (300 DPI) ⭐ Recommended",
                 qualityMedium: "Standard (200 DPI)",
                 qualityHint: "Higher quality for clearer photos",
-                spacingLabel: "Cutting Guide",
-                spacingNone: "Edge to Edge (More Photos)",
-                spacingSmall: "With Cutting Lines (Easier to Cut)",
-                spacingHint: "Lines help you cut accurately",
-                spacingDisabledHint: "Not available for this size - photos are edge-to-edge",
-                borderLabel: "Photo Border",
-                borderNone: "No Border",
-                borderThin: "Thin Border (Cutting Guide)",
-                borderHint: "Adds a thin border inside each photo for cutting reference",
+                cuttingGuideLabel: "Cutting Guide",
+                guideNoGuides: "No Guides (Maximum Photos) ⭐",
+                guideCuttingLines: "Cutting Lines Between Photos",
+                guideBorderGuide: "Border Guide Inside Photos",
+                guideFullGuidance: "Full Guidance (Lines + Border)",
+                cuttingGuideHint: "Choose how you want to cut your photos",
+                cuttingGuideDisabledHint: "Not available for this sheet size",
                 previewTitle: "Your Photo Sheet",
                 statPhotos: "Photos Included",
                 statSize: "Print Size",
                 statSavings: "Great Savings",
-                canvasLabel: "Preview of your photo sheet (actual size when printed)",
+                canvasLabel: "Preview of your photo sheet",
                 downloadBtn: "Download Photo Sheet",
                 resetBtn: "Start Over",
                 instructionsTitle: "How to Print Your Photos",
@@ -2365,8 +2581,7 @@
         const fileInput = document.getElementById('fileInput');
         const paperSize = document.getElementById('paperSize');
         const quality = document.getElementById('quality');
-        const spacing = document.getElementById('spacing');
-        const border = document.getElementById('border');
+        const cuttingGuide = document.getElementById('cuttingGuide');
         const previewSection = document.getElementById('previewSection');
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d', { alpha: false });
@@ -2375,7 +2590,6 @@
         const demoBtn = document.getElementById('demoBtn');
         const photoCount = document.getElementById('photoCount');
         const sheetSize = document.getElementById('sheetSize');
-        const costEstimate = document.getElementById('costEstimate');
 
         // State
         let uploadedImage = null;
@@ -2418,15 +2632,9 @@
         }
 
         function validateImageFile(file) {
-            const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-            const maxSize = 10 * 1024 * 1024; // 10MB
-
-            if (!validTypes.includes(file.type)) {
-                throw new Error('Please upload a JPG or PNG image file.');
-            }
-
-            if (file.size > maxSize) {
-                throw new Error('File size must be less than 10MB.');
+            // Basic check to ensure it's an image file
+            if (!file.type.startsWith('image/')) {
+                throw new Error('Please upload an image file.');
             }
 
             return true;
@@ -2520,60 +2728,88 @@
                 announceToScreenReader('Photo sheet updated with new settings.');
 
                 // Track option changes
+                const [spacing, border] = cuttingGuide.value.split('-');
                 trackEvent('options_changed', {
                     paper_size: paperSize.value,
                     quality: quality.value,
-                    spacing: spacing.value,
-                    border: border.value
+                    cutting_guide: cuttingGuide.value,
+                    spacing: spacing,
+                    border: border
                 });
             }
         }, 100);
 
-        // Update spacing availability based on paper size
-        function updateSpacingAvailability() {
+        // Update cutting guide availability based on paper size
+        function updateCuttingGuideAvailability() {
             const size = paperSize.value;
-            const spacingDisabledHint = document.getElementById('spacingDisabledHint');
+            const cuttingGuideDisabledHint = document.getElementById('cuttingGuideDisabledHint');
+            const currentValue = cuttingGuide.value;
+            const [currentSpacing, currentBorder] = currentValue.split('-');
 
             // Only 5x7 has margins for cutting lines
             // 4x6 and 8x10 are edge-to-edge and photos would be scaled down
-            if (size === '4x6' || size === '8x10') {
-                spacing.value = 'none';
-                spacing.disabled = true;
-                spacing.style.opacity = '0.5';
-                spacing.style.cursor = 'not-allowed';
-                spacingDisabledHint.style.display = 'block';
+            const disableCuttingLines = (size === '4x6' || size === '8x10');
+
+            // Get all options
+            const options = cuttingGuide.querySelectorAll('option');
+            let shouldResetValue = false;
+
+            options.forEach(option => {
+                const [spacing, border] = option.value.split('-');
+
+                // Disable options that have cutting lines (spacing='small') for 4x6 and 8x10
+                if (spacing === 'small' && disableCuttingLines) {
+                    option.disabled = true;
+                    option.style.color = '#999';
+
+                    // If current selection is being disabled, we need to reset
+                    if (option.value === currentValue) {
+                        shouldResetValue = true;
+                    }
+                } else {
+                    option.disabled = false;
+                    option.style.color = '';
+                }
+            });
+
+            // Reset to "none-none" if current selection was disabled
+            if (shouldResetValue) {
+                cuttingGuide.value = 'none-none';
+            }
+
+            // Show/hide disabled hint
+            if (disableCuttingLines && currentSpacing === 'small') {
+                cuttingGuideDisabledHint.style.display = 'block';
             } else {
-                spacing.disabled = false;
-                spacing.style.opacity = '1';
-                spacing.style.cursor = 'pointer';
-                spacingDisabledHint.style.display = 'none';
+                cuttingGuideDisabledHint.style.display = 'none';
             }
         }
 
         paperSize.addEventListener('change', () => {
-            updateSpacingAvailability();
+            updateCuttingGuideAvailability();
             handleOptionsChange();
         });
         quality.addEventListener('change', handleOptionsChange);
-        spacing.addEventListener('change', handleOptionsChange);
-        border.addEventListener('change', handleOptionsChange);
+        cuttingGuide.addEventListener('change', handleOptionsChange);
 
-        // Initialize spacing availability
-        updateSpacingAvailability();
+        // Initialize cutting guide availability
+        updateCuttingGuideAvailability();
 
         // Create Composite Function
         function createComposite() {
             const size = paperSize.value;
             const layout = LAYOUTS[size];
             const dpi = quality.value === 'high' ? 300 : 200;
-            const gapEnabled = spacing.value === 'small';
+
+            // Parse cutting guide value (format: "spacing-border")
+            const [spacing, border] = cuttingGuide.value.split('-');
+            const gapEnabled = spacing === 'small';
             const gapSize = gapEnabled ? 0.05 : 0; // 0.05 inches gap
-            const borderEnabled = border.value === 'thin';
+            const borderEnabled = border === 'thin';
 
             // Update stats
             photoCount.textContent = layout.photos;
             sheetSize.textContent = size.replace('x', '×') + '"';
-            costEstimate.textContent = layout.icon;
 
             // Calculate dimensions
             const canvasWidth = layout.width * dpi;
@@ -2644,10 +2880,12 @@
                 announceToScreenReader('Your photo sheet has been downloaded successfully.');
 
                 // Track download event
+                const [spacing, border] = cuttingGuide.value.split('-');
                 trackEvent('photo_sheet_downloaded', {
                     paper_size: size,
                     quality: quality.value,
-                    has_cutting_guides: spacing.value !== 'none',
+                    cutting_guide: cuttingGuide.value,
+                    has_cutting_guides: spacing !== 'none' || border !== 'none',
                     photo_count: LAYOUTS[size].photos,
                     language: currentLanguage
                 });
@@ -2690,150 +2928,225 @@
             demoCtx.fillStyle = gradient;
             demoCtx.fillRect(0, 0, 600, 600);
 
-            // Head
+            // Passport photo standards: head centered with proper framing
+            // Head (reduced size with more top gap)
             demoCtx.fillStyle = '#ffd4a3';
             demoCtx.beginPath();
-            demoCtx.ellipse(300, 280, 140, 160, 0, 0, Math.PI * 2);
+            demoCtx.ellipse(300, 350, 130, 135, 0, 0, Math.PI * 2);
             demoCtx.fill();
 
-            // Hair back
+            // Ears - visible and realistic
+            demoCtx.fillStyle = '#f5c897';
+            // Left ear
+            demoCtx.beginPath();
+            demoCtx.ellipse(175, 330, 18, 35, -0.15, 0, Math.PI * 2);
+            demoCtx.fill();
+            // Left ear inner detail
+            demoCtx.fillStyle = '#e8b885';
+            demoCtx.beginPath();
+            demoCtx.ellipse(180, 330, 8, 20, -0.15, 0, Math.PI * 2);
+            demoCtx.fill();
+
+            // Right ear
+            demoCtx.fillStyle = '#f5c897';
+            demoCtx.beginPath();
+            demoCtx.ellipse(425, 330, 18, 35, 0.15, 0, Math.PI * 2);
+            demoCtx.fill();
+            // Right ear inner detail
+            demoCtx.fillStyle = '#e8b885';
+            demoCtx.beginPath();
+            demoCtx.ellipse(420, 330, 8, 20, 0.15, 0, Math.PI * 2);
+            demoCtx.fill();
+
+            // Hair - fuller, more natural coverage
             demoCtx.fillStyle = '#4a3428';
+
+            // Main hair mass - covers most of top head
             demoCtx.beginPath();
-            demoCtx.ellipse(300, 160, 150, 140, 0, 0, Math.PI * 2);
+            demoCtx.ellipse(300, 200, 155, 135, 0, 0, Math.PI * 2);
             demoCtx.fill();
 
-            // Hair sides
+            // Hair sides - fuller coverage near face
             demoCtx.beginPath();
-            demoCtx.ellipse(200, 240, 40, 70, -0.26, 0, Math.PI * 2);
+            demoCtx.ellipse(200, 280, 45, 75, -0.15, 0, Math.PI * 2);
             demoCtx.fill();
             demoCtx.beginPath();
-            demoCtx.ellipse(400, 240, 40, 70, 0.26, 0, Math.PI * 2);
+            demoCtx.ellipse(400, 280, 45, 75, 0.15, 0, Math.PI * 2);
             demoCtx.fill();
 
-            // Hair front
+            // Front hairline - natural and fuller
             demoCtx.beginPath();
-            demoCtx.moveTo(250, 180);
-            demoCtx.quadraticCurveTo(300, 220, 350, 180);
-            demoCtx.lineTo(350, 140);
-            demoCtx.quadraticCurveTo(300, 160, 250, 140);
-            demoCtx.closePath();
+            demoCtx.moveTo(230, 235);
+            demoCtx.quadraticCurveTo(265, 250, 300, 252);
+            demoCtx.quadraticCurveTo(335, 250, 370, 235);
+            demoCtx.quadraticCurveTo(340, 218, 300, 215);
+            demoCtx.quadraticCurveTo(260, 218, 230, 235);
+            demoCtx.fill();
+
+            // Add some hair texture/strands for realism
+            demoCtx.strokeStyle = '#3a2820';
+            demoCtx.lineWidth = 2;
+            demoCtx.lineCap = 'round';
+            // Left side strands
+            for (let i = 0; i < 3; i++) {
+                demoCtx.beginPath();
+                demoCtx.moveTo(235 + i * 15, 240);
+                demoCtx.quadraticCurveTo(245 + i * 15, 260, 240 + i * 15, 280);
+                demoCtx.stroke();
+            }
+            // Right side strands
+            for (let i = 0; i < 3; i++) {
+                demoCtx.beginPath();
+                demoCtx.moveTo(325 + i * 15, 240);
+                demoCtx.quadraticCurveTo(335 + i * 15, 260, 340 + i * 15, 280);
+                demoCtx.stroke();
+            }
+
+            // Face shading for depth (prevents mask look)
+            demoCtx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+            // Left side of face
+            demoCtx.beginPath();
+            demoCtx.ellipse(210, 350, 40, 100, -0.2, 0, Math.PI * 2);
+            demoCtx.fill();
+            // Right side of face
+            demoCtx.beginPath();
+            demoCtx.ellipse(390, 350, 40, 100, 0.2, 0, Math.PI * 2);
             demoCtx.fill();
 
             // Eyebrows
             demoCtx.fillStyle = '#3a2820';
             demoCtx.beginPath();
-            demoCtx.ellipse(250, 230, 27, 4, -0.09, 0, Math.PI * 2);
+            demoCtx.ellipse(255, 300, 25, 4, -0.09, 0, Math.PI * 2);
             demoCtx.fill();
             demoCtx.beginPath();
-            demoCtx.ellipse(350, 230, 27, 4, 0.09, 0, Math.PI * 2);
+            demoCtx.ellipse(345, 300, 25, 4, 0.09, 0, Math.PI * 2);
             demoCtx.fill();
 
-            // Eyes
+            // Eyes (at ~55% from top for passport standard)
             demoCtx.strokeStyle = '#2a2a2a';
             demoCtx.lineWidth = 3;
             demoCtx.fillStyle = '#ffffff';
             // Left eye
             demoCtx.beginPath();
-            demoCtx.ellipse(250, 270, 25, 32, 0, 0, Math.PI * 2);
+            demoCtx.ellipse(255, 335, 24, 30, 0, 0, Math.PI * 2);
             demoCtx.fill();
             demoCtx.stroke();
             // Right eye
             demoCtx.beginPath();
-            demoCtx.ellipse(350, 270, 25, 32, 0, 0, Math.PI * 2);
+            demoCtx.ellipse(345, 335, 24, 30, 0, 0, Math.PI * 2);
             demoCtx.fill();
             demoCtx.stroke();
 
             // Iris
-            const irisGradient = demoCtx.createRadialGradient(250, 275, 0, 250, 275, 17);
+            const irisGradient = demoCtx.createRadialGradient(255, 340, 0, 255, 340, 16);
             irisGradient.addColorStop(0, '#4a90e2');
             irisGradient.addColorStop(1, '#2e5c8a');
             demoCtx.fillStyle = irisGradient;
             demoCtx.beginPath();
-            demoCtx.arc(250, 275, 17, 0, Math.PI * 2);
+            demoCtx.arc(255, 340, 16, 0, Math.PI * 2);
             demoCtx.fill();
-            const irisGradient2 = demoCtx.createRadialGradient(350, 275, 0, 350, 275, 17);
+            const irisGradient2 = demoCtx.createRadialGradient(345, 340, 0, 345, 340, 16);
             irisGradient2.addColorStop(0, '#4a90e2');
             irisGradient2.addColorStop(1, '#2e5c8a');
             demoCtx.fillStyle = irisGradient2;
             demoCtx.beginPath();
-            demoCtx.arc(350, 275, 17, 0, Math.PI * 2);
+            demoCtx.arc(345, 340, 16, 0, Math.PI * 2);
             demoCtx.fill();
 
             // Pupils
             demoCtx.fillStyle = '#1a1a1a';
             demoCtx.beginPath();
-            demoCtx.arc(250, 275, 9, 0, Math.PI * 2);
+            demoCtx.arc(255, 340, 8, 0, Math.PI * 2);
             demoCtx.fill();
             demoCtx.beginPath();
-            demoCtx.arc(350, 275, 9, 0, Math.PI * 2);
+            demoCtx.arc(345, 340, 8, 0, Math.PI * 2);
             demoCtx.fill();
 
             // Eye shine
             demoCtx.fillStyle = '#ffffff';
             demoCtx.beginPath();
-            demoCtx.arc(245, 268, 6, 0, Math.PI * 2);
+            demoCtx.arc(250, 333, 5, 0, Math.PI * 2);
             demoCtx.fill();
             demoCtx.beginPath();
-            demoCtx.arc(345, 268, 6, 0, Math.PI * 2);
+            demoCtx.arc(340, 333, 5, 0, Math.PI * 2);
             demoCtx.fill();
             demoCtx.beginPath();
-            demoCtx.arc(255, 280, 3, 0, Math.PI * 2);
+            demoCtx.arc(260, 345, 3, 0, Math.PI * 2);
             demoCtx.fill();
             demoCtx.beginPath();
-            demoCtx.arc(355, 280, 3, 0, Math.PI * 2);
+            demoCtx.arc(350, 345, 3, 0, Math.PI * 2);
             demoCtx.fill();
 
             // Nose
             demoCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
             demoCtx.beginPath();
-            demoCtx.ellipse(300, 310, 4, 2, 0, 0, Math.PI * 2);
+            demoCtx.ellipse(300, 375, 4, 2, 0, 0, Math.PI * 2);
             demoCtx.fill();
+            // Nose bridge shadow
+            demoCtx.strokeStyle = 'rgba(0, 0, 0, 0.08)';
+            demoCtx.lineWidth = 1.5;
+            demoCtx.beginPath();
+            demoCtx.moveTo(300, 350);
+            demoCtx.lineTo(300, 373);
+            demoCtx.stroke();
 
             // Mouth
             demoCtx.strokeStyle = '#d4766a';
             demoCtx.lineWidth = 3;
             demoCtx.fillStyle = '#ffffff';
             demoCtx.beginPath();
-            demoCtx.arc(300, 335, 25, 0, Math.PI, false);
+            demoCtx.arc(300, 400, 24, 0, Math.PI, false);
             demoCtx.stroke();
             demoCtx.fill();
             demoCtx.beginPath();
-            demoCtx.moveTo(290, 335);
-            demoCtx.lineTo(310, 335);
+            demoCtx.moveTo(290, 400);
+            demoCtx.lineTo(310, 400);
             demoCtx.stroke();
 
             // Cheeks
             demoCtx.fillStyle = 'rgba(255, 182, 193, 0.4)';
             demoCtx.beginPath();
-            demoCtx.ellipse(220, 320, 17, 12, 0, 0, Math.PI * 2);
+            demoCtx.ellipse(220, 385, 16, 11, 0, 0, Math.PI * 2);
             demoCtx.fill();
             demoCtx.beginPath();
-            demoCtx.ellipse(380, 320, 17, 12, 0, 0, Math.PI * 2);
+            demoCtx.ellipse(380, 385, 16, 11, 0, 0, Math.PI * 2);
             demoCtx.fill();
 
             // Neck
             demoCtx.fillStyle = '#ffc999';
             demoCtx.beginPath();
-            demoCtx.moveTo(250, 420);
-            demoCtx.lineTo(250, 460);
-            demoCtx.quadraticCurveTo(300, 480, 350, 460);
-            demoCtx.lineTo(350, 420);
+            demoCtx.moveTo(250, 495);
+            demoCtx.lineTo(250, 545);
+            demoCtx.quadraticCurveTo(300, 565, 350, 545);
+            demoCtx.lineTo(350, 495);
             demoCtx.closePath();
             demoCtx.fill();
 
-            // Shoulders/Shirt
+            // Shoulders/Shirt - Curved and natural looking, stretched to edges
             demoCtx.fillStyle = '#4a6fa5';
             demoCtx.beginPath();
-            demoCtx.ellipse(300, 540, 225, 60, 0, Math.PI, 0);
+            // Left shoulder curve - starts from left edge
+            demoCtx.moveTo(0, 600);
+            demoCtx.quadraticCurveTo(100, 510, 250, 535);
+            // Neckline
+            demoCtx.lineTo(250, 550);
+            demoCtx.quadraticCurveTo(300, 565, 350, 550);
+            demoCtx.lineTo(350, 535);
+            // Right shoulder curve - extends to right edge
+            demoCtx.quadraticCurveTo(500, 510, 600, 600);
+            // Complete the shape
+            demoCtx.lineTo(600, 600);
+            demoCtx.lineTo(0, 600);
+            demoCtx.closePath();
             demoCtx.fill();
 
             // Collar
             demoCtx.fillStyle = '#ffffff';
             demoCtx.beginPath();
-            demoCtx.moveTo(260, 480);
-            demoCtx.lineTo(270, 520);
-            demoCtx.lineTo(330, 520);
-            demoCtx.lineTo(340, 480);
+            demoCtx.moveTo(260, 550);
+            demoCtx.lineTo(270, 590);
+            demoCtx.lineTo(330, 590);
+            demoCtx.lineTo(340, 550);
             demoCtx.closePath();
             demoCtx.fill();
 
@@ -2915,6 +3228,63 @@
 
         // Track page view on load
         trackPageView();
+    </script>
+
+    <!-- UX Components Initialization -->
+    <script type="module">
+        import {
+            initMobileNav,
+            initWorkflowSelector,
+            initEditorBanner,
+            initTooltips,
+            initStickyNav,
+            ProgressSteps,
+            OnboardingModal
+        } from './js/ux-components.js';
+
+        // Initialize UX components
+        document.addEventListener('DOMContentLoaded', () => {
+            initMobileNav();
+            initWorkflowSelector();
+            initEditorBanner();
+            initTooltips();
+            initStickyNav();
+
+            // Initialize progress steps
+            const progressSteps = new ProgressSteps('#progressSteps');
+            window.progressSteps = progressSteps; // Make accessible globally
+
+            // Show onboarding modal for first-time users
+            const onboarding = new OnboardingModal();
+            onboarding.show();
+
+            // Update progress steps when image is uploaded
+            const originalUploadArea = document.getElementById('uploadArea');
+            if (originalUploadArea) {
+                // Hook into the existing file input change event
+                const fileInput = document.getElementById('fileInput');
+                if (fileInput) {
+                    fileInput.addEventListener('change', () => {
+                        // Show progress indicators when image is uploaded
+                        const progressStepsEl = document.getElementById('progressSteps');
+                        if (progressStepsEl && fileInput.files.length > 0) {
+                            progressStepsEl.style.display = 'flex';
+                            progressSteps.setStep(1); // Move to step 2 (Customize)
+                            progressSteps.completeStep(0); // Mark step 1 as completed
+                        }
+                    });
+                }
+            }
+
+            // Update progress when download button is clicked
+            const downloadBtn = document.getElementById('downloadBtn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', () => {
+                    progressSteps.setStep(2); // Move to step 3 (Download)
+                    progressSteps.completeStep(1); // Mark step 2 as completed
+                });
+            }
+        });
     </script>
 </body>
 </html>

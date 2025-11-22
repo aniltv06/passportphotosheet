@@ -2,6 +2,31 @@
 export default {
     skipToContent: "메인 콘텐츠로 건너뛰기",
     title: "포토 시트 메이커",
+
+    // Navigation - TODO: Translate these keys
+    photoMaker: "Photo Maker",
+    photoEditor: "Photo Editor",
+    help: "Help",
+
+    // Workflow Selector - TODO: Translate these keys
+    chooseWorkflow: "Choose Your Workflow",
+    haveReadyPhoto: "I Have a Ready Photo",
+    readyPhotoDesc: "Upload your 2×2\" passport photo and create a sheet",
+    continueToUpload: "Continue to Upload",
+    needToEdit: "I Need to Edit a Photo",
+    needToEditDesc: "Crop, resize, or remove background first",
+    openPhotoEditor: "Open Photo Editor",
+
+    // Editor Banner - TODO: Translate these keys
+    bannerTitle: "Don't have a 2×2\" photo?",
+    bannerDesc: "Use our Photo Editor to crop, resize, and prepare your photo",
+    tryPhotoEditor: "Try Photo Editor →",
+
+    // Progress Steps - TODO: Translate these keys
+    stepUpload: "Upload",
+    stepCustomize: "Customize",
+    stepDownload: "Download",
+    title: "포토 시트 메이커",
     subtitle: "전 세계 어디서나 인쇄할 수 있는 전문적인 여권 사진 시트 만들기",
     benefitsTitle: "Photo Sheet Maker를 사용하는 이유는?",
     benefit1: "2×2인치(51×51mm) 여권 또는 신분증 사진 업로드",
