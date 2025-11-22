@@ -737,10 +737,16 @@
         </div>
     </div>
 
+    <!-- Load translations from modular structure -->
+    <script type="module" src="translations/index.js"></script>
+
     <script>
         'use strict';
 
-        const translations = {
+        // Translations are now loaded from translations/index.js module
+        // The module automatically assigns to window.translations
+        // Keeping this as a fallback for file:// protocol compatibility
+        const translations = window.translations || {
             en: {
                 title: "Terms of Service",
                 heroSubtitle: "Please read these terms carefully before using our service",

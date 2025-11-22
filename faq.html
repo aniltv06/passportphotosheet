@@ -845,14 +845,19 @@
         </div>
     </div>
 
+    <!-- Load translations from modular structure -->
+    <script type="module" src="translations/index.js"></script>
+
     <script>
         'use strict';
 
-        // Translations for FAQ page
-        const translations = {};
+        // Translations are now loaded from translations/index.js module
+        // The module automatically assigns to window.translations
+        // Keeping this as a fallback for file:// protocol compatibility
+        const translations = window.translations || {};
 
         // English translations (complete)
-        translations.en = {
+        if (!translations.en) translations.en = {
                 title: "Frequently Asked Questions",
                 heroSubtitle: "Find answers to common questions about creating passport photo sheets",
                 backToHome: "← Back to Home",

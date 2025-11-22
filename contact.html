@@ -718,11 +718,16 @@
         </p>
     </div>
 
+    <!-- Load translations from modular structure -->
+    <script type="module" src="translations/index.js"></script>
+
     <script>
         'use strict';
 
-        // Translations for Contact page
-        const translations = {
+        // Translations are now loaded from translations/index.js module
+        // The module automatically assigns to window.translations
+        // Keeping this as a fallback for file:// protocol compatibility
+        const translations = window.translations || {
             en: {
                 title: "Contact Us",
                 heroSubtitle: "We'd love to hear from you! Get in touch with any questions or feedback",
