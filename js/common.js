@@ -160,17 +160,67 @@ export function formatFileSize(bytes) {
 }
 
 /**
- * Initialize common page elements
+ * Load footer component
+ * @returns {Promise<void>}
  */
-export function initCommon() {
-    setCurrentYear();
+export async function loadFooter() {
+    const footerContainer = document.getElementById('footer-container');
+    if (!footerContainer) {
+        console.warn('Footer container not found. Please add <div id="footer-container"></div> where you want the footer.');
+        return;
+    }
+
+    // Inline footer HTML for file:// protocol or as fallback
+    const footerHTML = `
+        <footer class="footer" role="contentinfo">
+            <div class="footer-content">
+                <ul class="footer-links">
+                    <li><a href="privacy-policy.html" data-i18n="privacyPolicy">Privacy Policy</a></li>
+                    <li><a href="terms-of-service.html" data-i18n="termsOfService">Terms of Service</a></li>
+                    <li><a href="contact.html" data-i18n="contact">Contact Us</a></li>
+                    <li><a href="faq.html" data-i18n="faq">FAQ</a></li>
+                </ul>
+                <p class="footer-text" data-i18n="footerText">
+                    All processing happens in your browser. Your photos are never uploaded to any server.
+                    This tool is completely free and respects your privacy.
+                </p>
+                <p class="footer-copyright">
+                    &copy; <span id="currentYear"></span> Photo Sheet Maker. <span data-i18n="allRights">All rights reserved</span>.
+                </p>
+                <p class="footer-designer">
+                    Designed by Anil Kumar Thatha Venkatachalapathy
+                </p>
+            </div>
+        </footer>
+    `;
+
+    // Check if we're on file:// protocol or http(s)://
+    if (window.location.protocol === 'file:') {
+        // Use inline HTML for file:// protocol
+        footerContainer.innerHTML = footerHTML;
+        setCurrentYear();
+    } else {
+        // Try to fetch from component file for http(s):// protocol
+        try {
+            const response = await fetch('components/footer.html');
+            if (!response.ok) {
+                throw new Error(`Failed to load footer: ${response.status}`);
+            }
+            const html = await response.text();
+            footerContainer.innerHTML = html;
+            setCurrentYear();
+        } catch (error) {
+            console.warn('Error loading footer from component file, using inline fallback:', error);
+            // Fallback to inline HTML
+            footerContainer.innerHTML = footerHTML;
+            setCurrentYear();
+        }
+    }
 }
 
-// Auto-initialize common functionality
-if (typeof window !== 'undefined') {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCommon);
-    } else {
-        initCommon();
-    }
+/**
+ * Initialize common page elements
+ */
+export async function initCommon() {
+    await loadFooter();
 }

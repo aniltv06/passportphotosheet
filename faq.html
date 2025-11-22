@@ -872,27 +872,8 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer" role="contentinfo">
-        <div class="footer-content">
-            <ul class="footer-links">
-                <li><a href="privacy-policy.html" data-i18n="privacyPolicy">Privacy Policy</a></li>
-                <li><a href="terms-of-service.html" data-i18n="termsOfService">Terms of Service</a></li>
-                <li><a href="contact.html" data-i18n="contact">Contact Us</a></li>
-                <li><a href="faq.html" data-i18n="faq">FAQ</a></li>
-            </ul>
-            <p class="footer-text" data-i18n="footerText">
-                All processing happens in your browser. Your photos are never uploaded to any server.
-                This tool is completely free and respects your privacy.
-            </p>
-            <p class="footer-copyright">
-                &copy; <span id="currentYear"></span> Photo Sheet Maker. <span data-i18n="allRights">All rights reserved</span>.
-            </p>
-            <p class="footer-designer">
-                Designed by Anil Kumar Thatha Venkatachalapathy
-            </p>
-        </div>
-    </footer>
+    <!-- Footer Container - Loaded from components/footer.html -->
+    <div id="footer-container"></div>
 
     <!-- Load translations from modular structure -->
     <script type="module" src="translations/index.js"></script>
@@ -1356,8 +1337,14 @@
     <script type="module">
         import { initMobileNav, initStickyNav } from './js/ux-components.js';
 
+        // Import common utilities
+        import { initCommon } from './js/common.js';
+
         // Initialize basic UX components
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load footer first
+            await initCommon();
+
             initMobileNav();
             initStickyNav();
         });

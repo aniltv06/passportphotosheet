@@ -1192,61 +1192,7 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .footer-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .footer-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-lg);
-            list-style: none;
-        }
-
-        .footer-links a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-
-        .footer-links a:focus {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 4px;
-            border-radius: 4px;
-        }
-
-        .footer-text {
-            color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.7;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .footer-copyright {
-            margin-top: var(--spacing-lg);
-            color: var(--text-secondary);
-            font-size: 13px;
-            padding-top: var(--spacing-lg);
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-designer {
-            margin-top: var(--spacing-sm);
-            color: #999;
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-        }
+        /* Footer styles moved to css/common.css */
 
         /* Responsive */
         @media (max-width: 1024px) {
@@ -1710,27 +1656,8 @@
     </div>
     <!-- End Main Content -->
 
-        <!-- Footer -->
-        <footer class="footer" role="contentinfo">
-            <div class="footer-content">
-                <ul class="footer-links">
-                    <li><a href="privacy-policy.html" data-i18n="privacyPolicy">Privacy Policy</a></li>
-                    <li><a href="terms-of-service.html" data-i18n="termsOfService">Terms of Service</a></li>
-                    <li><a href="contact.html" data-i18n="contact">Contact Us</a></li>
-                    <li><a href="faq.html" data-i18n="faq">FAQ</a></li>
-                </ul>
-                <p class="footer-text" data-i18n="footerText">
-                    All processing happens in your browser. Your photos are never uploaded to any server.
-                    This tool is completely free and respects your privacy.
-                </p>
-                <p class="footer-copyright">
-                    &copy; <span id="currentYear"></span> Photo Sheet Maker. <span data-i18n="allRights">All rights reserved</span>.
-                </p>
-                <p class="footer-designer">
-                    Designed by Anil Kumar Thatha Venkatachalapathy
-                </p>
-            </div>
-        </footer>
+        <!-- Footer Container - Loaded from components/footer.html -->
+        <div id="footer-container"></div>
     </div>
 
     <!-- Load translations from modular structure -->
@@ -2573,9 +2500,6 @@
             }
         }
 
-        // Set current year in footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-
         // DOM Elements
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
@@ -3242,47 +3166,94 @@
             OnboardingModal
         } from './js/ux-components.js';
 
+        // Import common utilities
+        import { initCommon } from './js/common.js';
+
         // Initialize UX components
-        document.addEventListener('DOMContentLoaded', () => {
-            initMobileNav();
-            initWorkflowSelector();
-            initEditorBanner();
-            initTooltips();
-            initStickyNav();
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Inline footer loading (no module needed for file:// protocol)
+            const footerContainer = document.getElementById('footer-container');
+            if (footerContainer) {
+                footerContainer.innerHTML = `
+                    <footer class="footer" role="contentinfo">
+                        <div class="footer-content">
+                            <ul class="footer-links">
+                                <li><a href="privacy-policy.html" data-i18n="privacyPolicy">Privacy Policy</a></li>
+                                <li><a href="terms-of-service.html" data-i18n="termsOfService">Terms of Service</a></li>
+                                <li><a href="contact.html" data-i18n="contact">Contact Us</a></li>
+                                <li><a href="faq.html" data-i18n="faq">FAQ</a></li>
+                            </ul>
+                            <p class="footer-text" data-i18n="footerText">
+                                All processing happens in your browser. Your photos are never uploaded to any server.
+                                This tool is completely free and respects your privacy.
+                            </p>
+                            <p class="footer-copyright">
+                                &copy; <span id="currentYear"></span> Photo Sheet Maker. <span data-i18n="allRights">All rights reserved</span>.
+                            </p>
+                            <p class="footer-designer">
+                                Designed by Anil Kumar Thatha Venkatachalapathy
+                            </p>
+                        </div>
+                    </footer>
+                `;
 
-            // Initialize progress steps
-            const progressSteps = new ProgressSteps('#progressSteps');
-            window.progressSteps = progressSteps; // Make accessible globally
-
-            // Show onboarding modal for first-time users
-            const onboarding = new OnboardingModal();
-            onboarding.show();
-
-            // Update progress steps when image is uploaded
-            const originalUploadArea = document.getElementById('uploadArea');
-            if (originalUploadArea) {
-                // Hook into the existing file input change event
-                const fileInput = document.getElementById('fileInput');
-                if (fileInput) {
-                    fileInput.addEventListener('change', () => {
-                        // Show progress indicators when image is uploaded
-                        const progressStepsEl = document.getElementById('progressSteps');
-                        if (progressStepsEl && fileInput.files.length > 0) {
-                            progressStepsEl.style.display = 'flex';
-                            progressSteps.setStep(1); // Move to step 2 (Customize)
-                            progressSteps.completeStep(0); // Mark step 1 as completed
-                        }
-                    });
+                // Set current year
+                const yearEl = document.getElementById('currentYear');
+                if (yearEl) {
+                    yearEl.textContent = new Date().getFullYear();
                 }
             }
 
-            // Update progress when download button is clicked
-            const downloadBtn = document.getElementById('downloadBtn');
-            if (downloadBtn) {
-                downloadBtn.addEventListener('click', () => {
-                    progressSteps.setStep(2); // Move to step 3 (Download)
-                    progressSteps.completeStep(1); // Mark step 2 as completed
-                });
+            // Load and initialize UX components if available
+            if (window.location.protocol !== 'file:') {
+                try {
+                    const { initMobileNav, initWorkflowSelector, initEditorBanner, initTooltips, initStickyNav, ProgressSteps, OnboardingModal } = await import('./js/ux-components.js');
+
+                    initMobileNav();
+                    initWorkflowSelector();
+                    initEditorBanner();
+                    initTooltips();
+                    initStickyNav();
+
+                    // Initialize progress steps
+                    const progressSteps = new ProgressSteps('#progressSteps');
+                    window.progressSteps = progressSteps; // Make accessible globally
+
+                    // Show onboarding modal for first-time users
+                    const onboarding = new OnboardingModal();
+                    onboarding.show();
+
+                    // Update progress steps when image is uploaded
+                    const originalUploadArea = document.getElementById('uploadArea');
+                    if (originalUploadArea) {
+                        // Hook into the existing file input change event
+                        const fileInput = document.getElementById('fileInput');
+                        if (fileInput) {
+                            fileInput.addEventListener('change', () => {
+                                // Show progress indicators when image is uploaded
+                                const progressStepsEl = document.getElementById('progressSteps');
+                                if (progressStepsEl && fileInput.files.length > 0) {
+                                    progressStepsEl.style.display = 'flex';
+                                    progressSteps.setStep(1); // Move to step 2 (Customize)
+                                    progressSteps.completeStep(0); // Mark step 1 as completed
+                                }
+                            });
+                        }
+                    }
+
+                    // Update progress when download button is clicked
+                    const downloadBtn = document.getElementById('downloadBtn');
+                    if (downloadBtn) {
+                        downloadBtn.addEventListener('click', () => {
+                            progressSteps.setStep(2); // Move to step 3 (Download)
+                            progressSteps.completeStep(1); // Mark step 2 as completed
+                        });
+                    }
+                } catch (error) {
+                    console.log('UX components not available (file:// protocol), using basic functionality');
+                }
+            } else {
+                console.log('Running on file:// protocol - UX enhancements disabled');
             }
         });
     </script>

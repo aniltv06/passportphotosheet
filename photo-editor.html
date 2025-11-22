@@ -718,6 +718,10 @@
             user-select: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1;
+            /* Force proper compositing in Chrome */
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            will-change: transform;
         }
 
         .canvas-container:hover {
@@ -731,6 +735,11 @@
             display: block;
             max-width: 100%;
             height: auto;
+            /* Chrome-specific rendering improvements */
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
 
         .overlay-canvas {
@@ -741,6 +750,9 @@
             max-width: 100%;
             height: auto;
             display: block;
+            /* Ensure overlay doesn't affect underlying image brightness */
+            mix-blend-mode: normal;
+            isolation: isolate;
         }
 
         /* Guidelines Overlay */
@@ -1123,6 +1135,52 @@
             color: var(--primary-color);
         }
 
+        /* Collapsible Instructions */
+        .instructions-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            margin-bottom: 8px;
+            padding: 4px 0;
+            transition: var(--transition);
+        }
+
+        .instructions-header:hover {
+            opacity: 0.8;
+        }
+
+        .instructions-header strong {
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .collapse-icon {
+            font-size: 18px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .instructions.collapsed .collapse-icon {
+            transform: rotate(-90deg);
+        }
+
+        .instructions-content {
+            max-height: 500px;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            opacity: 1;
+        }
+
+        .instructions.collapsed .instructions-content {
+            max-height: 0;
+            opacity: 0;
+        }
+
         /* Info Badge */
         .info-badge {
             background: linear-gradient(135deg, #FFF9E6 0%, #FFF3CD 100%);
@@ -1279,75 +1337,15 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-xl);
             padding: var(--spacing-2xl);
-            margin-top: var(--spacing-2xl);
+            margin-top: var(--spacing-xl);
             box-shadow: 0 8px 32px var(--shadow-lg);
             text-align: center;
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            position: relative;
-            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #667eea, #764ba2, transparent);
-        }
-
-        .footer-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .footer-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-lg);
-            list-style: none;
-        }
-
-        .footer-links a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-
-        .footer-text {
-            color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.7;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .footer-copyright {
-            margin-top: var(--spacing-lg);
-            color: var(--text-secondary);
-            font-size: 13px;
-            padding-top: var(--spacing-lg);
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-designer {
-            margin-top: var(--spacing-sm);
-            color: #999;
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-        }
+        /* Footer styles moved to css/common.css */
 
         /* Validation Results Enhancements */
         #validationResults {
@@ -1376,6 +1374,155 @@
                 0 15px 50px rgba(0,0,0,0.25),
                 0 0 0 1px rgba(0,0,0,0.1),
                 0 0 120px rgba(102, 126, 234, 0.2);
+        }
+
+        /* Progress Steps */
+        .progress-steps-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: 0 4px 16px var(--shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            position: relative;
+        }
+
+        .progress-step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--surface-secondary);
+            border: 3px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .progress-step.active .progress-step-number {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .progress-step-number {
+            background: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+
+        .progress-step.completed .progress-step-number::before {
+            content: '✓';
+        }
+
+        .progress-step-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .progress-step.active .progress-step-label {
+            color: var(--primary-color);
+        }
+
+        .progress-step.completed .progress-step-label {
+            color: var(--success-color);
+        }
+
+        .progress-connector {
+            height: 3px;
+            background: var(--border);
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            right: -50%;
+            z-index: 1;
+            transition: background 0.3s ease;
+        }
+
+        .progress-step:last-child .progress-connector {
+            display: none;
+        }
+
+        .progress-step.completed .progress-connector {
+            background: var(--success-color);
+        }
+
+        /* Touch Gesture Hints */
+        .touch-hints {
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 100;
+            animation: fadeInUp 0.5s ease-out;
+            pointer-events: none;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .touch-hints {
+                display: block;
+            }
+        }
+
+        .touch-hint-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        /* Mobile Improvements */
+        @media (max-width: 768px) {
+            .progress-steps {
+                gap: 8px;
+            }
+
+            .progress-step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .progress-step-label {
+                font-size: 11px;
+            }
+
+            .progress-connector {
+                top: 20px;
+            }
         }
     </style>
 
@@ -1464,6 +1611,31 @@
     <!-- Main Content -->
     <div class="main-content">
     <div class="container">
+        <!-- Progress Steps -->
+        <div id="progressStepsContainer" class="progress-steps-container" style="display: none;" role="navigation" aria-label="Photo editing progress">
+            <div class="progress-steps">
+                <div id="progressStep1" class="progress-step" data-step="1">
+                    <div class="progress-step-number">1</div>
+                    <div class="progress-step-label">Upload</div>
+                    <div class="progress-connector"></div>
+                </div>
+                <div id="progressStep2" class="progress-step" data-step="2">
+                    <div class="progress-step-number">2</div>
+                    <div class="progress-step-label">Adjust</div>
+                    <div class="progress-connector"></div>
+                </div>
+                <div id="progressStep3" class="progress-step" data-step="3">
+                    <div class="progress-step-number">3</div>
+                    <div class="progress-step-label">Validate</div>
+                    <div class="progress-connector"></div>
+                </div>
+                <div id="progressStep4" class="progress-step" data-step="4">
+                    <div class="progress-step-number">4</div>
+                    <div class="progress-step-label">Export</div>
+                </div>
+            </div>
+        </div>
+
         <main id="main-content" class="editor-layout" role="main">
             <!-- Left Panel: Upload & Guidelines -->
             <div class="left-panel">
@@ -1499,14 +1671,22 @@
                         </div>
                     </div>
 
-                    <div class="instructions" style="margin-top: 20px;">
-                        <strong>US Passport Requirements:</strong>
-                        <ul>
-                            <li>Head height: 1" to 1-3/8"</li>
-                            <li>Face centered horizontally</li>
-                            <li>Neutral expression</li>
-                            <li>White/off-white background</li>
-                        </ul>
+                    <div id="instructionsPanel" class="instructions" style="margin-top: 20px;">
+                        <div class="instructions-header" onclick="toggleInstructions()" role="button" tabindex="0" aria-expanded="true" aria-controls="instructionsContent">
+                            <strong>
+                                <span>📋</span>
+                                <span>US Passport Requirements</span>
+                            </strong>
+                            <span class="collapse-icon" aria-hidden="true">▼</span>
+                        </div>
+                        <div id="instructionsContent" class="instructions-content">
+                            <ul>
+                                <li>Head height: 1" to 1-3/8"</li>
+                                <li>Face centered horizontally</li>
+                                <li>Neutral expression</li>
+                                <li>White/off-white background</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1526,6 +1706,11 @@
                          aria-label="Passport photo editing canvas">
                         <canvas id="editCanvas" aria-label="Main editing canvas"></canvas>
                         <canvas id="overlayCanvas" class="overlay-canvas" aria-hidden="true"></canvas>
+                        <!-- Touch Gesture Hints for Mobile -->
+                        <div class="touch-hints" aria-live="polite">
+                            <div class="touch-hint-icon">👆</div>
+                            Pinch to zoom • Drag to move
+                        </div>
                     </div>
                     <div id="photoInfo" style="display: none; text-align: center; margin-top: 16px; padding: 12px; background: rgba(0, 122, 255, 0.05); border-radius: 8px; font-size: 13px; color: var(--text-secondary);">
                         <strong style="color: var(--text-primary);">Photo Specifications</strong><br>
@@ -1540,12 +1725,12 @@
                 <div class="panel" style="margin-top: 20px;">
                     <h3>Export</h3>
                     <button class="btn btn-success" id="exportBtn" disabled
-                            aria-label="Use this photo - return to photo sheet maker with edited photo">
-                        ✓ Use This Photo
+                            aria-label="Use this photo to create a photo sheet - returns to the main photo maker page">
+                        ✓ Create Photo Sheet
                     </button>
                     <button class="btn btn-secondary" id="downloadBtn" disabled
-                            aria-label="Download edited photo as JPEG file">
-                        ⬇ Download Photo
+                            aria-label="Download edited photo as JPEG file to your device">
+                        ⬇ Download to Device
                     </button>
                 </div>
             </div>
@@ -1635,30 +1820,11 @@
                 </div>
             </div>
         </main>
+    </div>
+    </div>
 
-        <!-- Footer -->
-        <footer class="footer" role="contentinfo">
-            <div class="footer-content">
-                <ul class="footer-links">
-                    <li><a href="privacy-policy.html" data-i18n="privacyPolicy">Privacy Policy</a></li>
-                    <li><a href="terms-of-service.html" data-i18n="termsOfService">Terms of Service</a></li>
-                    <li><a href="contact.html" data-i18n="contact">Contact Us</a></li>
-                    <li><a href="faq.html" data-i18n="faq">FAQ</a></li>
-                </ul>
-                <p class="footer-text" data-i18n="footerText">
-                    All processing happens in your browser. Your photos are never uploaded to any server.
-                    This tool is completely free and respects your privacy.
-                </p>
-                <p class="footer-copyright">
-                    &copy; <span id="currentYear"></span> Photo Sheet Maker. <span data-i18n="allRights">All rights reserved</span>.
-                </p>
-                <p class="footer-designer">
-                    Designed by Anil Kumar Thatha Venkatachalapathy
-                </p>
-            </div>
-        </footer>
-    </div>
-    </div>
+    <!-- Footer Container - Loaded from components/footer.html -->
+    <div id="footer-container"></div>
 
     <!-- Floating Home Button -->
     <a href="index.html" class="floating-home-btn" aria-label="Go to home page" title="Back to Home">
@@ -1679,8 +1845,7 @@
     <script type="module" src="translations/index.js"></script>
 
     <script>
-        // Set current year
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        // Current year will be set by loadFooter() in common.js
 
         // Canvas size for 2x2 inch photo at 300 DPI
         const CANVAS_SIZE = 600;
@@ -1705,7 +1870,7 @@
         const editCanvas = document.getElementById('editCanvas');
         const overlayCanvas = document.getElementById('overlayCanvas');
         const ctx = editCanvas.getContext('2d', { alpha: true });
-        const overlayCtx = overlayCanvas.getContext('2d');
+        const overlayCtx = overlayCanvas.getContext('2d', { alpha: true });
 
         const zoomSlider = document.getElementById('zoomSlider');
         const zoomValue = document.getElementById('zoomValue');
@@ -1723,11 +1888,104 @@
         const toggleFaceGuide = document.getElementById('toggleFaceGuide');
         const toggleGrid = document.getElementById('toggleGrid');
 
+        // UX Enhancement Elements - Progress Steps
+        const progressStepsContainer = document.getElementById('progressStepsContainer');
+        const progressStep1 = document.getElementById('progressStep1');
+        const progressStep2 = document.getElementById('progressStep2');
+        const progressStep3 = document.getElementById('progressStep3');
+        const progressStep4 = document.getElementById('progressStep4');
+
         // Initialize canvas
         editCanvas.width = CANVAS_SIZE;
         editCanvas.height = CANVAS_SIZE;
         overlayCanvas.width = CANVAS_SIZE;
         overlayCanvas.height = CANVAS_SIZE;
+
+        // ========================================
+        // UX ENHANCEMENTS: Progress Tracking
+        // ========================================
+
+        // Progress tracking state
+        let currentStep = 1; // 1: Upload, 2: Adjust, 3: Validate, 4: Export
+
+        /**
+         * Update progress step indicator
+         * @param {number} stepNumber - Step to mark as active (1-4)
+         */
+        function updateProgressStep(stepNumber) {
+            currentStep = stepNumber;
+
+            // Show progress container on first step change
+            if (progressStepsContainer.style.display === 'none') {
+                progressStepsContainer.style.display = 'block';
+            }
+
+            // Reset all steps to default state
+            [progressStep1, progressStep2, progressStep3, progressStep4].forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+
+                // Mark completed steps
+                if (index + 1 < stepNumber) {
+                    step.classList.add('completed');
+                }
+                // Mark active step
+                else if (index + 1 === stepNumber) {
+                    step.classList.add('active');
+                }
+            });
+
+            // Track progress in analytics
+            if (typeof gtag !== 'undefined') {
+                const stepNames = ['Upload', 'Adjust', 'Validate', 'Export'];
+                gtag('event', 'progress_step_reached', {
+                    'event_category': 'Photo Editor',
+                    'event_label': stepNames[stepNumber - 1],
+                    'value': stepNumber
+                });
+            }
+        }
+
+        /**
+         * Toggle instructions panel collapse/expand
+         */
+        function toggleInstructions() {
+            const panel = document.getElementById('instructionsPanel');
+            const header = panel.querySelector('.instructions-header');
+            const content = document.getElementById('instructionsContent');
+
+            const isCollapsed = panel.classList.contains('collapsed');
+
+            if (isCollapsed) {
+                // Expand
+                panel.classList.remove('collapsed');
+                header.setAttribute('aria-expanded', 'true');
+            } else {
+                // Collapse
+                panel.classList.add('collapsed');
+                header.setAttribute('aria-expanded', 'false');
+            }
+
+            // Track toggle action
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'instructions_toggled', {
+                    'event_category': 'Photo Editor',
+                    'event_label': isCollapsed ? 'Expanded' : 'Collapsed'
+                });
+            }
+        }
+
+        // Keyboard accessibility for instructions toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const instructionsHeader = document.querySelector('.instructions-header');
+            if (instructionsHeader) {
+                instructionsHeader.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleInstructions();
+                    }
+                });
+            }
+        });
 
         // Upload handlers
         uploadArea.addEventListener('click', () => fileInput.click());
@@ -1785,6 +2043,9 @@
                             'event_label': 'Photo Upload'
                         });
                     }
+
+                    // Update progress to step 1 (Upload complete) and advance to step 2 (Adjust)
+                    updateProgressStep(2);
                 };
                 img.src = e.target.result;
             };
@@ -1882,7 +2143,7 @@
             // Photo: 2x2 inches
             // Head: 1 to 1.4 inches (50% to 70% of photo) - we'll show 60% (1.2 inches) as ideal
             if (toggleFaceGuide.checked) {
-                overlayCtx.strokeStyle = 'rgba(0, 122, 255, 0.7)';
+                overlayCtx.strokeStyle = 'rgba(0, 122, 255, 0.45)';
                 overlayCtx.lineWidth = 3;
                 overlayCtx.setLineDash([8, 6]);
 
@@ -1911,7 +2172,7 @@
 
                 // Add reference markers at top and bottom of face guide
                 overlayCtx.setLineDash([]);
-                overlayCtx.strokeStyle = 'rgba(0, 122, 255, 0.4)';
+                overlayCtx.strokeStyle = 'rgba(0, 122, 255, 0.3)';
                 overlayCtx.lineWidth = 1;
 
                 // Top of head marker (crown)
@@ -1922,7 +2183,7 @@
                 overlayCtx.stroke();
 
                 // Add label for crown
-                overlayCtx.fillStyle = 'rgba(0, 122, 255, 0.8)';
+                overlayCtx.fillStyle = 'rgba(0, 122, 255, 0.6)';
                 overlayCtx.font = '11px -apple-system, sans-serif';
                 overlayCtx.fillText('Crown', centerX + 35, topY + 4);
 
@@ -1939,12 +2200,12 @@
 
             // Grid with scale markings
             if (toggleGrid.checked) {
-                overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+                overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
                 overlayCtx.lineWidth = 1;
                 overlayCtx.setLineDash([4, 4]);
 
                 // Center cross (most important)
-                overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+                overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
                 overlayCtx.lineWidth = 2;
 
                 // Vertical center
@@ -1960,7 +2221,7 @@
                 overlayCtx.stroke();
 
                 // Thirds grid (lighter)
-                overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
                 overlayCtx.lineWidth = 1;
 
                 // Vertical thirds
@@ -1983,11 +2244,39 @@
 
                 overlayCtx.setLineDash([]);
 
+                // Helper function to draw text with background for better readability
+                function drawScaleText(text, x, y) {
+                    overlayCtx.font = 'bold 13px -apple-system, sans-serif';
+                    const metrics = overlayCtx.measureText(text);
+                    const padding = 3;
+
+                    // Draw semi-transparent background
+                    overlayCtx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+                    overlayCtx.fillRect(
+                        x - padding,
+                        y - 10 - padding,
+                        metrics.width + padding * 2,
+                        14 + padding * 2
+                    );
+
+                    // Draw white text with shadow for extra contrast
+                    overlayCtx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+                    overlayCtx.shadowBlur = 3;
+                    overlayCtx.shadowOffsetX = 1;
+                    overlayCtx.shadowOffsetY = 1;
+                    overlayCtx.fillStyle = '#FFFFFF';
+                    overlayCtx.fillText(text, x, y);
+
+                    // Reset shadow
+                    overlayCtx.shadowColor = 'transparent';
+                    overlayCtx.shadowBlur = 0;
+                    overlayCtx.shadowOffsetX = 0;
+                    overlayCtx.shadowOffsetY = 0;
+                }
+
                 // Add scale markings on all edges
-                overlayCtx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-                overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
-                overlayCtx.font = 'bold 11px -apple-system, sans-serif';
-                overlayCtx.lineWidth = 1;
+                overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+                overlayCtx.lineWidth = 2;
 
                 // Scale: 2 inches = 600px, so each 0.5" = 150px, each 0.25" = 75px
                 const quarterInch = CANVAS_SIZE / 8; // 75px = 0.25"
@@ -1997,7 +2286,7 @@
                 for (let i = 0; i <= 8; i++) {
                     const x = i * quarterInch;
                     const isMajor = i % 2 === 0; // Every half inch
-                    const tickHeight = isMajor ? 12 : 6;
+                    const tickHeight = isMajor ? 16 : 8;
 
                     overlayCtx.beginPath();
                     overlayCtx.moveTo(x, 0);
@@ -2005,7 +2294,7 @@
                     overlayCtx.stroke();
 
                     if (isMajor && i > 0 && i < 8) {
-                        overlayCtx.fillText((i * 0.25).toFixed(2) + '"', x - 12, tickHeight + 11);
+                        drawScaleText((i * 0.25).toFixed(2) + '"', x - 14, tickHeight + 16);
                     }
                 }
 
@@ -2013,7 +2302,7 @@
                 for (let i = 0; i <= 8; i++) {
                     const x = i * quarterInch;
                     const isMajor = i % 2 === 0;
-                    const tickHeight = isMajor ? 12 : 6;
+                    const tickHeight = isMajor ? 16 : 8;
 
                     overlayCtx.beginPath();
                     overlayCtx.moveTo(x, CANVAS_SIZE);
@@ -2021,7 +2310,7 @@
                     overlayCtx.stroke();
 
                     if (isMajor && i > 0 && i < 8) {
-                        overlayCtx.fillText((i * 0.25).toFixed(2) + '"', x - 12, CANVAS_SIZE - tickHeight - 3);
+                        drawScaleText((i * 0.25).toFixed(2) + '"', x - 14, CANVAS_SIZE - tickHeight - 6);
                     }
                 }
 
@@ -2029,7 +2318,7 @@
                 for (let i = 0; i <= 8; i++) {
                     const y = i * quarterInch;
                     const isMajor = i % 2 === 0;
-                    const tickWidth = isMajor ? 12 : 6;
+                    const tickWidth = isMajor ? 16 : 8;
 
                     overlayCtx.beginPath();
                     overlayCtx.moveTo(0, y);
@@ -2038,8 +2327,7 @@
 
                     if (isMajor && i > 0 && i < 8) {
                         overlayCtx.save();
-                        overlayCtx.translate(tickWidth + 3, y + 4);
-                        overlayCtx.fillText((i * 0.25).toFixed(2) + '"', 0, 0);
+                        drawScaleText((i * 0.25).toFixed(2) + '"', tickWidth + 4, y + 4);
                         overlayCtx.restore();
                     }
                 }
@@ -2048,7 +2336,7 @@
                 for (let i = 0; i <= 8; i++) {
                     const y = i * quarterInch;
                     const isMajor = i % 2 === 0;
-                    const tickWidth = isMajor ? 12 : 6;
+                    const tickWidth = isMajor ? 16 : 8;
 
                     overlayCtx.beginPath();
                     overlayCtx.moveTo(CANVAS_SIZE, y);
@@ -2057,8 +2345,7 @@
 
                     if (isMajor && i > 0 && i < 8) {
                         overlayCtx.save();
-                        overlayCtx.translate(CANVAS_SIZE - tickWidth - 26, y + 4);
-                        overlayCtx.fillText((i * 0.25).toFixed(2) + '"', 0, 0);
+                        drawScaleText((i * 0.25).toFixed(2) + '"', CANVAS_SIZE - tickWidth - 32, y + 4);
                         overlayCtx.restore();
                     }
                 }
@@ -2355,6 +2642,9 @@
                     'event_label': 'Face Validation'
                 });
             }
+
+            // Update progress to step 3 (Validate)
+            updateProgressStep(3);
 
             if (!currentImage) {
                 console.error('No image loaded');
@@ -2836,6 +3126,9 @@
 
         // Export button
         exportBtn.addEventListener('click', () => {
+            // Update progress to step 4 (Export)
+            updateProgressStep(4);
+
             const croppedData = editCanvas.toDataURL('image/jpeg', 0.95);
             // Save to localStorage or pass to main app
             localStorage.setItem('editedPhoto', croppedData);
@@ -2853,6 +3146,9 @@
 
         // Download button
         downloadBtn.addEventListener('click', () => {
+            // Update progress to step 4 (Export)
+            updateProgressStep(4);
+
             const link = document.createElement('a');
             link.download = 'passport-photo-edited.jpg';
             link.href = editCanvas.toDataURL('image/jpeg', 0.95);
@@ -3075,8 +3371,14 @@
     <script type="module">
         import { initMobileNav, initStickyNav } from './js/ux-components.js';
 
+        // Import common utilities
+        import { initCommon } from './js/common.js';
+
         // Initialize basic UX components
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load footer first
+            await initCommon();
+
             initMobileNav();
             initStickyNav();
         });
