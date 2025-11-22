@@ -1,0 +1,3035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Photo Editor - Passport Photo Maker</title>
+    <meta name="title" content="Photo Editor - Passport Photo Maker">
+    <meta name="description" content="Edit and prepare your passport photo with professional tools. Adjust, crop, validate face position with AI. Create perfect passport photos.">
+    <meta name="keywords" content="passport photo editor, photo crop tool, face validation, passport photo preparation, photo adjustment, photo editor online">
+    <meta name="author" content="Photo Sheet Maker">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://aniltv06.github.io/passportphotosheet/photo-editor.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aniltv06.github.io/passportphotosheet/photo-editor.html">
+    <meta property="og:title" content="Photo Editor - Passport Photo Maker">
+    <meta property="og:description" content="Professional passport photo editor with AI face validation. Adjust, crop, and prepare perfect passport photos.">
+    <meta property="og:image" content="https://aniltv06.github.io/passportphotosheet/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://aniltv06.github.io/passportphotosheet/photo-editor.html">
+    <meta name="twitter:title" content="Photo Editor - Passport Photo Maker">
+    <meta name="twitter:description" content="Professional passport photo editor with AI face validation.">
+
+    <!-- Theme and Mobile -->
+    <meta name="theme-color" content="#007AFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Photo Editor">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+
+    <!-- MediaPipe Libraries for Face Detection -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4"></script>
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BHSENQTDSF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-BHSENQTDSF', {
+            'anonymize_ip': true,
+            'cookie_flags': 'SameSite=None;Secure',
+            'page_path': '/photo-editor.html'
+        });
+
+        // Track page view
+        gtag('event', 'page_view', {
+            page_title: 'Photo Editor',
+            page_location: window.location.href,
+            page_path: '/photo-editor.html'
+        });
+    </script>
+
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "u9f5jiwh0y");
+    </script>
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Photo Editor - Passport Photo Maker",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any",
+      "description": "Professional passport photo editor with AI face validation. Adjust, crop, and prepare perfect passport photos with guidelines.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Upload and crop passport photos",
+        "AI-powered face validation",
+        "Zoom and rotation controls",
+        "US passport guideline overlay",
+        "Grid with scale measurements",
+        "High-quality 300 DPI output",
+        "Privacy-focused (no server upload)",
+        "Free forever"
+      ],
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "author": {
+        "@type": "Organization",
+        "name": "Photo Sheet Maker"
+      }
+    }
+    </script>
+
+    <style>
+        :root {
+            --primary-color: #007AFF;
+            --primary-hover: #0051D5;
+            --secondary-color: #5856D6;
+            --accent-color: #FF2D55;
+            --success-color: #34C759;
+            --warning-color: #FF9500;
+            --danger-color: #FF3B30;
+            --text-primary: #1D1D1F;
+            --text-secondary: #86868B;
+            --background: #FFFFFF;
+            --surface: #FFFFFF;
+            --surface-secondary: #F5F5F7;
+            --border: #D2D2D7;
+            --shadow: rgba(0, 0, 0, 0.08);
+            --shadow-md: rgba(0, 0, 0, 0.12);
+            --shadow-lg: rgba(0, 0, 0, 0.16);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+            --spacing-3xl: 64px;
+            --spacing-4xl: 96px;
+            --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-system);
+            background: var(--surface-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Accessibility - Skip Link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 100;
+            font-weight: 600;
+            transition: top 0.2s ease;
+        }
+
+        .skip-link:focus {
+            top: 0;
+            outline: 3px solid var(--warning-color);
+            outline-offset: 2px;
+        }
+
+        /* Accessibility - Visually Hidden */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Accessibility - Focus Indicators */
+        *:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Accessibility - Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* Accessibility - High Contrast Mode */
+        @media (prefers-contrast: high) {
+            :root {
+                --primary-color: #0051D5;
+                --text-primary: #000000;
+                --text-secondary: #333333;
+                --border: #000000;
+            }
+
+            .panel {
+                border: 2px solid var(--border);
+            }
+
+            .btn {
+                border: 2px solid currentColor;
+            }
+        }
+
+        /* Hero Section - Apple Style (from index.html) */
+        .hero {
+            position: relative;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--spacing-4xl) var(--spacing-lg);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto var(--spacing-xl);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-icon svg {
+            width: 60px;
+            height: 60px;
+        }
+
+        /* Hero Camera Icon */
+        .hero-camera-icon {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+        .hero-camera-body {
+            width: 100%;
+            height: 70%;
+            background: white;
+            border-radius: 8px;
+            position: absolute;
+            bottom: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .hero-lens {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow:
+                inset 0 1px 3px rgba(0, 0, 0, 0.1),
+                0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+        .hero-lens-inner {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .hero-lens-glare {
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+        }
+        .hero-flash {
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 15%;
+            right: 15%;
+            box-shadow: 0 2px 6px rgba(255, 165, 0, 0.4);
+        }
+        .hero-viewfinder {
+            width: 8px;
+            height: 6px;
+            background: #333;
+            border-radius: 2px;
+            position: absolute;
+            top: 12%;
+            left: 15%;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-title {
+            font-size: clamp(48px, 8vw, 72px);
+            font-weight: 700;
+            color: white;
+            margin-bottom: var(--spacing-lg);
+            letter-spacing: -2px;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--spacing-2xl);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: 18px 36px;
+            background: white;
+            color: var(--primary-color);
+            border-radius: 980px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: var(--spacing-2xl);
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-indicator svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+            opacity: 0.7;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 12px;
+            padding: 10px 14px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: var(--transition);
+        }
+
+        .language-selector:hover {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .language-selector select {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 4px 24px 4px 8px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%231D1D1F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        .language-selector select:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* Floating Home Button */
+        .floating-home-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 1000;
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 50%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            animation: floatButton 3s ease-in-out infinite;
+        }
+
+        .floating-home-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.3);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .floating-home-btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        @keyframes floatButton {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Camera icon for floating button */
+        .floating-camera-icon {
+            width: 35px;
+            height: 35px;
+            position: relative;
+        }
+
+        .floating-camera-body {
+            width: 100%;
+            height: 70%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            position: absolute;
+            bottom: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-lens {
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.15);
+        }
+
+        .floating-lens-inner {
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-lens-glare {
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+        }
+
+        .floating-flash {
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 10%;
+            right: 12%;
+            box-shadow: 0 1px 4px rgba(255, 165, 0, 0.4);
+        }
+
+        .floating-viewfinder {
+            width: 5px;
+            height: 4px;
+            background: #333;
+            border-radius: 1px;
+            position: absolute;
+            top: 8%;
+            left: 12%;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .floating-home-btn {
+                top: 20px;
+                left: 20px;
+                width: 60px;
+                height: 60px;
+            }
+
+            .floating-camera-icon {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        /* Main Content Section */
+        .main-content {
+            background: var(--background);
+            padding: var(--spacing-4xl) 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-lg);
+        }
+
+        /* Editor Layout */
+        .editor-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr 300px;
+            gap: var(--spacing-lg);
+            align-items: start;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Panel/Card Styles - Matching index.html */
+        .panel {
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            box-shadow: 0 2px 16px var(--shadow), 0 0 0 1px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .panel:hover {
+            box-shadow: 0 8px 32px var(--shadow-md), 0 0 0 1px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .panel:hover::before {
+            opacity: 1;
+        }
+
+        .panel h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel h3::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        /* Canvas Area */
+        .canvas-panel {
+            background: linear-gradient(135deg, #E5E5EA 0%, #D1D1D6 100%);
+            padding: var(--spacing-xl);
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .canvas-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(255, 255, 255, 0.03) 10px,
+                    rgba(255, 255, 255, 0.03) 20px
+                );
+            pointer-events: none;
+        }
+
+        .canvas-container {
+            position: relative;
+            background: #FFFFFF;
+            box-shadow:
+                0 10px 40px rgba(0,0,0,0.15),
+                0 0 0 1px rgba(0,0,0,0.05),
+                0 0 80px rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: move;
+            user-select: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+
+        .canvas-container:hover {
+            box-shadow:
+                0 15px 50px rgba(0,0,0,0.2),
+                0 0 0 1px rgba(0,0,0,0.08),
+                0 0 100px rgba(102, 126, 234, 0.15);
+        }
+
+        #editCanvas {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .overlay-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        /* Guidelines Overlay */
+        .guidelines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-xl);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, #FAFAFA 0%, #F5F5F7 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.03) 0%, transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.6s ease;
+        }
+
+        .upload-area:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, #FFFFFF 0%, #FAFAFA 100%);
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.05);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        @keyframes bounceExcited {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-15px) scale(1.1);
+            }
+        }
+
+        .upload-area:hover .upload-icon {
+            animation: bounceExcited 0.6s ease-in-out infinite;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-hint {
+            font-size: 14px;
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* Controls */
+        .control-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .control-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #E5E5EA 0%, #D1D1D6 100%);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .slider:hover {
+            background: linear-gradient(90deg, #D1D1D6 0%, #C7C7CC 100%);
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0051D5 100%);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+            border: 2px solid white;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.5);
+        }
+
+        .slider::-webkit-slider-thumb:active {
+            transform: scale(1.1);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0051D5 100%);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.5);
+        }
+
+        .slider-value {
+            min-width: 45px;
+            text-align: right;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 600;
+            font-family: var(--font-system);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0051D5 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0051D5 0%, #003DA5 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 122, 255, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--surface) 0%, #F5F5F7 100%);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, #FFFFFF 0%, #FAFAFA 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.15);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #28a745 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(52, 199, 89, 0.3);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 199, 89, 0.4);
+        }
+
+        .btn-success:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Guidelines Toggle */
+        .toggle-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #F9F9F9 0%, #F5F5F7 100%);
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .toggle-item:hover {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F9F9F9 100%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transform: translateX(2px);
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 28px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input:checked + .toggle-slider {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0051D5 100%);
+            box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        input:focus + .toggle-slider {
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+        }
+
+        /* Instructions */
+        .instructions {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            padding: var(--spacing-md);
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #0066CC;
+            border: 1px solid rgba(0, 122, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.1);
+        }
+
+        .instructions strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-size: 14px;
+        }
+
+        .instructions ul {
+            margin-left: 18px;
+            margin-top: 8px;
+        }
+
+        .instructions li {
+            margin-bottom: 4px;
+            position: relative;
+            padding-left: 4px;
+        }
+
+        .instructions li::marker {
+            color: var(--primary-color);
+        }
+
+        /* Info Badge */
+        .info-badge {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFF3CD 100%);
+            border: 1px solid #FFE69C;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            font-size: 13px;
+            color: #856404;
+            margin-bottom: var(--spacing-md);
+            box-shadow: 0 2px 12px rgba(255, 183, 77, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #FFA500, #FF9500);
+        }
+
+        .info-badge strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #664d03;
+            padding-left: 12px;
+        }
+
+        .info-badge:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .editor-layout {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-lg);
+            }
+
+            .left-panel, .right-panel {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 50vh;
+                padding: var(--spacing-3xl) var(--spacing-md);
+            }
+
+            .hero-icon {
+                width: 90px;
+                height: 90px;
+            }
+
+            .hero-icon svg {
+                width: 45px;
+                height: 45px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .hero-cta {
+                padding: 16px 28px;
+                font-size: 16px;
+            }
+
+            .container {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+
+            .panel {
+                padding: var(--spacing-md);
+            }
+
+            .panel h3 {
+                font-size: 18px;
+            }
+
+            .editor-layout {
+                gap: var(--spacing-md);
+            }
+
+            .language-selector {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 28px;
+            }
+
+            .hero-cta {
+                font-size: 14px;
+                padding: var(--spacing-xs) var(--spacing-sm);
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: var(--spacing-xl);
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 122, 255, 0.1);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+
+        .spinner::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            border-top-color: rgba(0, 122, 255, 0.3);
+            animation: spin 2s cubic-bezier(0.5, 0, 0.5, 1) infinite reverse;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .processing-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-2xl);
+            margin-top: var(--spacing-2xl);
+            box-shadow: 0 8px 32px var(--shadow-lg);
+            text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #667eea, #764ba2, transparent);
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .footer-copyright {
+            margin-top: var(--spacing-lg);
+            color: var(--text-secondary);
+            font-size: 13px;
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-designer {
+            margin-top: var(--spacing-sm);
+            color: #999;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        /* Validation Results Enhancements */
+        #validationResults {
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Photo Info Badge Enhancement */
+        #photoInfo {
+            animation: fadeIn 0.5s ease-out 0.3s both;
+        }
+
+        /* Add subtle glow effect to active canvas */
+        .canvas-container:active {
+            box-shadow:
+                0 15px 50px rgba(0,0,0,0.25),
+                0 0 0 1px rgba(0,0,0,0.1),
+                0 0 120px rgba(102, 126, 234, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <label for="languageSelect" class="visually-hidden">Select Language</label>
+        <select id="languageSelect" aria-label="Select Language">
+            <option value="en">🇬🇧 English</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="pt">🇵🇹 Português</option>
+            <option value="it">🇮🇹 Italiano</option>
+            <option value="ja">🇯🇵 日本語</option>
+            <option value="ko">🇰🇷 한국어</option>
+            <option value="zh">🇨🇳 中文</option>
+            <option value="ar">🇸🇦 العربية</option>
+            <option value="hi">🇮🇳 हिन्दी</option>
+            <option value="ru">🇷🇺 Русский</option>
+        </select>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <div class="hero-camera-icon">
+                    <div class="hero-camera-body">
+                        <div class="hero-viewfinder"></div>
+                        <div class="hero-flash"></div>
+                        <div class="hero-lens">
+                            <div class="hero-lens-inner">
+                                <div class="hero-lens-glare"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h1 class="hero-title" data-i18n="page_title">Photo Editor</h1>
+            <p class="hero-subtitle" data-i18n="page_subtitle">Crop, adjust, and perfect your passport photo</p>
+            <a href="index.html" class="hero-cta">
+                <span data-i18n="backToHome">← Back to Home</span>
+            </a>
+        </div>
+        <div class="scroll-indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="main-content">
+    <div class="container">
+        <main id="main-content" class="editor-layout" role="main">
+            <!-- Left Panel: Upload & Guidelines -->
+            <div class="left-panel">
+                <div class="panel">
+                    <h3 data-i18n="upload_title">1. Upload Photo</h3>
+                    <div class="upload-area" id="uploadArea" role="button" tabindex="0"
+                         aria-label="Click to upload a passport photo or drag and drop a file here">
+                        <div class="upload-icon" aria-hidden="true">📁</div>
+                        <div class="upload-text" data-i18n="upload_text">Choose Your Photo</div>
+                        <div class="upload-hint" data-i18n="upload_hint">Click or drag and drop</div>
+                        <input type="file" id="fileInput" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="panel" style="margin-top: 20px;">
+                    <h3 data-i18n="guidelines_title">Guidelines</h3>
+                    <div class="toggle-group">
+                        <div class="toggle-item">
+                            <span class="toggle-label" id="faceGuideLabel" data-i18n="face_outline">Face Outline</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="toggleFaceGuide" checked
+                                       role="switch" aria-checked="true" aria-labelledby="faceGuideLabel">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <span class="toggle-label" id="gridLabel" data-i18n="grid_scale">Grid with Scale</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="toggleGrid"
+                                       role="switch" aria-checked="false" aria-labelledby="gridLabel">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="instructions" style="margin-top: 20px;">
+                        <strong>US Passport Requirements:</strong>
+                        <ul>
+                            <li>Head height: 1" to 1-3/8"</li>
+                            <li>Face centered horizontally</li>
+                            <li>Neutral expression</li>
+                            <li>White/off-white background</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Column: Canvas + Export -->
+            <div>
+                <!-- Canvas Panel -->
+                <div class="canvas-panel panel" id="canvasPanel">
+                    <div id="uploadPrompt">
+                        <div style="text-align: center; color: var(--text-secondary);">
+                            <div style="font-size: 64px; margin-bottom: 16px;">📸</div>
+                            <h3 style="font-size: 20px; margin-bottom: 8px; color: var(--text-primary);">Upload a photo to get started</h3>
+                            <p>Select a photo from the left panel</p>
+                        </div>
+                    </div>
+                    <div id="canvasContainer" class="canvas-container" style="display: none;"
+                         aria-label="Passport photo editing canvas">
+                        <canvas id="editCanvas" aria-label="Main editing canvas"></canvas>
+                        <canvas id="overlayCanvas" class="overlay-canvas" aria-hidden="true"></canvas>
+                    </div>
+                    <div id="photoInfo" style="display: none; text-align: center; margin-top: 16px; padding: 12px; background: rgba(0, 122, 255, 0.05); border-radius: 8px; font-size: 13px; color: var(--text-secondary);">
+                        <strong style="color: var(--text-primary);">Photo Specifications</strong><br>
+                        <span style="display: inline-block; margin-top: 6px;">
+                            <strong>Size:</strong> 2×2 inches (51×51 mm) •
+                            <strong>Resolution:</strong> 600×600 pixels @ 300 DPI
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Export Panel - Separate panel below canvas -->
+                <div class="panel" style="margin-top: 20px;">
+                    <h3>Export</h3>
+                    <button class="btn btn-success" id="exportBtn" disabled
+                            aria-label="Use this photo - return to photo sheet maker with edited photo">
+                        ✓ Use This Photo
+                    </button>
+                    <button class="btn btn-secondary" id="downloadBtn" disabled
+                            aria-label="Download edited photo as JPEG file">
+                        ⬇ Download Photo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Panel: Controls -->
+            <div class="right-panel">
+                <div class="panel">
+                    <h3>2. Adjust Photo</h3>
+
+                    <div class="info-badge">
+                        <strong>💡 Quick Tips</strong>
+                        Drag to pan • Scroll to zoom • Align face with guides
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="zoomSlider">Zoom</label>
+                        <div class="slider-container">
+                            <input type="range" id="zoomSlider" class="slider"
+                                   min="0.1" max="3" step="0.01" value="1"
+                                   aria-label="Zoom level" aria-valuemin="0.1" aria-valuemax="3" aria-valuenow="1" aria-valuetext="100%">
+                            <span class="slider-value" id="zoomValue" aria-live="polite">100%</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="rotationSlider">Rotation</label>
+                        <div class="slider-container">
+                            <input type="range" id="rotationSlider" class="slider"
+                                   min="-45" max="45" step="0.1" value="0"
+                                   aria-label="Rotation angle" aria-valuemin="-45" aria-valuemax="45" aria-valuenow="0" aria-valuetext="0 degrees">
+                            <span class="slider-value" id="rotationValue" aria-live="polite">0°</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-secondary" id="resetBtn" disabled
+                            aria-label="Reset photo position, zoom, and rotation to defaults">
+                        ↻ Reset Position
+                    </button>
+                </div>
+
+                <!-- Background Removal Section - Hidden for future improvements -->
+                <!--
+                <div class="panel" style="margin-top: 20px;">
+                    <h3>3. Background</h3>
+
+                    <button class="btn btn-primary" id="removeBackgroundBtn" disabled>
+                        🎨 Remove Background
+                    </button>
+
+                    <div class="control-group">
+                        <label class="control-label">Background Color</label>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                            <button class="bg-color-btn" data-color="#FFFFFF"
+                                    style="background: white; border: 2px solid #ddd; height: 40px; border-radius: 8px; cursor: pointer;">
+                                White
+                            </button>
+                            <button class="bg-color-btn" data-color="#F5F5F0"
+                                    style="background: #F5F5F0; border: 2px solid #ddd; height: 40px; border-radius: 8px; cursor: pointer;">
+                                Off-White
+                            </button>
+                            <button class="bg-color-btn" data-color="#E8E8E8"
+                                    style="background: #E8E8E8; border: 2px solid #ddd; height: 40px; border-radius: 8px; cursor: pointer;">
+                                Light Gray
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="loadingIndicator" class="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <div class="processing-text">Processing...</div>
+                    </div>
+                </div>
+                -->
+
+                <div class="panel" style="margin-top: 20px;">
+                    <h3>3. Face Validation</h3>
+
+                    <button class="btn btn-primary" id="validateFaceBtn" disabled
+                            aria-label="Check if face position meets passport photo requirements">
+                        👤 Check Face Position
+                    </button>
+
+                    <div id="validationResults" style="display: none; margin-top: 16px; padding: 16px; border-radius: 8px; font-size: 14px; line-height: 1.6;"
+                         role="status" aria-live="polite">
+                        <!-- Results will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer" role="contentinfo">
+            <div class="footer-content">
+                <ul class="footer-links">
+                    <li><a href="index.html">← Back to Sheet Maker</a></li>
+                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="terms-of-service.html">Terms of Service</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+                <p class="footer-text">
+                    All processing happens in your browser. Your photos are never uploaded to any server.
+                    This tool is completely free and respects your privacy.
+                </p>
+                <p class="footer-copyright">
+                    &copy; <span id="currentYear"></span> Photo Sheet Maker. All rights reserved.
+                </p>
+                <p class="footer-designer">
+                    Designed by Anil Kumar Thatha Venkatachalapathy
+                </p>
+            </div>
+        </footer>
+    </div>
+    </div>
+
+    <!-- Floating Home Button -->
+    <a href="index.html" class="floating-home-btn" aria-label="Go to home page" title="Back to Home">
+        <div class="floating-camera-icon">
+            <div class="floating-camera-body">
+                <div class="floating-viewfinder"></div>
+                <div class="floating-flash"></div>
+                <div class="floating-lens">
+                    <div class="floating-lens-inner">
+                        <div class="floating-lens-glare"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+
+    <script>
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Canvas size for 2x2 inch photo at 300 DPI
+        const CANVAS_SIZE = 600;
+
+        // State variables
+        let originalImage = null;
+        let currentImage = null;
+        let scale = 1;
+        let rotation = 0;
+        let offsetX = 0;
+        let offsetY = 0;
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let backgroundRemoved = false;
+
+        // DOM elements
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadPrompt = document.getElementById('uploadPrompt');
+        const canvasContainer = document.getElementById('canvasContainer');
+        const editCanvas = document.getElementById('editCanvas');
+        const overlayCanvas = document.getElementById('overlayCanvas');
+        const ctx = editCanvas.getContext('2d', { alpha: true });
+        const overlayCtx = overlayCanvas.getContext('2d');
+
+        const zoomSlider = document.getElementById('zoomSlider');
+        const zoomValue = document.getElementById('zoomValue');
+        const rotationSlider = document.getElementById('rotationSlider');
+        const rotationValue = document.getElementById('rotationValue');
+        const resetBtn = document.getElementById('resetBtn');
+        const removeBackgroundBtn = document.getElementById('removeBackgroundBtn');
+        const validateFaceBtn = document.getElementById('validateFaceBtn');
+        const validationResults = document.getElementById('validationResults');
+        const exportBtn = document.getElementById('exportBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const photoInfo = document.getElementById('photoInfo');
+
+        const toggleFaceGuide = document.getElementById('toggleFaceGuide');
+        const toggleGrid = document.getElementById('toggleGrid');
+
+        // Initialize canvas
+        editCanvas.width = CANVAS_SIZE;
+        editCanvas.height = CANVAS_SIZE;
+        overlayCanvas.width = CANVAS_SIZE;
+        overlayCanvas.height = CANVAS_SIZE;
+
+        // Upload handlers
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        // Keyboard accessibility for upload area
+        uploadArea.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                fileInput.click();
+            }
+        });
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                loadImage(file);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                loadImage(file);
+            }
+        });
+
+        // Load image
+        function loadImage(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    originalImage = img;
+                    currentImage = img;
+                    resetTransform();
+                    showCanvas();
+                    enableControls();
+                    render();
+
+                    // Track photo upload event
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'photo_uploaded', {
+                            'event_category': 'Photo Editor',
+                            'event_label': 'Photo Upload'
+                        });
+                    }
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function showCanvas() {
+            uploadPrompt.style.display = 'none';
+            canvasContainer.style.display = 'block';
+            photoInfo.style.display = 'block';
+        }
+
+        function enableControls() {
+            resetBtn.disabled = false;
+            // removeBackgroundBtn.disabled = false; // Commented out - UI removed
+            validateFaceBtn.disabled = false;
+            exportBtn.disabled = false;
+            downloadBtn.disabled = false;
+        }
+
+        function resetTransform() {
+            // Calculate initial scale to fit image in canvas
+            if (currentImage) {
+                // Calculate scale to fit image within canvas while maintaining aspect ratio
+                const scaleX = CANVAS_SIZE / currentImage.width;
+                const scaleY = CANVAS_SIZE / currentImage.height;
+                const autoScale = Math.min(scaleX, scaleY, 1); // Don't scale up, only down if needed
+
+                scale = autoScale;
+            } else {
+                scale = 1;
+            }
+
+            rotation = 0;
+            offsetX = 0;
+            offsetY = 0;
+            zoomSlider.value = scale;
+            rotationSlider.value = 0;
+            updateSliderValues();
+
+            // Also reset background removal if applied
+            if (backgroundRemoved) {
+                currentImage = originalImage;
+                backgroundRemoved = false;
+                // Update button UI only if button exists (UI may be commented out)
+                if (removeBackgroundBtn) {
+                    removeBackgroundBtn.textContent = '🎨 Remove Background';
+                    removeBackgroundBtn.style.background = '';
+                    removeBackgroundBtn.disabled = false;
+                }
+            }
+        }
+
+        // Render canvas
+        function render() {
+            if (!currentImage) return;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+            // Save context
+            ctx.save();
+
+            // Move to center
+            ctx.translate(CANVAS_SIZE / 2, CANVAS_SIZE / 2);
+
+            // Apply rotation
+            ctx.rotate((rotation * Math.PI) / 180);
+
+            // Apply scale and offset
+            ctx.translate(offsetX, offsetY);
+            ctx.scale(scale, scale);
+
+            // Draw image centered
+            ctx.drawImage(
+                currentImage,
+                -currentImage.width / 2,
+                -currentImage.height / 2,
+                currentImage.width,
+                currentImage.height
+            );
+
+            // Restore context
+            ctx.restore();
+
+            // Draw overlay
+            drawOverlay();
+        }
+
+        // Draw guidelines overlay
+        function drawOverlay() {
+            overlayCtx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+            // Face guide (oval) - US passport spec:
+            // Photo: 2x2 inches
+            // Head: 1 to 1.4 inches (50% to 70% of photo) - we'll show 60% (1.2 inches) as ideal
+            if (toggleFaceGuide.checked) {
+                overlayCtx.strokeStyle = 'rgba(0, 122, 255, 0.7)';
+                overlayCtx.lineWidth = 3;
+                overlayCtx.setLineDash([8, 6]);
+
+                const centerX = CANVAS_SIZE / 2;
+
+                // Head height: 60% of photo (1.2" ideal)
+                const headHeightPercent = 0.60;
+                const radiusY = CANVAS_SIZE * (headHeightPercent / 2); // 30% radius = 60% height
+
+                // Eyes are typically 1/3 down from crown of head
+                // If eyes should be at ~37.5% from top (middle of 31-44% range)
+                // And eyes are 1/3 down from crown, then crown is at:
+                const eyePositionPercent = 0.375;
+                const eyesToCrownPercent = headHeightPercent / 3; // ~20%
+                const crownPercent = eyePositionPercent - eyesToCrownPercent; // ~17.5%
+
+                // Face center is halfway between crown and chin
+                const centerY = CANVAS_SIZE * (crownPercent + (headHeightPercent / 2)); // ~47.5%
+
+                // Face width: typically 70-75% of face height for realistic oval
+                const radiusX = radiusY * 0.72; // More realistic face proportions
+
+                overlayCtx.beginPath();
+                overlayCtx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
+                overlayCtx.stroke();
+
+                // Add reference markers at top and bottom of face guide
+                overlayCtx.setLineDash([]);
+                overlayCtx.strokeStyle = 'rgba(0, 122, 255, 0.4)';
+                overlayCtx.lineWidth = 1;
+
+                // Top of head marker (crown)
+                const topY = centerY - radiusY;
+                overlayCtx.beginPath();
+                overlayCtx.moveTo(centerX - 30, topY);
+                overlayCtx.lineTo(centerX + 30, topY);
+                overlayCtx.stroke();
+
+                // Add label for crown
+                overlayCtx.fillStyle = 'rgba(0, 122, 255, 0.8)';
+                overlayCtx.font = '11px -apple-system, sans-serif';
+                overlayCtx.fillText('Crown', centerX + 35, topY + 4);
+
+                // Bottom of chin marker
+                const bottomY = centerY + radiusY;
+                overlayCtx.beginPath();
+                overlayCtx.moveTo(centerX - 30, bottomY);
+                overlayCtx.lineTo(centerX + 30, bottomY);
+                overlayCtx.stroke();
+
+                // Add label for chin
+                overlayCtx.fillText('Chin', centerX + 35, bottomY + 4);
+            }
+
+            // Grid with scale markings
+            if (toggleGrid.checked) {
+                overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+                overlayCtx.lineWidth = 1;
+                overlayCtx.setLineDash([4, 4]);
+
+                // Center cross (most important)
+                overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+                overlayCtx.lineWidth = 2;
+
+                // Vertical center
+                overlayCtx.beginPath();
+                overlayCtx.moveTo(CANVAS_SIZE / 2, 0);
+                overlayCtx.lineTo(CANVAS_SIZE / 2, CANVAS_SIZE);
+                overlayCtx.stroke();
+
+                // Horizontal center
+                overlayCtx.beginPath();
+                overlayCtx.moveTo(0, CANVAS_SIZE / 2);
+                overlayCtx.lineTo(CANVAS_SIZE, CANVAS_SIZE / 2);
+                overlayCtx.stroke();
+
+                // Thirds grid (lighter)
+                overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                overlayCtx.lineWidth = 1;
+
+                // Vertical thirds
+                for (let i = 1; i < 3; i++) {
+                    const x = (CANVAS_SIZE / 3) * i;
+                    overlayCtx.beginPath();
+                    overlayCtx.moveTo(x, 0);
+                    overlayCtx.lineTo(x, CANVAS_SIZE);
+                    overlayCtx.stroke();
+                }
+
+                // Horizontal thirds
+                for (let i = 1; i < 3; i++) {
+                    const y = (CANVAS_SIZE / 3) * i;
+                    overlayCtx.beginPath();
+                    overlayCtx.moveTo(0, y);
+                    overlayCtx.lineTo(CANVAS_SIZE, y);
+                    overlayCtx.stroke();
+                }
+
+                overlayCtx.setLineDash([]);
+
+                // Add scale markings on all edges
+                overlayCtx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+                overlayCtx.font = 'bold 11px -apple-system, sans-serif';
+                overlayCtx.lineWidth = 1;
+
+                // Scale: 2 inches = 600px, so each 0.5" = 150px, each 0.25" = 75px
+                const quarterInch = CANVAS_SIZE / 8; // 75px = 0.25"
+                const halfInch = CANVAS_SIZE / 4;     // 150px = 0.5"
+
+                // Top edge - horizontal scale
+                for (let i = 0; i <= 8; i++) {
+                    const x = i * quarterInch;
+                    const isMajor = i % 2 === 0; // Every half inch
+                    const tickHeight = isMajor ? 12 : 6;
+
+                    overlayCtx.beginPath();
+                    overlayCtx.moveTo(x, 0);
+                    overlayCtx.lineTo(x, tickHeight);
+                    overlayCtx.stroke();
+
+                    if (isMajor && i > 0 && i < 8) {
+                        overlayCtx.fillText((i * 0.25).toFixed(2) + '"', x - 12, tickHeight + 11);
+                    }
+                }
+
+                // Bottom edge - horizontal scale
+                for (let i = 0; i <= 8; i++) {
+                    const x = i * quarterInch;
+                    const isMajor = i % 2 === 0;
+                    const tickHeight = isMajor ? 12 : 6;
+
+                    overlayCtx.beginPath();
+                    overlayCtx.moveTo(x, CANVAS_SIZE);
+                    overlayCtx.lineTo(x, CANVAS_SIZE - tickHeight);
+                    overlayCtx.stroke();
+
+                    if (isMajor && i > 0 && i < 8) {
+                        overlayCtx.fillText((i * 0.25).toFixed(2) + '"', x - 12, CANVAS_SIZE - tickHeight - 3);
+                    }
+                }
+
+                // Left edge - vertical scale
+                for (let i = 0; i <= 8; i++) {
+                    const y = i * quarterInch;
+                    const isMajor = i % 2 === 0;
+                    const tickWidth = isMajor ? 12 : 6;
+
+                    overlayCtx.beginPath();
+                    overlayCtx.moveTo(0, y);
+                    overlayCtx.lineTo(tickWidth, y);
+                    overlayCtx.stroke();
+
+                    if (isMajor && i > 0 && i < 8) {
+                        overlayCtx.save();
+                        overlayCtx.translate(tickWidth + 3, y + 4);
+                        overlayCtx.fillText((i * 0.25).toFixed(2) + '"', 0, 0);
+                        overlayCtx.restore();
+                    }
+                }
+
+                // Right edge - vertical scale
+                for (let i = 0; i <= 8; i++) {
+                    const y = i * quarterInch;
+                    const isMajor = i % 2 === 0;
+                    const tickWidth = isMajor ? 12 : 6;
+
+                    overlayCtx.beginPath();
+                    overlayCtx.moveTo(CANVAS_SIZE, y);
+                    overlayCtx.lineTo(CANVAS_SIZE - tickWidth, y);
+                    overlayCtx.stroke();
+
+                    if (isMajor && i > 0 && i < 8) {
+                        overlayCtx.save();
+                        overlayCtx.translate(CANVAS_SIZE - tickWidth - 26, y + 4);
+                        overlayCtx.fillText((i * 0.25).toFixed(2) + '"', 0, 0);
+                        overlayCtx.restore();
+                    }
+                }
+            }
+        }
+
+        // Zoom control
+        zoomSlider.addEventListener('input', (e) => {
+            scale = parseFloat(e.target.value);
+            updateSliderValues();
+            render();
+        });
+
+        // Track zoom changes (throttled)
+        let zoomTrackTimeout;
+        zoomSlider.addEventListener('change', (e) => {
+            clearTimeout(zoomTrackTimeout);
+            zoomTrackTimeout = setTimeout(() => {
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'zoom_adjusted', {
+                        'event_category': 'Photo Editor',
+                        'event_label': 'Zoom Control',
+                        'value': Math.round(scale * 100)
+                    });
+                }
+            }, 500);
+        });
+
+        // Prevent zoom slider from stealing focus
+        zoomSlider.addEventListener('focus', () => {
+            if (isDragging) {
+                zoomSlider.blur();
+            }
+        });
+
+        // Rotation control
+        rotationSlider.addEventListener('input', (e) => {
+            rotation = parseFloat(e.target.value);
+            updateSliderValues();
+            render();
+        });
+
+        // Track rotation changes (throttled)
+        let rotationTrackTimeout;
+        rotationSlider.addEventListener('change', (e) => {
+            clearTimeout(rotationTrackTimeout);
+            rotationTrackTimeout = setTimeout(() => {
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'rotation_adjusted', {
+                        'event_category': 'Photo Editor',
+                        'event_label': 'Rotation Control',
+                        'value': Math.round(rotation)
+                    });
+                }
+            }, 500);
+        });
+
+        function updateSliderValues() {
+            const zoomPercent = Math.round(scale * 100);
+            const rotationDegrees = rotation.toFixed(1);
+
+            zoomValue.textContent = zoomPercent + '%';
+            rotationValue.textContent = rotationDegrees + '°';
+
+            // Update ARIA attributes for accessibility
+            zoomSlider.setAttribute('aria-valuenow', scale);
+            zoomSlider.setAttribute('aria-valuetext', zoomPercent + '%');
+            rotationSlider.setAttribute('aria-valuenow', rotation);
+            rotationSlider.setAttribute('aria-valuetext', rotationDegrees + ' degrees');
+        }
+
+        // Mouse wheel zoom (smooth)
+        canvasContainer.addEventListener('wheel', (e) => {
+            // Prevent zoom while dragging
+            if (isDragging) {
+                e.preventDefault();
+                return;
+            }
+
+            e.preventDefault();
+
+            // Increased sensitivity for better zoom out control
+            let delta;
+            if (e.deltaMode === 1) { // Line mode
+                delta = e.deltaY * -0.05;
+            } else { // Pixel mode (most common)
+                delta = e.deltaY * -0.005; // Increased from 0.001 for better responsiveness
+            }
+
+            const newScale = Math.max(0.1, Math.min(3, scale + delta));
+
+            // Only update if scale actually changed
+            if (newScale !== scale) {
+                scale = newScale;
+                zoomSlider.value = scale;
+                updateSliderValues();
+                render();
+            }
+        }, { passive: false });
+
+        // Pan with mouse
+        canvasContainer.addEventListener('mousedown', (e) => {
+            e.preventDefault(); // Prevent any default browser behavior
+            isDragging = true;
+            dragStartX = e.clientX - offsetX;
+            dragStartY = e.clientY - offsetY;
+            canvasContainer.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault(); // Prevent default during drag
+
+            offsetX = e.clientX - dragStartX;
+            offsetY = e.clientY - dragStartY;
+            render();
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            if (isDragging) {
+                e.preventDefault();
+                isDragging = false;
+                canvasContainer.style.cursor = 'move';
+            }
+        });
+
+        // Touch support
+        let lastTouchDistance = 0;
+
+        canvasContainer.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                isDragging = true;
+                dragStartX = e.touches[0].clientX - offsetX;
+                dragStartY = e.touches[0].clientY - offsetY;
+            } else if (e.touches.length === 2) {
+                const dx = e.touches[0].clientX - e.touches[1].clientX;
+                const dy = e.touches[0].clientY - e.touches[1].clientY;
+                lastTouchDistance = Math.sqrt(dx * dx + dy * dy);
+            }
+        });
+
+        canvasContainer.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+
+            if (e.touches.length === 1 && isDragging) {
+                offsetX = e.touches[0].clientX - dragStartX;
+                offsetY = e.touches[0].clientY - dragStartY;
+                render();
+            } else if (e.touches.length === 2) {
+                const dx = e.touches[0].clientX - e.touches[1].clientX;
+                const dy = e.touches[0].clientY - e.touches[1].clientY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (lastTouchDistance > 0) {
+                    const delta = (distance - lastTouchDistance) * 0.01;
+                    scale = Math.max(0.1, Math.min(3, scale + delta));
+                    zoomSlider.value = scale;
+                    updateSliderValues();
+                    render();
+                }
+
+                lastTouchDistance = distance;
+            }
+        });
+
+        canvasContainer.addEventListener('touchend', () => {
+            isDragging = false;
+            lastTouchDistance = 0;
+        });
+
+        // Reset button
+        resetBtn.addEventListener('click', () => {
+            resetTransform();
+            render();
+
+            // Track reset action
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'reset_clicked', {
+                    'event_category': 'Photo Editor',
+                    'event_label': 'Reset Position'
+                });
+            }
+        });
+
+        // Initialize MediaPipe Selfie Segmentation for background removal
+        let selfieSegmentation = null;
+        let faceDetection = null;
+        let selectedBackgroundColor = '#FFFFFF'; // Default white
+
+        async function initializeSegmentation() {
+            try {
+                console.log('Starting MediaPipe initialization...');
+
+                // Check if MediaPipe libraries are loaded
+                if (typeof SelfieSegmentation === 'undefined') {
+                    console.warn('SelfieSegmentation not loaded');
+                }
+                if (typeof FaceDetection === 'undefined') {
+                    console.warn('FaceDetection not loaded');
+                }
+
+                // Initialize Selfie Segmentation
+                selfieSegmentation = new SelfieSegmentation({
+                    locateFile: (file) => {
+                        return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
+                    }
+                });
+
+                selfieSegmentation.setOptions({
+                    modelSelection: 0, // 0 for general (0.5-2m), better for close-up passport photos
+                });
+
+                // Set up the onResults callback BEFORE using it
+                selfieSegmentation.onResults(onSegmentationResults);
+                console.log('SelfieSegmentation initialized');
+
+                // Initialize Face Detection
+                faceDetection = new FaceDetection({
+                    locateFile: (file) => {
+                        return `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${file}`;
+                    }
+                });
+
+                faceDetection.setOptions({
+                    model: 'short', // 'short' for faces within 2 meters
+                    minDetectionConfidence: 0.5
+                });
+
+                // Set up face detection callback
+                faceDetection.onResults(onFaceDetectionResults);
+                console.log('FaceDetection initialized');
+
+                console.log('MediaPipe libraries initialized successfully');
+            } catch (error) {
+                console.error('Failed to initialize MediaPipe:', error);
+                // Face detection is still available even if initialization partially fails
+            }
+        }
+
+        // Store the results for processing
+        let currentSegmentationResults = null;
+        let currentFaceResults = null;
+
+        function onSegmentationResults(results) {
+            currentSegmentationResults = results;
+        }
+
+        function onFaceDetectionResults(results) {
+            currentFaceResults = results;
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', initializeSegmentation);
+
+        // Toggle controls
+        toggleFaceGuide.addEventListener('change', () => {
+            render();
+
+            // Update ARIA and track event
+            toggleFaceGuide.setAttribute('aria-checked', toggleFaceGuide.checked);
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'toggle_face_guide', {
+                    'event_category': 'Photo Editor',
+                    'event_label': 'Face Outline Guide',
+                    'value': toggleFaceGuide.checked ? 1 : 0
+                });
+            }
+        });
+
+        toggleGrid.addEventListener('change', () => {
+            render();
+
+            // Update ARIA and track event
+            toggleGrid.setAttribute('aria-checked', toggleGrid.checked);
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'toggle_grid', {
+                    'event_category': 'Photo Editor',
+                    'event_label': 'Grid with Scale',
+                    'value': toggleGrid.checked ? 1 : 0
+                });
+            }
+        });
+
+        // Face validation using MediaPipe Face Detection
+        validateFaceBtn.addEventListener('click', async () => {
+            console.log('Face validation button clicked');
+            console.log('Current image:', currentImage);
+            console.log('Face detection initialized:', faceDetection);
+
+            // Track face validation click
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'face_validation_started', {
+                    'event_category': 'Photo Editor',
+                    'event_label': 'Face Validation'
+                });
+            }
+
+            if (!currentImage) {
+                console.error('No image loaded');
+                return;
+            }
+
+            if (!faceDetection) {
+                console.error('Face detection not initialized');
+                validationResults.style.display = 'block';
+                validationResults.style.background = '#FFF3CD';
+                validationResults.style.borderLeft = '4px solid #FFA500';
+                validationResults.innerHTML = `
+                    <strong style="color: #856404;">⚠️ Face Detection Not Ready</strong>
+                    <p style="color: #856404; margin-top: 8px;">Face detection is still loading. Please wait a moment and try again.</p>
+                    <p style="color: #856404; margin-top: 8px; font-size: 12px;">If this persists, try refreshing the page.</p>
+                `;
+                return;
+            }
+
+            validationResults.style.display = 'block';
+            validationResults.innerHTML = '<div class="spinner" style="width: 20px; height: 20px; margin: 0 auto;"></div><p style="text-align: center; margin-top: 10px;">Analyzing face position...</p>';
+            validateFaceBtn.disabled = true;
+
+            try {
+                // Create temporary canvas for processing
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = currentImage.width;
+                tempCanvas.height = currentImage.height;
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCtx.drawImage(currentImage, 0, 0);
+
+                // Reset results
+                currentFaceResults = null;
+
+                // Process with MediaPipe
+                await faceDetection.send({image: tempCanvas});
+
+                // Wait for results (with timeout)
+                const maxWait = 5000; // 5 seconds
+                const startTime = Date.now();
+
+                while (!currentFaceResults && (Date.now() - startTime) < maxWait) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+                if (!currentFaceResults || !currentFaceResults.detections || currentFaceResults.detections.length === 0) {
+                    validationResults.style.background = '#FFF3CD';
+                    validationResults.style.borderLeft = '4px solid #FFA500';
+                    validationResults.innerHTML = `
+                        <strong style="color: #856404;">⚠️ No Face Detected</strong>
+                        <p style="color: #856404; margin-top: 8px;">Make sure:</p>
+                        <ul style="color: #856404; margin-left: 20px; margin-top: 8px;">
+                            <li>Your face is clearly visible</li>
+                            <li>Good lighting conditions</li>
+                            <li>Face is centered in the photo</li>
+                            <li>Zoom in to make face larger</li>
+                        </ul>
+                    `;
+                    validateFaceBtn.disabled = false;
+                    return;
+                }
+
+                // ========================================
+                // COMPREHENSIVE FACE VALIDATION SYSTEM
+                // ========================================
+
+                const face = currentFaceResults.detections[0];
+                const bbox = face.boundingBox;
+                const landmarks = face.landmarks;
+
+                // Debug info object
+                const debugInfo = {
+                    method: 'unknown',
+                    hasEyes: false,
+                    hasNose: false,
+                    hasMouth: false,
+                    bboxCoverage: 'unknown'
+                };
+
+                // ========================================
+                // STEP 1: Extract all available landmarks
+                // ========================================
+                let rightEye = null, leftEye = null, noseTip = null, mouthCenter = null;
+
+                if (landmarks && landmarks.length >= 2) {
+                    rightEye = landmarks[0];  // Right eye
+                    leftEye = landmarks[1];   // Left eye
+                    debugInfo.hasEyes = true;
+
+                    if (landmarks.length >= 3) {
+                        noseTip = landmarks[2];
+                        debugInfo.hasNose = true;
+                    }
+                    if (landmarks.length >= 4) {
+                        mouthCenter = landmarks[3];
+                        debugInfo.hasMouth = true;
+                    }
+                }
+
+                // ========================================
+                // STEP 2: Convert bbox to pixel coordinates
+                // ========================================
+                const bboxLeft = (bbox.xCenter - bbox.width / 2) * currentImage.width;
+                const bboxTop = (bbox.yCenter - bbox.height / 2) * currentImage.height;
+                const bboxRight = (bbox.xCenter + bbox.width / 2) * currentImage.width;
+                const bboxBottom = (bbox.yCenter + bbox.height / 2) * currentImage.height;
+                const bboxWidthPx = bboxRight - bboxLeft;
+                const bboxHeightPx = bboxBottom - bboxTop;
+                const bboxCenterX = (bboxLeft + bboxRight) / 2;
+                const bboxCenterY = (bboxTop + bboxBottom) / 2;
+
+                // ========================================
+                // STEP 3: Determine head boundaries using multi-strategy approach
+                // ========================================
+                let crownYPx, chinYPx, headCenterXPx, headCenterYPx;
+                let eyeYPx = null, noseYPx = null, mouthYPx = null;
+
+                if (rightEye && leftEye) {
+                    // Strategy: Eye-landmark based (most accurate)
+                    debugInfo.method = 'eye-landmark';
+
+                    const eyeCenterX = (rightEye.x + leftEye.x) / 2;
+                    const eyeCenterY = (rightEye.y + leftEye.y) / 2;
+                    eyeYPx = eyeCenterY * currentImage.height;
+                    headCenterXPx = eyeCenterX * currentImage.width;
+
+                    // Get additional landmarks for better accuracy
+                    if (noseTip) {
+                        noseYPx = noseTip.y * currentImage.height;
+                    }
+                    if (mouthCenter) {
+                        mouthYPx = mouthCenter.y * currentImage.height;
+                    }
+
+                    // ANATOMICAL PROPORTIONS (adult human head):
+                    // - Crown to eyes: ~43% of total head height
+                    // - Eyes to nose: ~17% of total head height
+                    // - Nose to mouth: ~10% of total head height
+                    // - Mouth to chin: ~30% of total head height
+
+                    // Method A: If we have mouth, use eye-to-mouth distance
+                    if (mouthYPx) {
+                        const eyeToMouthPx = mouthYPx - eyeYPx;
+                        // Eye to mouth is ~27% of head, so full head = eyeToMouth / 0.27
+                        const estimatedHeadHeight = eyeToMouthPx / 0.27;
+
+                        // Crown is 43% of head above eyes
+                        crownYPx = eyeYPx - (estimatedHeadHeight * 0.43);
+                        // Chin is 57% of head below eyes (100% - 43%)
+                        chinYPx = eyeYPx + (estimatedHeadHeight * 0.57);
+
+                        debugInfo.bboxCoverage = 'eye-mouth-based';
+                    }
+                    // Method B: If we have nose but no mouth
+                    else if (noseYPx) {
+                        const eyeToNosePx = noseYPx - eyeYPx;
+                        // Eye to nose is ~17% of head, so full head = eyeToNose / 0.17
+                        const estimatedHeadHeight = eyeToNosePx / 0.17;
+
+                        crownYPx = eyeYPx - (estimatedHeadHeight * 0.43);
+                        chinYPx = eyeYPx + (estimatedHeadHeight * 0.57);
+
+                        debugInfo.bboxCoverage = 'eye-nose-based';
+                    }
+                    // Method C: Use bbox bottom as chin approximation
+                    else {
+                        // Bbox bottom is usually close to chin
+                        chinYPx = bboxBottom;
+                        const eyeToChinPx = chinYPx - eyeYPx;
+                        // Eye to chin is ~57% of head, so full head = eyeToChin / 0.57
+                        const estimatedHeadHeight = eyeToChinPx / 0.57;
+
+                        crownYPx = eyeYPx - (estimatedHeadHeight * 0.43);
+
+                        debugInfo.bboxCoverage = 'eye-bbox-based';
+                    }
+
+                    // Head center Y is midpoint between crown and chin
+                    headCenterYPx = (crownYPx + chinYPx) / 2;
+
+                } else {
+                    // Strategy: Bbox-only based (fallback)
+                    debugInfo.method = 'bbox-only';
+
+                    headCenterXPx = bboxCenterX;
+
+                    // Assumption: MediaPipe bbox typically captures from hairline/forehead to chin
+                    // This is roughly 85-90% of full head (crown to chin)
+                    // We need to add ~10-15% above the bbox top for full crown
+
+                    const extraAbove = bboxHeightPx * 0.12; // Add 12% above for crown
+                    crownYPx = bboxTop - extraAbove;
+                    chinYPx = bboxBottom;
+                    headCenterYPx = (crownYPx + chinYPx) / 2;
+
+                    debugInfo.bboxCoverage = 'bbox-only-with-crown-estimate';
+                }
+
+                const headHeightPx = chinYPx - crownYPx;
+
+                // ========================================
+                // STEP 4: Transform source coordinates to canvas coordinates
+                // ========================================
+                // The canvas transformation is:
+                // 1. Image is centered at canvas center
+                // 2. Rotation is applied around canvas center
+                // 3. Scale is applied
+                // 4. Offset (pan) is applied
+
+                const canvasCenterX = CANVAS_SIZE / 2;
+                const canvasCenterY = CANVAS_SIZE / 2;
+
+                // Helper function to transform a point from source to canvas
+                function transformToCanvas(sourceX, sourceY) {
+                    // Position relative to source image center
+                    const relX = sourceX - currentImage.width / 2;
+                    const relY = sourceY - currentImage.height / 2;
+
+                    // Apply rotation around origin (0,0)
+                    const rotRad = (rotation * Math.PI) / 180;
+                    const cosRot = Math.cos(rotRad);
+                    const sinRot = Math.sin(rotRad);
+                    const rotX = relX * cosRot - relY * sinRot;
+                    const rotY = relX * sinRot + relY * cosRot;
+
+                    // Apply scale
+                    const scaledX = rotX * scale;
+                    const scaledY = rotY * scale;
+
+                    // Apply offset and translate to canvas center
+                    const canvasX = canvasCenterX + scaledX + offsetX;
+                    const canvasY = canvasCenterY + scaledY + offsetY;
+
+                    return { x: canvasX, y: canvasY };
+                }
+
+                // Transform head points to canvas
+                const canvasHeadCenter = transformToCanvas(headCenterXPx, headCenterYPx);
+                const canvasCrown = transformToCanvas(headCenterXPx, crownYPx);
+                const canvasChin = transformToCanvas(headCenterXPx, chinYPx);
+
+                // Head height on canvas (accounting for rotation)
+                const canvasHeadHeight = Math.abs(canvasChin.y - canvasCrown.y);
+
+                // Use transformed coordinates
+                const canvasHeadCenterX = canvasHeadCenter.x;
+                const canvasHeadCenterY = canvasHeadCenter.y;
+                const canvasCrownY = canvasCrown.y;
+                const canvasChinY = canvasChin.y;
+
+                // ========================================
+                // STEP 5: Calculate percentages and validate
+                // ========================================
+
+                // Calculate head height as percentage of canvas
+                const headHeightPercent = (canvasHeadHeight / CANVAS_SIZE) * 100;
+
+                // Face center position as percentage from top/left
+                const faceCenterYPercent = (canvasHeadCenterY / CANVAS_SIZE) * 100;
+                const faceCenterXPercent = (canvasHeadCenterX / CANVAS_SIZE) * 100;
+
+                // Crown and chin positions as percentage (for detailed feedback)
+                const crownYPercent = (canvasCrownY / CANVAS_SIZE) * 100;
+                const chinYPercent = (canvasChinY / CANVAS_SIZE) * 100;
+
+                // ========================================
+                // STEP 6: Define target values (matching our oval guideline)
+                // ========================================
+
+                const targetHeadHeight = 60;        // Our oval is 60% tall
+                const targetVerticalCenter = 47.5;  // Our oval center at 47.5%
+                const targetHorizontalCenter = 50;  // Centered at 50%
+                const targetCrownY = 17.5;          // Our oval crown at 17.5%
+                const targetChinY = 77.5;           // Our oval chin at 77.5%
+
+                // ========================================
+                // STEP 7: Perform validation with progressive tolerance
+                // ========================================
+
+                const results = [];
+                let allGood = true;
+
+                // SIZE VALIDATION
+                const heightDiff = Math.abs(headHeightPercent - targetHeadHeight);
+                if (headHeightPercent < 40) {
+                    results.push({ status: 'error', text: '❌ Face too small - zoom in significantly' });
+                    allGood = false;
+                } else if (headHeightPercent > 80) {
+                    results.push({ status: 'error', text: '❌ Face too large - zoom out significantly' });
+                    allGood = false;
+                } else if (heightDiff > 15) {
+                    if (headHeightPercent < targetHeadHeight) {
+                        results.push({ status: 'warning', text: `⚠️ Face small (${headHeightPercent.toFixed(0)}%) - zoom in more` });
+                    } else {
+                        results.push({ status: 'warning', text: `⚠️ Face large (${headHeightPercent.toFixed(0)}%) - zoom out more` });
+                    }
+                } else if (heightDiff > 8) {
+                    if (headHeightPercent < targetHeadHeight) {
+                        results.push({ status: 'success', text: `✓ Face size acceptable - could zoom in slightly to ${targetHeadHeight}%` });
+                    } else {
+                        results.push({ status: 'success', text: `✓ Face size acceptable - could zoom out slightly to ${targetHeadHeight}%` });
+                    }
+                } else if (heightDiff > 3) {
+                    results.push({ status: 'success', text: `✓ Face size good (${headHeightPercent.toFixed(1)}% vs ${targetHeadHeight}%)` });
+                } else {
+                    results.push({ status: 'success', text: `✓ Face size perfect! (${headHeightPercent.toFixed(1)}%)` });
+                }
+
+                // VERTICAL POSITION VALIDATION
+                const verticalDiff = Math.abs(faceCenterYPercent - targetVerticalCenter);
+                const crownDiff = Math.abs(crownYPercent - targetCrownY);
+                const chinDiff = Math.abs(chinYPercent - targetChinY);
+
+                if (faceCenterYPercent < 25 || crownYPercent < 0) {
+                    results.push({ status: 'error', text: '❌ Face too high - pan down significantly' });
+                    allGood = false;
+                } else if (faceCenterYPercent > 70 || chinYPercent > 100) {
+                    results.push({ status: 'error', text: '❌ Face too low - pan up significantly' });
+                    allGood = false;
+                } else if (verticalDiff > 12) {
+                    if (faceCenterYPercent < targetVerticalCenter) {
+                        results.push({ status: 'warning', text: `⚠️ Face high (${faceCenterYPercent.toFixed(0)}%) - pan down to ~${targetVerticalCenter}%` });
+                    } else {
+                        results.push({ status: 'warning', text: `⚠️ Face low (${faceCenterYPercent.toFixed(0)}%) - pan up to ~${targetVerticalCenter}%` });
+                    }
+                } else if (verticalDiff > 6) {
+                    if (faceCenterYPercent < targetVerticalCenter) {
+                        results.push({ status: 'success', text: `✓ Vertical acceptable - pan down slightly for perfect alignment` });
+                    } else {
+                        results.push({ status: 'success', text: `✓ Vertical acceptable - pan up slightly for perfect alignment` });
+                    }
+                } else if (verticalDiff > 2) {
+                    results.push({ status: 'success', text: `✓ Vertical position good (${faceCenterYPercent.toFixed(1)}%)` });
+                } else {
+                    results.push({ status: 'success', text: `✓ Vertical position perfect! (${faceCenterYPercent.toFixed(1)}%)` });
+                }
+
+                // HORIZONTAL POSITION VALIDATION
+                const horizontalDiff = Math.abs(faceCenterXPercent - targetHorizontalCenter);
+                if (faceCenterXPercent < 25) {
+                    results.push({ status: 'error', text: '❌ Face too far left - pan right significantly' });
+                    allGood = false;
+                } else if (faceCenterXPercent > 75) {
+                    results.push({ status: 'error', text: '❌ Face too far right - pan left significantly' });
+                    allGood = false;
+                } else if (horizontalDiff > 12) {
+                    if (faceCenterXPercent < targetHorizontalCenter) {
+                        results.push({ status: 'warning', text: `⚠️ Face left (${faceCenterXPercent.toFixed(0)}%) - pan right` });
+                    } else {
+                        results.push({ status: 'warning', text: `⚠️ Face right (${faceCenterXPercent.toFixed(0)}%) - pan left` });
+                    }
+                } else if (horizontalDiff > 5) {
+                    results.push({ status: 'success', text: `✓ Horizontal acceptable - minor adjustment possible` });
+                } else if (horizontalDiff > 2) {
+                    results.push({ status: 'success', text: `✓ Horizontally centered (${faceCenterXPercent.toFixed(1)}%)` });
+                } else {
+                    results.push({ status: 'success', text: `✓ Perfectly centered horizontally! (${faceCenterXPercent.toFixed(1)}%)` });
+                }
+
+                // ========================================
+                // STEP 8: Display results with detailed feedback
+                // ========================================
+                const bgColor = allGood ? '#D4EDDA' : '#FFF3CD';
+                const borderColor = allGood ? '#28A745' : '#FFA500';
+                validationResults.style.background = bgColor;
+                validationResults.style.borderLeft = `4px solid ${borderColor}`;
+
+                // Track validation results
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'face_validation_completed', {
+                        'event_category': 'Photo Editor',
+                        'event_label': allGood ? 'Perfect Alignment' : 'Needs Adjustment',
+                        'value': allGood ? 1 : 0
+                    });
+                }
+
+                let html = allGood
+                    ? '<strong style="color: #155724;">🎉 Perfect! Your photo aligns with the guideline</strong>'
+                    : '<strong style="color: #856404;">📊 Face Position Analysis</strong>';
+
+                html += '<ul style="margin: 12px 0 0 20px; padding: 0;">';
+                results.forEach(result => {
+                    const color = result.status === 'success' ? '#155724' :
+                                 result.status === 'warning' ? '#856404' : '#721C24';
+                    html += `<li style="color: ${color}; margin: 6px 0;">${result.text}</li>`;
+                });
+                html += '</ul>';
+
+                // Add toggle button for detailed stats
+                html += `
+                    <div style="text-align: center; margin-top: 12px;">
+                        <button id="toggleStatsBtn" style="padding: 8px 16px; border: 1px solid #007AFF; background: white; color: #007AFF; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s;">
+                            🤓 Show Detailed Stats
+                        </button>
+                    </div>
+                `;
+
+                // Build detection method description
+                let methodDesc = '';
+                if (debugInfo.method === 'eye-landmark') {
+                    if (debugInfo.bboxCoverage === 'eye-mouth-based') {
+                        methodDesc = '👁️👄 Eye+Mouth Landmarks (Highest Accuracy)';
+                    } else if (debugInfo.bboxCoverage === 'eye-nose-based') {
+                        methodDesc = '👁️👃 Eye+Nose Landmarks (High Accuracy)';
+                    } else {
+                        methodDesc = '👁️ Eye Landmarks (Good Accuracy)';
+                    }
+                } else {
+                    methodDesc = '📦 Bounding Box Only (Standard)';
+                }
+
+                // Detailed measurements section (hidden by default)
+                html += `
+                    <div id="detailedStats" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.1); font-size: 12px; color: #666;">
+                        <div style="background: rgba(0, 122, 255, 0.05); padding: 8px; border-radius: 6px; margin-bottom: 10px;">
+                            <strong style="color: #007AFF;">🔍 Detection:</strong> ${methodDesc}
+                        </div>
+
+                        <strong>📏 Current Measurements:</strong><br>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 6px 0;">
+                            <span>• Head height:</span> <span style="font-weight: 600;">${headHeightPercent.toFixed(1)}%</span>
+                            <span>• Center vertical:</span> <span style="font-weight: 600;">${faceCenterYPercent.toFixed(1)}%</span>
+                            <span>• Center horizontal:</span> <span style="font-weight: 600;">${faceCenterXPercent.toFixed(1)}%</span>
+                        </div>
+
+                        <strong style="margin-top: 8px; display: block;">🎯 Target Guideline:</strong><br>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 6px 0;">
+                            <span>• Head height:</span> <span style="color: #007AFF; font-weight: 600;">${targetHeadHeight}%</span>
+                            <span>• Center vertical:</span> <span style="color: #007AFF; font-weight: 600;">${targetVerticalCenter}%</span>
+                            <span>• Center horizontal:</span> <span style="color: #007AFF; font-weight: 600;">${targetHorizontalCenter}%</span>
+                        </div>
+
+                        <strong style="margin-top: 8px; display: block;">📍 Detailed Positions:</strong><br>
+                        <div style="display: grid; grid-template-columns: auto 1fr 1fr; gap: 4px 8px; margin: 6px 0; font-size: 11px;">
+                            <span></span><span style="text-align: center; font-weight: 600;">Current</span><span style="text-align: center; font-weight: 600; color: #007AFF;">Target</span>
+                            <span>Crown:</span><span style="text-align: center;">${crownYPercent.toFixed(1)}%</span><span style="text-align: center; color: #007AFF;">${targetCrownY}%</span>
+                            <span>Chin:</span><span style="text-align: center;">${chinYPercent.toFixed(1)}%</span><span style="text-align: center; color: #007AFF;">${targetChinY}%</span>
+                        </div>
+
+                        <div style="margin-top: 10px; padding: 8px; background: rgba(52, 199, 89, 0.05); border-radius: 6px; font-size: 11px; line-height: 1.5;">
+                            <strong style="color: #28A745;">💡 Tips:</strong><br>
+                            • Align crown & chin with blue oval markers<br>
+                            • Use mouse wheel or slider to zoom<br>
+                            • Click and drag to pan the image
+                        </div>
+                    </div>
+                `;
+
+                validationResults.innerHTML = html;
+
+                // Add event listener for toggle button
+                const toggleBtn = document.getElementById('toggleStatsBtn');
+                if (toggleBtn) {
+                    toggleBtn.addEventListener('click', () => {
+                        const detailedStats = document.getElementById('detailedStats');
+                        if (detailedStats) {
+                            const isHidden = detailedStats.style.display === 'none';
+                            detailedStats.style.display = isHidden ? 'block' : 'none';
+                            toggleBtn.textContent = isHidden ? '📊 Hide Detailed Stats' : '🤓 Show Detailed Stats';
+                            toggleBtn.style.background = isHidden ? '#007AFF' : 'white';
+                            toggleBtn.style.color = isHidden ? 'white' : '#007AFF';
+                        }
+                    });
+                }
+
+            } catch (error) {
+                console.error('Face validation failed:', error);
+                validationResults.style.background = '#F8D7DA';
+                validationResults.style.borderLeft = '4px solid #DC3545';
+                validationResults.innerHTML = `
+                    <strong style="color: #721C24;">❌ Validation Failed</strong>
+                    <p style="color: #721C24; margin-top: 8px;">${error.message}</p>
+                    <p style="color: #721C24; margin-top: 8px;">Please try again or use a different photo.</p>
+                `;
+            } finally {
+                validateFaceBtn.disabled = false;
+            }
+        });
+
+        // Export button
+        exportBtn.addEventListener('click', () => {
+            const croppedData = editCanvas.toDataURL('image/jpeg', 0.95);
+            // Save to localStorage or pass to main app
+            localStorage.setItem('editedPhoto', croppedData);
+
+            // Track export action
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'photo_exported', {
+                    'event_category': 'Photo Editor',
+                    'event_label': 'Use Photo - Return to Sheet Maker'
+                });
+            }
+
+            window.location.href = 'index.html';
+        });
+
+        // Download button
+        downloadBtn.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = 'passport-photo-edited.jpg';
+            link.href = editCanvas.toDataURL('image/jpeg', 0.95);
+            link.click();
+
+            // Track download action
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'photo_downloaded', {
+                    'event_category': 'Photo Editor',
+                    'event_label': 'Download Photo'
+                });
+            }
+        });
+
+        // ========================================
+        // LOCALIZATION SYSTEM
+        // ========================================
+
+        const translations = {
+            en: {
+                page_title: "Photo Editor",
+                page_subtitle: "Crop, adjust, and perfect your passport photo",
+                backToHome: "← Back to Home",
+                upload_title: "1. Upload Photo",
+                upload_text: "Choose Your Photo",
+                upload_hint: "Click or drag and drop",
+                guidelines_title: "Guidelines",
+                face_outline: "Face Outline",
+                grid_scale: "Grid with Scale"
+            },
+            es: {
+                page_title: "Editor de Fotos",
+                page_subtitle: "Recorta, ajusta y perfecciona tu foto de pasaporte",
+                backToHome: "← Volver al Inicio",
+                upload_title: "1. Subir Foto",
+                upload_text: "Elige Tu Foto",
+                upload_hint: "Haz clic o arrastra y suelta",
+                guidelines_title: "Guías",
+                face_outline: "Contorno Facial",
+                grid_scale: "Cuadrícula con Escala"
+            },
+            fr: {
+                page_title: "Éditeur de Photos",
+                page_subtitle: "Recadrez, ajustez et perfectionnez votre photo de passeport",
+                backToHome: "← Retour à l'Accueil",
+                upload_title: "1. Télécharger une Photo",
+                upload_text: "Choisissez Votre Photo",
+                upload_hint: "Cliquez ou glissez-déposez",
+                guidelines_title: "Directives",
+                face_outline: "Contour du Visage",
+                grid_scale: "Grille avec Échelle"
+            },
+            de: {
+                page_title: "Foto-Editor",
+                page_subtitle: "Schneiden, passen und perfektionieren Sie Ihr Passfoto",
+                backToHome: "← Zurück zur Startseite",
+                upload_title: "1. Foto Hochladen",
+                upload_text: "Wählen Sie Ihr Foto",
+                upload_hint: "Klicken oder Drag & Drop",
+                guidelines_title: "Richtlinien",
+                face_outline: "Gesichtsumriss",
+                grid_scale: "Raster mit Skala"
+            },
+            pt: {
+                page_title: "Editor de Fotos",
+                page_subtitle: "Corte, ajuste e aprimore sua foto de passaporte",
+                backToHome: "← Voltar ao Início",
+                upload_title: "1. Enviar Foto",
+                upload_text: "Escolha Sua Foto",
+                upload_hint: "Clique ou arraste e solte",
+                guidelines_title: "Diretrizes",
+                face_outline: "Contorno Facial",
+                grid_scale: "Grade com Escala"
+            },
+            it: {
+                page_title: "Editor Foto",
+                page_subtitle: "Ritaglia, regola e perfeziona la tua foto del passaporto",
+                backToHome: "← Torna alla Home",
+                upload_title: "1. Carica Foto",
+                upload_text: "Scegli la Tua Foto",
+                upload_hint: "Clicca o trascina e rilascia",
+                guidelines_title: "Linee Guida",
+                face_outline: "Contorno del Viso",
+                grid_scale: "Griglia con Scala"
+            },
+            ja: {
+                page_title: "写真エディター",
+                page_subtitle: "パスポート写真を切り抜き、調整、完成させます",
+                backToHome: "← ホームに戻る",
+                upload_title: "1. 写真をアップロード",
+                upload_text: "写真を選択",
+                upload_hint: "クリックまたはドラッグ＆ドロップ",
+                guidelines_title: "ガイドライン",
+                face_outline: "顔の輪郭",
+                grid_scale: "スケール付きグリッド"
+            },
+            ko: {
+                page_title: "사진 편집기",
+                page_subtitle: "여권 사진을 자르고, 조정하고, 완성하세요",
+                backToHome: "← 홈으로 돌아가기",
+                upload_title: "1. 사진 업로드",
+                upload_text: "사진 선택",
+                upload_hint: "클릭하거나 드래그 앤 드롭",
+                guidelines_title: "가이드라인",
+                face_outline: "얼굴 윤곽",
+                grid_scale: "눈금이 있는 격자"
+            },
+            zh: {
+                page_title: "照片编辑器",
+                page_subtitle: "裁剪、调整和完善您的护照照片",
+                backToHome: "← 返回首页",
+                upload_title: "1. 上传照片",
+                upload_text: "选择您的照片",
+                upload_hint: "点击或拖放",
+                guidelines_title: "指南",
+                face_outline: "面部轮廓",
+                grid_scale: "带刻度网格"
+            },
+            ar: {
+                page_title: "محرر الصور",
+                page_subtitle: "قم بقص وضبط وإتقان صورة جواز سفرك",
+                backToHome: "← العودة إلى الصفحة الرئيسية",
+                upload_title: "1. تحميل الصورة",
+                upload_text: "اختر صورتك",
+                upload_hint: "انقر أو اسحب وأفلت",
+                guidelines_title: "إرشادات",
+                face_outline: "محيط الوجه",
+                grid_scale: "شبكة مع مقياس"
+            },
+            hi: {
+                page_title: "फोटो संपादक",
+                page_subtitle: "अपनी पासपोर्ट फोटो को क्रॉप, समायोजित और सुधारें",
+                backToHome: "← होम पर वापस जाएं",
+                upload_title: "1. फोटो अपलोड करें",
+                upload_text: "अपना फोटो चुनें",
+                upload_hint: "क्लिक करें या ड्रैग और ड्रॉप करें",
+                guidelines_title: "दिशानिर्देश",
+                face_outline: "चेहरे की रूपरेखा",
+                grid_scale: "स्केल के साथ ग्रिड"
+            },
+            ru: {
+                page_title: "Редактор Фото",
+                page_subtitle: "Обрезайте, настраивайте и совершенствуйте фотографию для паспорта",
+                backToHome: "← Вернуться на Главную",
+                upload_title: "1. Загрузить Фото",
+                upload_text: "Выберите Ваше Фото",
+                upload_hint: "Нажмите или перетащите",
+                guidelines_title: "Рекомендации",
+                face_outline: "Контур Лица",
+                grid_scale: "Сетка с Масштабом"
+            }
+        };
+
+        // Get or set language preference
+        function getLanguage() {
+            return localStorage.getItem('preferredLanguage') || 'en';
+        }
+
+        function setLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Apply translations to the page
+        function applyTranslations(lang) {
+            const trans = translations[lang] || translations.en;
+
+            // Update all elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (trans[key]) {
+                    element.textContent = trans[key];
+                }
+            });
+
+            // Update document title
+            document.title = trans.page_title + " - Passport Photo Maker";
+
+            // Track language change
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'language_changed', {
+                    'event_category': 'Localization',
+                    'event_label': lang
+                });
+            }
+        }
+
+        // Language selector event listener
+        const languageSelect = document.getElementById('languageSelect');
+        if (languageSelect) {
+            // Set initial language
+            const currentLang = getLanguage();
+            languageSelect.value = currentLang;
+            applyTranslations(currentLang);
+
+            // Handle language change
+            languageSelect.addEventListener('change', (e) => {
+                const newLang = e.target.value;
+                setLanguage(newLang);
+                applyTranslations(newLang);
+
+                // Optional: Show confirmation
+                console.log(`Language changed to: ${newLang}`);
+            });
+        }
+
+        // Apply translations on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const lang = getLanguage();
+            if (languageSelect) {
+                languageSelect.value = lang;
+            }
+            applyTranslations(lang);
+        });
+    </script>
+</body>
+</html>

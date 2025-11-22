@@ -8,133 +8,1110 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://aniltv06.github.io/passportphotosheet/privacy-policy.html">
     <style>
+        :root {
+            --primary-color: #007AFF;
+            --primary-hover: #0051D5;
+            --secondary-color: #5856D6;
+            --accent-color: #FF2D55;
+            --success-color: #34C759;
+            --warning-color: #FF9500;
+            --danger-color: #FF3B30;
+            --text-primary: #1D1D1F;
+            --text-secondary: #86868B;
+            --background: #FFFFFF;
+            --surface: #FFFFFF;
+            --border: #D2D2D7;
+            --shadow: rgba(0, 0, 0, 0.08);
+            --shadow-md: rgba(0, 0, 0, 0.12);
+            --shadow-lg: rgba(0, 0, 0, 0.16);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+            --spacing-3xl: 64px;
+            --spacing-4xl: 96px;
+            --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: var(--font-system);
+            background: var(--background);
+            color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section - Apple Style */
+        .hero {
+            position: relative;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--spacing-4xl) var(--spacing-lg);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto var(--spacing-xl);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-icon svg {
+            width: 60px;
+            height: 60px;
+        }
+
+        /* Hero Camera Icon */
+        .hero-camera-icon {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+        .hero-camera-body {
+            width: 100%;
+            height: 70%;
+            background: white;
+            border-radius: 8px;
+            position: absolute;
+            bottom: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .hero-lens {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow:
+                inset 0 1px 3px rgba(0, 0, 0, 0.1),
+                0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+        .hero-lens-inner {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .hero-lens-glare {
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+        }
+        .hero-flash {
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 15%;
+            right: 15%;
+            box-shadow: 0 2px 6px rgba(255, 165, 0, 0.4);
+        }
+        .hero-viewfinder {
+            width: 8px;
+            height: 6px;
+            background: #333;
+            border-radius: 2px;
+            position: absolute;
+            top: 12%;
+            left: 15%;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-title {
+            font-size: clamp(48px, 8vw, 72px);
+            font-weight: 700;
+            color: white;
+            margin-bottom: var(--spacing-lg);
+            letter-spacing: -2px;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--spacing-2xl);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: 18px 36px;
+            background: white;
+            color: var(--primary-color);
+            border-radius: 980px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: var(--spacing-2xl);
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-indicator svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+            opacity: 0.7;
+        }
+
+        /* Main Content Section */
+        .main-content {
+            background: var(--background);
+            padding: var(--spacing-4xl) 0;
             max-width: 800px;
             margin: 0 auto;
             padding: 40px 20px;
-            color: #333;
         }
-        h1 { color: #007AFF; margin-bottom: 10px; }
-        h2 { color: #007AFF; margin-top: 30px; }
+
+        /* Language Selector */
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 12px;
+            padding: 10px 14px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: var(--transition);
+        }
+
+        .language-selector:hover {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .language-selector select {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 4px 24px 4px 8px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%231D1D1F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        .language-selector select:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* Floating Home Button */
+        .floating-home-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 1000;
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 50%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            animation: floatButton 3s ease-in-out infinite;
+        }
+
+        .floating-home-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.3);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .floating-home-btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        @keyframes floatButton {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Camera icon for floating button */
+        .floating-camera-icon {
+            width: 35px;
+            height: 35px;
+            position: relative;
+        }
+
+        .floating-camera-body {
+            width: 100%;
+            height: 70%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            position: absolute;
+            bottom: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-lens {
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.15);
+        }
+
+        .floating-lens-inner {
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-lens-glare {
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+        }
+
+        .floating-flash {
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 10%;
+            right: 12%;
+            box-shadow: 0 1px 4px rgba(255, 165, 0, 0.4);
+        }
+
+        .floating-viewfinder {
+            width: 5px;
+            height: 4px;
+            background: #333;
+            border-radius: 1px;
+            position: absolute;
+            top: 8%;
+            left: 12%;
+        }
+
+        /* Content Styling */
+        h1 { color: #007AFF; margin-bottom: 10px; font-size: 42px; }
+        h2 { color: #007AFF; margin-top: 30px; font-size: 28px; }
+        h3 { color: #007AFF; margin-top: 20px; font-size: 22px; }
         .last-updated { color: #666; font-size: 14px; margin-bottom: 30px; }
         a { color: #007AFF; text-decoration: none; }
         a:hover { text-decoration: underline; }
         .highlight { background: #E3F2FD; padding: 15px; border-radius: 8px; margin: 20px 0; }
+        ul { margin-left: 20px; margin-bottom: 20px; }
+        li { margin-bottom: 8px; }
+        p { margin-bottom: 15px; }
+        hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 50vh;
+                padding: var(--spacing-3xl) var(--spacing-md);
+            }
+
+            .hero-icon {
+                width: 90px;
+                height: 90px;
+            }
+
+            .hero-icon svg {
+                width: 45px;
+                height: 45px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .hero-cta {
+                padding: 16px 28px;
+                font-size: 16px;
+            }
+
+            .language-selector {
+                top: 10px;
+                right: 10px;
+            }
+
+            .main-content {
+                padding: var(--spacing-xl) var(--spacing-md);
+            }
+
+            .floating-home-btn {
+                top: 20px;
+                left: 20px;
+                width: 60px;
+                height: 60px;
+            }
+
+            .floating-camera-icon {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Privacy Policy</h1>
-    <p class="last-updated">Last updated: January 20, 2025</p>
-
-    <div class="highlight">
-        <strong>TL;DR:</strong> We don't collect, store, or transmit your photos. Everything happens in your browser. We use analytics to improve the service, and you can opt out anytime.
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="languageSelect" class="language-select" aria-label="Select language">
+            <option value="en">🇬🇧 English</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="pt">🇵🇹 Português</option>
+            <option value="it">🇮🇹 Italiano</option>
+            <option value="ja">🇯🇵 日本語</option>
+            <option value="ko">🇰🇷 한국어</option>
+            <option value="zh">🇨🇳 中文</option>
+            <option value="ar">🇸🇦 العربية</option>
+            <option value="hi">🇮🇳 हिन्दी</option>
+            <option value="ru">🇷🇺 Русский</option>
+        </select>
     </div>
 
-    <h2>1. Introduction</h2>
-    <p>Welcome to Photo Sheet Maker ("we," "our," or "us"). We are committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our website.</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <div class="hero-camera-icon">
+                    <div class="hero-camera-body">
+                        <div class="hero-viewfinder"></div>
+                        <div class="hero-flash"></div>
+                        <div class="hero-lens">
+                            <div class="hero-lens-inner">
+                                <div class="hero-lens-glare"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h1 class="hero-title" data-i18n="title">Privacy Policy</h1>
+            <p class="hero-subtitle" data-i18n="heroSubtitle">Your privacy matters. Learn how we protect your data and respect your rights</p>
+            <a href="index.html" class="hero-cta">
+                <span data-i18n="backToHome">← Back to Home</span>
+            </a>
+        </div>
+        <div class="scroll-indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </div>
+    </section>
 
-    <h2>2. Information We Don't Collect</h2>
-    <p><strong>Your Photos:</strong> All image processing happens entirely in your web browser. Your photos are NEVER uploaded to our servers or any third-party service. When you upload a photo, it stays on your device.</p>
+    <!-- Main Content -->
+    <div class="main-content">
+        <p class="last-updated" data-i18n="lastUpdated">Last updated: January 20, 2025</p>
 
-    <p><strong>Personal Information:</strong> We do not require you to create an account, provide your name, email address, or any other personal information to use our service.</p>
+        <div class="highlight">
+            <strong data-i18n="tldr">TL;DR:</strong> <span data-i18n="tldrText">We don't collect, store, or transmit your photos. Everything happens in your browser. We use analytics to improve the service, and you can opt out anytime.</span>
+        </div>
 
-    <h2>3. Information We Collect</h2>
-    <p>We use analytics services to understand how people use our tool and improve it. This includes:</p>
+        <h2 data-i18n="section1">1. Introduction</h2>
+        <p data-i18n="section1Text">Welcome to Photo Sheet Maker ("we," "our," or "us"). We are committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our website.</p>
 
-    <h3>Google Analytics</h3>
-    <ul>
-        <li>Page views and navigation patterns</li>
-        <li>Device type and browser information</li>
-        <li>Approximate geographic location (country/city level)</li>
-        <li>Actions taken (upload, download, option changes)</li>
-        <li>Your IP address is anonymized</li>
-    </ul>
+        <h2 data-i18n="section2">2. Information We Don't Collect</h2>
+        <p><strong data-i18n="yourPhotos">Your Photos:</strong> <span data-i18n="section2Text1">All image processing happens entirely in your web browser. Your photos are NEVER uploaded to our servers or any third-party service. When you upload a photo, it stays on your device.</span></p>
 
-    <h3>Microsoft Clarity</h3>
-    <ul>
-        <li>Session recordings (showing cursor movement and clicks, but NOT your photos)</li>
-        <li>Heatmaps of where users click</li>
-        <li>General usage statistics</li>
-    </ul>
+        <p><strong data-i18n="personalInfo">Personal Information:</strong> <span data-i18n="section2Text2">We do not require you to create an account, provide your name, email address, or any other personal information to use our service.</span></p>
 
-    <h2>4. How We Use This Information</h2>
-    <p>We use analytics data to:</p>
-    <ul>
-        <li>Understand which features are most useful</li>
-        <li>Identify and fix bugs or errors</li>
-        <li>Improve the user experience</li>
-        <li>Make informed decisions about new features</li>
-    </ul>
+        <h2 data-i18n="section3">3. Information We Collect</h2>
+        <p data-i18n="section3Intro">We use analytics services to understand how people use our tool and improve it. This includes:</p>
 
-    <h2>5. Cookies and Tracking</h2>
-    <p>We use cookies for:</p>
-    <ul>
-        <li><strong>Analytics:</strong> Google Analytics and Microsoft Clarity use cookies to track your session</li>
-        <li><strong>Preferences:</strong> Remembering your settings (optional, stored locally in your browser)</li>
-    </ul>
-    <p>You can disable cookies in your browser settings, though this may limit some analytics functionality.</p>
+        <h3 data-i18n="googleAnalytics">Google Analytics</h3>
+        <ul>
+            <li>Page views and navigation patterns</li>
+            <li>Device type and browser information</li>
+            <li>Approximate geographic location (country/city level)</li>
+            <li>Actions taken (upload, download, option changes)</li>
+            <li>Your IP address is anonymized</li>
+        </ul>
 
-    <h2>6. Third-Party Services</h2>
-    <p>We use these third-party services:</p>
-    <ul>
-        <li><strong>Google Analytics:</strong> <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a></li>
-        <li><strong>Microsoft Clarity:</strong> <a href="https://privacy.microsoft.com/en-us/privacystatement" target="_blank">Privacy Policy</a></li>
-    </ul>
+        <h3 data-i18n="microsoftClarity">Microsoft Clarity</h3>
+        <ul>
+            <li>Session recordings (showing cursor movement and clicks, but NOT your photos)</li>
+            <li>Heatmaps of where users click</li>
+            <li>General usage statistics</li>
+        </ul>
 
-    <h2>7. Data Retention</h2>
-    <p>Since we don't store your photos or personal data, there's nothing for us to retain. Analytics data is retained according to Google and Microsoft's policies (typically 26-50 months, anonymized).</p>
+        <h2 data-i18n="section4">4. How We Use This Information</h2>
+        <p>We use analytics data to:</p>
+        <ul>
+            <li>Understand which features are most useful</li>
+            <li>Identify and fix bugs or errors</li>
+            <li>Improve the user experience</li>
+            <li>Make informed decisions about new features</li>
+        </ul>
 
-    <h2>8. Your Rights</h2>
-    <p>You have the right to:</p>
-    <ul>
-        <li>Use our service without providing any personal information</li>
-        <li>Opt out of analytics tracking using browser extensions like <a href="https://tools.google.com/dlpage/gaoptout" target="_blank">Google Analytics Opt-out</a></li>
-        <li>Clear cookies from your browser at any time</li>
-        <li>Use ad blockers or privacy tools to prevent tracking</li>
-    </ul>
+        <h2 data-i18n="section5">5. Cookies and Tracking</h2>
+        <p>We use cookies for:</p>
+        <ul>
+            <li><strong>Analytics:</strong> Google Analytics and Microsoft Clarity use cookies to track your session</li>
+            <li><strong>Preferences:</strong> Remembering your settings (optional, stored locally in your browser)</li>
+        </ul>
+        <p>You can disable cookies in your browser settings, though this may limit some analytics functionality.</p>
 
-    <h2>9. Children's Privacy</h2>
-    <p>Our service does not knowingly collect information from children under 13. If you are a parent or guardian and believe your child has used our service, please note that no personal data is collected or stored.</p>
+        <h2 data-i18n="section6">6. Third-Party Services</h2>
+        <p>We use these third-party services:</p>
+        <ul>
+            <li><strong>Google Analytics:</strong> <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a></li>
+            <li><strong>Microsoft Clarity:</strong> <a href="https://privacy.microsoft.com/en-us/privacystatement" target="_blank">Privacy Policy</a></li>
+        </ul>
 
-    <h2>10. Security</h2>
-    <p>Since all processing happens in your browser:</p>
-    <ul>
-        <li>Your photos never leave your device</li>
-        <li>We use HTTPS to secure the connection to our website</li>
-        <li>No photo data is transmitted over the internet</li>
-    </ul>
+        <h2 data-i18n="section7">7. Data Retention</h2>
+        <p>Since we don't store your photos or personal data, there's nothing for us to retain. Analytics data is retained according to Google and Microsoft's policies (typically 26-50 months, anonymized).</p>
 
-    <h2>11. Changes to This Policy</h2>
-    <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.</p>
+        <h2 data-i18n="section8">8. Your Rights</h2>
+        <p>You have the right to:</p>
+        <ul>
+            <li>Use our service without providing any personal information</li>
+            <li>Opt out of analytics tracking using browser extensions like <a href="https://tools.google.com/dlpage/gaoptout" target="_blank">Google Analytics Opt-out</a></li>
+            <li>Clear cookies from your browser at any time</li>
+            <li>Use ad blockers or privacy tools to prevent tracking</li>
+        </ul>
 
-    <h2>12. Contact Us</h2>
-    <p>If you have any questions about this Privacy Policy, please contact us at:</p>
-    <p>Email: <a href="mailto:aniltv06@gmail.com">aniltv06@gmail.com</a></p>
+        <h2 data-i18n="section9">9. Children's Privacy</h2>
+        <p>Our service does not knowingly collect information from children under 13. If you are a parent or guardian and believe your child has used our service, please note that no personal data is collected or stored.</p>
 
-    <h2>13. GDPR Compliance (EU Users)</h2>
-    <p>If you are in the European Union:</p>
-    <ul>
-        <li>We do not process or store your photos (Article 5 - Data Minimization)</li>
-        <li>Analytics data is our legitimate interest (Article 6(1)(f))</li>
-        <li>You can opt out of tracking at any time</li>
-        <li>Your data is not sold or shared except with analytics providers</li>
-    </ul>
+        <h2 data-i18n="section10">10. Security</h2>
+        <p>Since all processing happens in your browser:</p>
+        <ul>
+            <li>Your photos never leave your device</li>
+            <li>We use HTTPS to secure the connection to our website</li>
+            <li>No photo data is transmitted over the internet</li>
+        </ul>
 
-    <h2>14. California Privacy Rights (CCPA)</h2>
-    <p>California residents have the right to:</p>
-    <ul>
-        <li>Know what personal information is collected (see Section 3)</li>
-        <li>Request deletion of personal information (we don't store any)</li>
-        <li>Opt out of the sale of personal information (we don't sell data)</li>
-    </ul>
+        <h2 data-i18n="section11">11. Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.</p>
 
-    <hr>
-    <p style="text-align: center; color: #666; font-size: 14px; margin-top: 40px;">
-        <a href="index.html">Return to Photo Sheet Maker</a> |
-        <a href="terms-of-service.html">Terms of Service</a> |
-        <a href="contact.html">Contact</a>
-    </p>
+        <h2 data-i18n="section12">12. Contact Us</h2>
+        <p>If you have any questions about this Privacy Policy, please contact us at:</p>
+        <p>Email: <a href="mailto:aniltv06@gmail.com">aniltv06@gmail.com</a></p>
+
+        <h2 data-i18n="section13">13. GDPR Compliance (EU Users)</h2>
+        <p>If you are in the European Union:</p>
+        <ul>
+            <li>We do not process or store your photos (Article 5 - Data Minimization)</li>
+            <li>Analytics data is our legitimate interest (Article 6(1)(f))</li>
+            <li>You can opt out of tracking at any time</li>
+            <li>Your data is not sold or shared except with analytics providers</li>
+        </ul>
+
+        <h2 data-i18n="section14">14. California Privacy Rights (CCPA)</h2>
+        <p>California residents have the right to:</p>
+        <ul>
+            <li>Know what personal information is collected (see Section 3)</li>
+            <li>Request deletion of personal information (we don't store any)</li>
+            <li>Opt out of the sale of personal information (we don't sell data)</li>
+        </ul>
+
+        <hr>
+        <p style="text-align: center; color: #666; font-size: 14px; margin-top: 40px;">
+            <a href="index.html" data-i18n="returnHome">Return to Photo Sheet Maker</a> |
+            <a href="terms-of-service.html" data-i18n="termsOfService">Terms of Service</a> |
+            <a href="contact.html" data-i18n="contact">Contact</a>
+        </p>
+    </div>
+
+    <script>
+        'use strict';
+
+        const translations = {
+            en: {
+                title: "Privacy Policy",
+                heroSubtitle: "Your privacy matters. Learn how we protect your data and respect your rights",
+                backToHome: "← Back to Home",
+                lastUpdated: "Last updated: January 20, 2025",
+                tldr: "TL;DR:",
+                tldrText: "We don't collect, store, or transmit your photos. Everything happens in your browser. We use analytics to improve the service, and you can opt out anytime.",
+                section1: "1. Introduction",
+                section1Text: "Welcome to Photo Sheet Maker (\"we,\" \"our,\" or \"us\"). We are committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our website.",
+                section2: "2. Information We Don't Collect",
+                yourPhotos: "Your Photos:",
+                section2Text1: "All image processing happens entirely in your web browser. Your photos are NEVER uploaded to our servers or any third-party service. When you upload a photo, it stays on your device.",
+                personalInfo: "Personal Information:",
+                section2Text2: "We do not require you to create an account, provide your name, email address, or any other personal information to use our service.",
+                section3: "3. Information We Collect",
+                section3Intro: "We use analytics services to understand how people use our tool and improve it. This includes:",
+                googleAnalytics: "Google Analytics",
+                microsoftClarity: "Microsoft Clarity",
+                section4: "4. How We Use This Information",
+                section5: "5. Cookies and Tracking",
+                section6: "6. Third-Party Services",
+                section7: "7. Data Retention",
+                section8: "8. Your Rights",
+                section9: "9. Children's Privacy",
+                section10: "10. Security",
+                section11: "11. Changes to This Policy",
+                section12: "12. Contact Us",
+                section13: "13. GDPR Compliance (EU Users)",
+                section14: "14. California Privacy Rights (CCPA)",
+                returnHome: "Return to Photo Sheet Maker",
+                termsOfService: "Terms of Service",
+                contact: "Contact"
+            },
+            es: {
+                title: "Política de Privacidad",
+                heroSubtitle: "Tu privacidad importa. Aprende cómo protegemos tus datos y respetamos tus derechos",
+                backToHome: "← Volver al Inicio",
+                lastUpdated: "Última actualización: 20 de enero de 2025",
+                tldr: "Resumen:",
+                tldrText: "No recopilamos, almacenamos ni transmitimos tus fotos. Todo sucede en tu navegador. Usamos analíticas para mejorar el servicio, y puedes optar por no participar en cualquier momento.",
+                section1: "1. Introducción",
+                section1Text: "Bienvenido a Photo Sheet Maker (\"nosotros\" o \"nuestro\"). Estamos comprometidos a proteger tu privacidad. Esta Política de Privacidad explica cómo manejamos la información cuando usas nuestro sitio web.",
+                section2: "2. Información que No Recopilamos",
+                yourPhotos: "Tus Fotos:",
+                section2Text1: "Todo el procesamiento de imágenes ocurre completamente en tu navegador web. Tus fotos NUNCA se cargan en nuestros servidores o cualquier servicio de terceros. Cuando subes una foto, permanece en tu dispositivo.",
+                personalInfo: "Información Personal:",
+                section2Text2: "No requerimos que crees una cuenta, proporciones tu nombre, dirección de correo electrónico u otra información personal para usar nuestro servicio.",
+                section3: "3. Información que Recopilamos",
+                section3Intro: "Usamos servicios de analíticas para entender cómo las personas usan nuestra herramienta y mejorarla. Esto incluye:",
+                googleAnalytics: "Google Analytics",
+                microsoftClarity: "Microsoft Clarity",
+                section4: "4. Cómo Usamos Esta Información",
+                section5: "5. Cookies y Seguimiento",
+                section6: "6. Servicios de Terceros",
+                section7: "7. Retención de Datos",
+                section8: "8. Tus Derechos",
+                section9: "9. Privacidad de los Niños",
+                section10: "10. Seguridad",
+                section11: "11. Cambios a Esta Política",
+                section12: "12. Contáctanos",
+                section13: "13. Cumplimiento del RGPD (Usuarios de la UE)",
+                section14: "14. Derechos de Privacidad de California (CCPA)",
+                returnHome: "Volver a Photo Sheet Maker",
+                termsOfService: "Términos de Servicio",
+                contact: "Contacto"
+            },
+            fr: {
+                title: "Politique de Confidentialité",
+                heroSubtitle: "Votre vie privée compte. Découvrez comment nous protégeons vos données et respectons vos droits",
+                backToHome: "← Retour à l'Accueil",
+                lastUpdated: "Dernière mise à jour : 20 janvier 2025",
+                tldr: "Résumé :",
+                tldrText: "Nous ne collectons, ne stockons ni ne transmettons vos photos. Tout se passe dans votre navigateur. Nous utilisons des analyses pour améliorer le service, et vous pouvez vous désinscrire à tout moment.",
+                section1: "1. Introduction",
+                section1Text: "Bienvenue sur Photo Sheet Maker (\"nous\" ou \"notre\"). Nous nous engageons à protéger votre vie privée. Cette Politique de Confidentialité explique comment nous gérons les informations lorsque vous utilisez notre site web.",
+                section2: "2. Informations que Nous Ne Collectons Pas",
+                yourPhotos: "Vos Photos :",
+                section2Text1: "Tout le traitement d'image se fait entièrement dans votre navigateur web. Vos photos ne sont JAMAIS téléchargées sur nos serveurs ou tout service tiers. Lorsque vous téléchargez une photo, elle reste sur votre appareil.",
+                personalInfo: "Informations Personnelles :",
+                section2Text2: "Nous n'exigeons pas que vous créiez un compte, fournissiez votre nom, adresse e-mail ou toute autre information personnelle pour utiliser notre service.",
+                section3: "3. Informations que Nous Collectons",
+                section3Intro: "Nous utilisons des services d'analyse pour comprendre comment les gens utilisent notre outil et l'améliorer. Cela inclut :",
+                googleAnalytics: "Google Analytics",
+                microsoftClarity: "Microsoft Clarity",
+                section4: "4. Comment Nous Utilisons Ces Informations",
+                section5: "5. Cookies et Suivi",
+                section6: "6. Services Tiers",
+                section7: "7. Conservation des Données",
+                section8: "8. Vos Droits",
+                section9: "9. Confidentialité des Enfants",
+                section10: "10. Sécurité",
+                section11: "11. Modifications de Cette Politique",
+                section12: "12. Contactez-nous",
+                section13: "13. Conformité RGPD (Utilisateurs UE)",
+                section14: "14. Droits à la Vie Privée en Californie (CCPA)",
+                returnHome: "Retour à Photo Sheet Maker",
+                termsOfService: "Conditions d'Utilisation",
+                contact: "Contact"
+            },
+            de: {
+                title: "Datenschutzrichtlinie",
+                heroSubtitle: "Ihre Privatsphäre ist wichtig. Erfahren Sie, wie wir Ihre Daten schützen und Ihre Rechte respektieren",
+                backToHome: "← Zurück zur Startseite",
+                lastUpdated: "Zuletzt aktualisiert: 20. Januar 2025",
+                tldr: "Zusammenfassung:",
+                tldrText: "Wir sammeln, speichern oder übertragen Ihre Fotos nicht. Alles passiert in Ihrem Browser. Wir verwenden Analysen zur Verbesserung des Service, und Sie können sich jederzeit abmelden.",
+                section1: "1. Einleitung",
+                section1Text: "Willkommen bei Photo Sheet Maker (\"wir\" oder \"unser\"). Wir verpflichten uns, Ihre Privatsphäre zu schützen. Diese Datenschutzrichtlinie erklärt, wie wir mit Informationen umgehen, wenn Sie unsere Website nutzen.",
+                section2: "2. Informationen, die Wir Nicht Sammeln",
+                yourPhotos: "Ihre Fotos:",
+                section2Text1: "Die gesamte Bildverarbeitung erfolgt vollständig in Ihrem Webbrowser. Ihre Fotos werden NIEMALS auf unsere Server oder einen Drittanbieterdienst hochgeladen. Wenn Sie ein Foto hochladen, bleibt es auf Ihrem Gerät.",
+                personalInfo: "Persönliche Informationen:",
+                section2Text2: "Wir verlangen nicht, dass Sie ein Konto erstellen, Ihren Namen, E-Mail-Adresse oder andere persönliche Informationen angeben, um unseren Service zu nutzen.",
+                section3: "3. Informationen, die Wir Sammeln",
+                section3Intro: "Wir verwenden Analysedienste, um zu verstehen, wie Menschen unser Tool verwenden und es zu verbessern. Dies umfasst:",
+                googleAnalytics: "Google Analytics",
+                microsoftClarity: "Microsoft Clarity",
+                section4: "4. Wie Wir Diese Informationen Verwenden",
+                section5: "5. Cookies und Tracking",
+                section6: "6. Drittanbieterdienste",
+                section7: "7. Datenaufbewahrung",
+                section8: "8. Ihre Rechte",
+                section9: "9. Datenschutz für Kinder",
+                section10: "10. Sicherheit",
+                section11: "11. Änderungen an Dieser Richtlinie",
+                section12: "12. Kontaktieren Sie Uns",
+                section13: "13. DSGVO-Konformität (EU-Nutzer)",
+                section14: "14. Kalifornische Datenschutzrechte (CCPA)",
+                returnHome: "Zurück zu Photo Sheet Maker",
+                termsOfService: "Nutzungsbedingungen",
+                contact: "Kontakt"
+            },
+            pt: {
+                title: "Política de Privacidade",
+                heroSubtitle: "Sua privacidade importa. Saiba como protegemos seus dados e respeitamos seus direitos",
+                backToHome: "← Voltar ao Início",
+                lastUpdated: "Última atualização: 20 de janeiro de 2025",
+                tldr: "Resumo:",
+                tldrText: "Não coletamos, armazenamos ou transmitimos suas fotos. Tudo acontece no seu navegador. Usamos análises para melhorar o serviço, e você pode cancelar a qualquer momento.",
+                section1: "1. Introdução",
+                section1Text: "Bem-vindo ao Photo Sheet Maker (\"nós\" ou \"nosso\"). Estamos comprometidos em proteger sua privacidade. Esta Política de Privacidade explica como lidamos com informações quando você usa nosso site.",
+                section2: "2. Informações que Não Coletamos",
+                yourPhotos: "Suas Fotos:",
+                section2Text1: "Todo o processamento de imagens acontece inteiramente no seu navegador web. Suas fotos NUNCA são enviadas para nossos servidores ou qualquer serviço de terceiros. Quando você faz upload de uma foto, ela permanece no seu dispositivo.",
+                personalInfo: "Informações Pessoais:",
+                section2Text2: "Não exigimos que você crie uma conta, forneça seu nome, endereço de e-mail ou qualquer outra informação pessoal para usar nosso serviço.",
+                section3: "3. Informações que Coletamos",
+                section3Intro: "Usamos serviços de análise para entender como as pessoas usam nossa ferramenta e melhorá-la. Isso inclui:",
+                googleAnalytics: "Google Analytics",
+                microsoftClarity: "Microsoft Clarity",
+                section4: "4. Como Usamos Essas Informações",
+                section5: "5. Cookies e Rastreamento",
+                section6: "6. Serviços de Terceiros",
+                section7: "7. Retenção de Dados",
+                section8: "8. Seus Direitos",
+                section9: "9. Privacidade Infantil",
+                section10: "10. Segurança",
+                section11: "11. Alterações a Esta Política",
+                section12: "12. Entre em Contato",
+                section13: "13. Conformidade com RGPD (Usuários da UE)",
+                section14: "14. Direitos de Privacidade da Califórnia (CCPA)",
+                returnHome: "Voltar ao Photo Sheet Maker",
+                termsOfService: "Termos de Serviço",
+                contact: "Contato"
+            },
+            it: {
+                title: "Informativa sulla Privacy",
+                heroSubtitle: "La tua privacy conta. Scopri come proteggiamo i tuoi dati e rispettiamo i tuoi diritti",
+                backToHome: "← Torna alla Home",
+                lastUpdated: "Ultimo aggiornamento: 20 gennaio 2025",
+                tldr: "Riepilogo:",
+                tldrText: "Non raccogliamo, memorizziamo o trasmettiamo le tue foto. Tutto avviene nel tuo browser. Usiamo l'analisi per migliorare il servizio e puoi disattivarlo in qualsiasi momento.",
+                section1: "1. Introduzione",
+                section1Text: "Benvenuto su Photo Sheet Maker (\"noi\" o \"nostro\"). Ci impegniamo a proteggere la tua privacy. Questa Informativa sulla Privacy spiega come gestiamo le informazioni quando usi il nostro sito web.",
+                section2: "2. Informazioni che Non Raccogliamo",
+                yourPhotos: "Le Tue Foto:",
+                section2Text1: "Tutta l'elaborazione delle immagini avviene interamente nel tuo browser web. Le tue foto NON vengono MAI caricate sui nostri server o su qualsiasi servizio di terze parti. Quando carichi una foto, rimane sul tuo dispositivo.",
+                personalInfo: "Informazioni Personali:",
+                section2Text2: "Non richiediamo che tu crei un account, fornisca il tuo nome, indirizzo email o qualsiasi altra informazione personale per utilizzare il nostro servizio.",
+                section3: "3. Informazioni che Raccogliamo",
+                section3Intro: "Utilizziamo servizi di analisi per capire come le persone usano il nostro strumento e migliorarlo. Questo include:",
+                googleAnalytics: "Google Analytics",
+                microsoftClarity: "Microsoft Clarity",
+                section4: "4. Come Usiamo Queste Informazioni",
+                section5: "5. Cookie e Tracciamento",
+                section6: "6. Servizi di Terze Parti",
+                section7: "7. Conservazione dei Dati",
+                section8: "8. I Tuoi Diritti",
+                section9: "9. Privacy dei Bambini",
+                section10: "10. Sicurezza",
+                section11: "11. Modifiche a Questa Informativa",
+                section12: "12. Contattaci",
+                section13: "13. Conformità GDPR (Utenti UE)",
+                section14: "14. Diritti sulla Privacy della California (CCPA)",
+                returnHome: "Torna a Photo Sheet Maker",
+                termsOfService: "Termini di Servizio",
+                contact: "Contatto"
+            },
+            ja: {
+                title: "プライバシーポリシー",
+                heroSubtitle: "あなたのプライバシーは重要です。データを保護し、権利を尊重する方法をご確認ください",
+                backToHome: "← ホームに戻る",
+                lastUpdated: "最終更新: 2025年1月20日",
+                tldr: "要約：",
+                tldrText: "私たちは写真を収集、保存、送信しません。すべてがブラウザ内で行われます。サービス改善のために分析を使用していますが、いつでもオプトアウトできます。",
+                section1: "1. はじめに",
+                section1Text: "Photo Sheet Maker（「当社」または「私たち」）へようこそ。私たちはあなたのプライバシーを保護することに尽力しています。このプライバシーポリシーは、ウェブサイトをご利用になる際の情報の取り扱いについて説明します。",
+                section2: "2. 収集しない情報",
+                yourPhotos: "あなたの写真：",
+                section2Text1: "すべての画像処理は完全にウェブブラウザ内で行われます。あなたの写真は当社のサーバーや第三者サービスにアップロードされることは決してありません。写真をアップロードすると、デバイスに留まります。",
+                personalInfo: "個人情報：",
+                section2Text2: "サービスを使用するためにアカウントを作成したり、名前、メールアドレス、その他の個人情報を提供する必要はありません。",
+                section3: "3. 収集する情報",
+                section3Intro: "私たちは、人々が当社のツールをどのように使用しているかを理解し、改善するために分析サービスを使用しています。これには以下が含まれます：",
+                googleAnalytics: "Google Analytics",
+                microsoftClarity: "Microsoft Clarity",
+                section4: "4. この情報の使用方法",
+                section5: "5. Cookieと追跡",
+                section6: "6. 第三者サービス",
+                section7: "7. データ保持",
+                section8: "8. あなたの権利",
+                section9: "9. 子供のプライバシー",
+                section10: "10. セキュリティ",
+                section11: "11. このポリシーの変更",
+                section12: "12. お問い合わせ",
+                section13: "13. GDPR準拠（EU利用者）",
+                section14: "14. カリフォルニアプライバシー権（CCPA）",
+                returnHome: "Photo Sheet Makerに戻る",
+                termsOfService: "利用規約",
+                contact: "お問い合わせ"
+            },
+            ko: {
+                title: "개인정보 처리방침",
+                heroSubtitle: "귀하의 개인정보는 중요합니다. 데이터를 보호하고 권리를 존중하는 방법을 알아보세요",
+                backToHome: "← 홈으로 돌아가기",
+                lastUpdated: "최종 업데이트: 2025년 1월 20일",
+                tldr: "요약:",
+                tldrText: "우리는 사진을 수집, 저장 또는 전송하지 않습니다. 모든 것이 브라우저에서 일어납니다. 서비스 개선을 위해 분석을 사용하며, 언제든지 거부할 수 있습니다.",
+                section1: "1. 소개",
+                section1Text: "Photo Sheet Maker(\"당사\" 또는 \"우리\")에 오신 것을 환영합니다. 우리는 귀하의 개인정보를 보호하기 위해 노력하고 있습니다. 이 개인정보 처리방침은 웹사이트를 사용할 때 정보를 처리하는 방법을 설명합니다.",
+                section2: "2. 수집하지 않는 정보",
+                yourPhotos: "귀하의 사진:",
+                section2Text1: "모든 이미지 처리는 웹 브라우저에서 완전히 이루어집니다. 귀하의 사진은 당사 서버나 타사 서비스에 업로드되지 않습니다. 사진을 업로드하면 기기에 남아 있습니다.",
+                personalInfo: "개인 정보:",
+                section2Text2: "서비스를 사용하기 위해 계정을 만들거나 이름, 이메일 주소 또는 기타 개인 정보를 제공할 필요가 없습니다.",
+                section3: "3. 수집하는 정보",
+                section3Intro: "우리는 사람들이 도구를 어떻게 사용하는지 이해하고 개선하기 위해 분석 서비스를 사용합니다. 여기에는 다음이 포함됩니다:",
+                googleAnalytics: "Google Analytics",
+                microsoftClarity: "Microsoft Clarity",
+                section4: "4. 이 정보의 사용 방법",
+                section5: "5. 쿠키 및 추적",
+                section6: "6. 제3자 서비스",
+                section7: "7. 데이터 보유",
+                section8: "8. 귀하의 권리",
+                section9: "9. 어린이 개인정보 보호",
+                section10: "10. 보안",
+                section11: "11. 정책 변경",
+                section12: "12. 문의하기",
+                section13: "13. GDPR 준수(EU 사용자)",
+                section14: "14. 캘리포니아 개인정보 보호 권리(CCPA)",
+                returnHome: "Photo Sheet Maker로 돌아가기",
+                termsOfService: "서비스 약관",
+                contact: "문의하기"
+            },
+            zh: {
+                title: "隐私政策",
+                heroSubtitle: "您的隐私很重要。了解我们如何保护您的数据并尊重您的权利",
+                backToHome: "← 返回主页",
+                lastUpdated: "最后更新：2025年1月20日",
+                tldr: "简要说明：",
+                tldrText: "我们不收集、存储或传输您的照片。一切都在您的浏览器中进行。我们使用分析来改进服务，您可以随时选择退出。",
+                section1: "1. 简介",
+                section1Text: "欢迎使用Photo Sheet Maker（\"我们\"或\"我们的\"）。我们致力于保护您的隐私。本隐私政策说明了您使用我们网站时我们如何处理信息。",
+                section2: "2. 我们不收集的信息",
+                yourPhotos: "您的照片：",
+                section2Text1: "所有图像处理完全在您的网络浏览器中进行。您的照片永远不会上传到我们的服务器或任何第三方服务。当您上传照片时，它会留在您的设备上。",
+                personalInfo: "个人信息：",
+                section2Text2: "我们不要求您创建帐户、提供您的姓名、电子邮件地址或任何其他个人信息来使用我们的服务。",
+                section3: "3. 我们收集的信息",
+                section3Intro: "我们使用分析服务来了解人们如何使用我们的工具并改进它。这包括：",
+                googleAnalytics: "Google Analytics",
+                microsoftClarity: "Microsoft Clarity",
+                section4: "4. 我们如何使用这些信息",
+                section5: "5. Cookie和跟踪",
+                section6: "6. 第三方服务",
+                section7: "7. 数据保留",
+                section8: "8. 您的权利",
+                section9: "9. 儿童隐私",
+                section10: "10. 安全",
+                section11: "11. 政策变更",
+                section12: "12. 联系我们",
+                section13: "13. GDPR合规（欧盟用户）",
+                section14: "14. 加州隐私权（CCPA）",
+                returnHome: "返回Photo Sheet Maker",
+                termsOfService: "服务条款",
+                contact: "联系"
+            },
+            ar: {
+                title: "سياسة الخصوصية",
+                heroSubtitle: "خصوصيتك مهمة. تعرف على كيفية حماية بياناتك واحترام حقوقك",
+                backToHome: "← العودة إلى الصفحة الرئيسية",
+                lastUpdated: "آخر تحديث: 20 يناير 2025",
+                tldr: "باختصار:",
+                tldrText: "نحن لا نجمع أو نخزن أو نرسل صورك. كل شيء يحدث في متصفحك. نستخدم التحليلات لتحسين الخدمة، ويمكنك إلغاء الاشتراك في أي وقت.",
+                section1: "1. مقدمة",
+                section1Text: "مرحبًا بك في Photo Sheet Maker (\"نحن\" أو \"لنا\"). نحن ملتزمون بحماية خصوصيتك. توضح سياسة الخصوصية هذه كيفية تعاملنا مع المعلومات عند استخدام موقعنا.",
+                section2: "2. المعلومات التي لا نجمعها",
+                yourPhotos: "صورك:",
+                section2Text1: "تتم معالجة جميع الصور بالكامل في متصفح الويب الخاص بك. لا يتم تحميل صورك أبدًا إلى خوادمنا أو أي خدمة تابعة لجهة خارجية. عند تحميل صورة، تبقى على جهازك.",
+                personalInfo: "المعلومات الشخصية:",
+                section2Text2: "لا نطلب منك إنشاء حساب أو تقديم اسمك أو عنوان بريدك الإلكتروني أو أي معلومات شخصية أخرى لاستخدام خدمتنا.",
+                section3: "3. المعلومات التي نجمعها",
+                section3Intro: "نستخدم خدمات التحليلات لفهم كيفية استخدام الأشخاص لأداتنا وتحسينها. يشمل ذلك:",
+                googleAnalytics: "Google Analytics",
+                microsoftClarity: "Microsoft Clarity",
+                section4: "4. كيف نستخدم هذه المعلومات",
+                section5: "5. ملفات تعريف الارتباط والتتبع",
+                section6: "6. خدمات الطرف الثالث",
+                section7: "7. الاحتفاظ بالبيانات",
+                section8: "8. حقوقك",
+                section9: "9. خصوصية الأطفال",
+                section10: "10. الأمان",
+                section11: "11. تغييرات على هذه السياسة",
+                section12: "12. اتصل بنا",
+                section13: "13. الامتثال للائحة العامة لحماية البيانات (مستخدمو الاتحاد الأوروبي)",
+                section14: "14. حقوق الخصوصية في كاليفورنيا (CCPA)",
+                returnHome: "العودة إلى Photo Sheet Maker",
+                termsOfService: "شروط الخدمة",
+                contact: "اتصل"
+            },
+            hi: {
+                title: "गोपनीयता नीति",
+                heroSubtitle: "आपकी गोपनीयता महत्वपूर्ण है। जानें कि हम आपके डेटा की सुरक्षा कैसे करते हैं और आपके अधिकारों का सम्मान करते हैं",
+                backToHome: "← होम पर वापस जाएं",
+                lastUpdated: "अंतिम अपडेट: 20 जनवरी 2025",
+                tldr: "संक्षेप में:",
+                tldrText: "हम आपकी फ़ोटो एकत्र, संग्रहीत या प्रसारित नहीं करते हैं। सब कुछ आपके ब्राउज़र में होता है। हम सेवा में सुधार के लिए एनालिटिक्स का उपयोग करते हैं, और आप किसी भी समय ऑप्ट-आउट कर सकते हैं।",
+                section1: "1. परिचय",
+                section1Text: "Photo Sheet Maker (\"हम\" या \"हमारे\") में आपका स्वागत है। हम आपकी गोपनीयता की सुरक्षा के लिए प्रतिबद्ध हैं। यह गोपनीयता नीति बताती है कि जब आप हमारी वेबसाइट का उपयोग करते हैं तो हम जानकारी को कैसे संभालते हैं।",
+                section2: "2. जो जानकारी हम एकत्र नहीं करते",
+                yourPhotos: "आपकी फ़ोटो:",
+                section2Text1: "सभी छवि प्रसंस्करण पूरी तरह से आपके वेब ब्राउज़र में होता है। आपकी फ़ोटो कभी भी हमारे सर्वर या किसी तीसरे पक्ष की सेवा में अपलोड नहीं की जाती हैं। जब आप एक फ़ोटो अपलोड करते हैं, तो यह आपके डिवाइस पर रहती है।",
+                personalInfo: "व्यक्तिगत जानकारी:",
+                section2Text2: "हम आपसे हमारी सेवा का उपयोग करने के लिए खाता बनाने, अपना नाम, ईमेल पता या कोई अन्य व्यक्तिगत जानकारी प्रदान करने की आवश्यकता नहीं है।",
+                section3: "3. जो जानकारी हम एकत्र करते हैं",
+                section3Intro: "हम यह समझने के लिए एनालिटिक्स सेवाओं का उपयोग करते हैं कि लोग हमारे टूल का उपयोग कैसे करते हैं और इसे बेहतर बनाते हैं। इसमें शामिल हैं:",
+                googleAnalytics: "Google Analytics",
+                microsoftClarity: "Microsoft Clarity",
+                section4: "4. हम इस जानकारी का उपयोग कैसे करते हैं",
+                section5: "5. कुकीज़ और ट्रैकिंग",
+                section6: "6. तृतीय-पक्ष सेवाएं",
+                section7: "7. डेटा प्रतिधारण",
+                section8: "8. आपके अधिकार",
+                section9: "9. बच्चों की गोपनीयता",
+                section10: "10. सुरक्षा",
+                section11: "11. इस नीति में परिवर्तन",
+                section12: "12. हमसे संपर्क करें",
+                section13: "13. GDPR अनुपालन (EU उपयोगकर्ता)",
+                section14: "14. कैलिफ़ोर्निया गोपनीयता अधिकार (CCPA)",
+                returnHome: "Photo Sheet Maker पर वापस जाएं",
+                termsOfService: "सेवा की शर्तें",
+                contact: "संपर्क करें"
+            },
+            ru: {
+                title: "Политика Конфиденциальности",
+                heroSubtitle: "Ваша конфиденциальность важна. Узнайте, как мы защищаем ваши данные и уважаем ваши права",
+                backToHome: "← Вернуться на Главную",
+                lastUpdated: "Последнее обновление: 20 января 2025 г.",
+                tldr: "Краткое содержание:",
+                tldrText: "Мы не собираем, не храним и не передаем ваши фотографии. Все происходит в вашем браузере. Мы используем аналитику для улучшения сервиса, и вы можете отказаться в любое время.",
+                section1: "1. Введение",
+                section1Text: "Добро пожаловать в Photo Sheet Maker (\"мы\" или \"наш\"). Мы стремимся защитить вашу конфиденциальность. Эта Политика конфиденциальности объясняет, как мы обрабатываем информацию, когда вы используете наш веб-сайт.",
+                section2: "2. Информация, Которую Мы Не Собираем",
+                yourPhotos: "Ваши Фотографии:",
+                section2Text1: "Вся обработка изображений происходит полностью в вашем веб-браузере. Ваши фотографии НИКОГДА не загружаются на наши серверы или какой-либо сторонний сервис. Когда вы загружаете фотографию, она остается на вашем устройстве.",
+                personalInfo: "Личная Информация:",
+                section2Text2: "Мы не требуем от вас создания учетной записи, предоставления вашего имени, адреса электронной почты или любой другой личной информации для использования нашего сервиса.",
+                section3: "3. Информация, Которую Мы Собираем",
+                section3Intro: "Мы используем аналитические сервисы, чтобы понять, как люди используют наш инструмент и улучшить его. Это включает:",
+                googleAnalytics: "Google Analytics",
+                microsoftClarity: "Microsoft Clarity",
+                section4: "4. Как Мы Используем Эту Информацию",
+                section5: "5. Файлы Cookie и Отслеживание",
+                section6: "6. Сторонние Сервисы",
+                section7: "7. Хранение Данных",
+                section8: "8. Ваши Права",
+                section9: "9. Конфиденциальность Детей",
+                section10: "10. Безопасность",
+                section11: "11. Изменения в Этой Политике",
+                section12: "12. Свяжитесь с Нами",
+                section13: "13. Соответствие GDPR (Пользователи ЕС)",
+                section14: "14. Права на Конфиденциальность в Калифорнии (CCPA)",
+                returnHome: "Вернуться к Photo Sheet Maker",
+                termsOfService: "Условия Обслуживания",
+                contact: "Контакт"
+            }
+        };
+
+        // Get or set language preference using 'preferredLanguage' key
+        function getLanguage() {
+            return localStorage.getItem('preferredLanguage') || 'en';
+        }
+
+        function setLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Apply translations to the page
+        function applyTranslations(lang) {
+            const trans = translations[lang] || translations.en;
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (trans[key]) {
+                    element.textContent = trans[key];
+                }
+            });
+
+            document.documentElement.lang = lang;
+            document.title = trans.title + " - Photo Sheet Maker";
+        }
+
+        // Initialize language
+        const languageSelect = document.getElementById('languageSelect');
+        if (languageSelect) {
+            const currentLang = getLanguage();
+            languageSelect.value = currentLang;
+            applyTranslations(currentLang);
+
+            languageSelect.addEventListener('change', (e) => {
+                const newLang = e.target.value;
+                setLanguage(newLang);
+                applyTranslations(newLang);
+            });
+        }
+
+        // Apply translations on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const lang = getLanguage();
+            if (languageSelect) {
+                languageSelect.value = lang;
+            }
+            applyTranslations(lang);
+        });
+    </script>
+
+    <!-- Floating Home Button -->
+    <a href="index.html" class="floating-home-btn" aria-label="Go to home page" title="Back to Home">
+        <div class="floating-camera-icon">
+            <div class="floating-camera-body">
+                <div class="floating-viewfinder"></div>
+                <div class="floating-flash"></div>
+                <div class="floating-lens">
+                    <div class="floating-lens-inner">
+                        <div class="floating-lens-glare"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
 </body>
 </html>

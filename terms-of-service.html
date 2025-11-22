@@ -8,183 +8,1186 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://aniltv06.github.io/passportphotosheet/terms-of-service.html">
     <style>
+        :root {
+            --primary-color: #007AFF;
+            --primary-hover: #0051D5;
+            --secondary-color: #5856D6;
+            --accent-color: #FF2D55;
+            --success-color: #34C759;
+            --warning-color: #FF9500;
+            --danger-color: #FF3B30;
+            --text-primary: #1D1D1F;
+            --text-secondary: #86868B;
+            --background: #FFFFFF;
+            --surface: #FFFFFF;
+            --border: #D2D2D7;
+            --shadow: rgba(0, 0, 0, 0.08);
+            --shadow-md: rgba(0, 0, 0, 0.12);
+            --shadow-lg: rgba(0, 0, 0, 0.16);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+            --spacing-3xl: 64px;
+            --spacing-4xl: 96px;
+            --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: var(--font-system);
+            background: var(--background);
+            color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section - Apple Style */
+        .hero {
+            position: relative;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--spacing-4xl) var(--spacing-lg);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto var(--spacing-xl);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-icon svg {
+            width: 60px;
+            height: 60px;
+        }
+
+        /* Hero Camera Icon */
+        .hero-camera-icon {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+        .hero-camera-body {
+            width: 100%;
+            height: 70%;
+            background: white;
+            border-radius: 8px;
+            position: absolute;
+            bottom: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .hero-lens {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow:
+                inset 0 1px 3px rgba(0, 0, 0, 0.1),
+                0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+        .hero-lens-inner {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .hero-lens-glare {
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+        }
+        .hero-flash {
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 15%;
+            right: 15%;
+            box-shadow: 0 2px 6px rgba(255, 165, 0, 0.4);
+        }
+        .hero-viewfinder {
+            width: 8px;
+            height: 6px;
+            background: #333;
+            border-radius: 2px;
+            position: absolute;
+            top: 12%;
+            left: 15%;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-title {
+            font-size: clamp(48px, 8vw, 72px);
+            font-weight: 700;
+            color: white;
+            margin-bottom: var(--spacing-lg);
+            letter-spacing: -2px;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--spacing-2xl);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: 18px 36px;
+            background: white;
+            color: var(--primary-color);
+            border-radius: 980px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: var(--spacing-2xl);
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-indicator svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+            opacity: 0.7;
+        }
+
+        /* Main Content Section */
+        .main-content {
+            background: var(--background);
+            padding: var(--spacing-4xl) 0;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 12px;
+            padding: 10px 14px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: var(--transition);
+        }
+
+        .language-selector:hover {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .language-selector select {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 4px 24px 4px 8px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%231D1D1F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        .language-selector select:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* Floating Home Button */
+        .floating-home-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 1000;
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 50%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            animation: floatButton 3s ease-in-out infinite;
+        }
+
+        .floating-home-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.3);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .floating-home-btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        @keyframes floatButton {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Camera icon for floating button */
+        .floating-camera-icon {
+            width: 35px;
+            height: 35px;
+            position: relative;
+        }
+
+        .floating-camera-body {
+            width: 100%;
+            height: 70%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            position: absolute;
+            bottom: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-lens {
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.15);
+        }
+
+        .floating-lens-inner {
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-lens-glare {
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+        }
+
+        .floating-flash {
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 10%;
+            right: 12%;
+            box-shadow: 0 1px 4px rgba(255, 165, 0, 0.4);
+        }
+
+        .floating-viewfinder {
+            width: 5px;
+            height: 4px;
+            background: #333;
+            border-radius: 1px;
+            position: absolute;
+            top: 8%;
+            left: 12%;
+        }
+
+        /* Content Styling */
+        .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 40px 20px;
-            color: #333;
+            padding: 0 var(--spacing-lg);
         }
-        h1 { color: #007AFF; margin-bottom: 10px; }
-        h2 { color: #007AFF; margin-top: 30px; }
-        .last-updated { color: #666; font-size: 14px; margin-bottom: 30px; }
-        a { color: #007AFF; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        .highlight { background: #E3F2FD; padding: 15px; border-radius: 8px; margin: 20px 0; }
+
+        h1 {
+            color: #007AFF;
+            margin-bottom: 10px;
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+        }
+
+        h2 {
+            color: #007AFF;
+            margin-top: 30px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .last-updated {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        a {
+            color: #007AFF;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .highlight {
+            background: #E3F2FD;
+            padding: 15px;
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 40px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 50vh;
+                padding: var(--spacing-3xl) var(--spacing-md);
+            }
+
+            .hero-icon {
+                width: 90px;
+                height: 90px;
+            }
+
+            .hero-icon svg {
+                width: 45px;
+                height: 45px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .hero-cta {
+                padding: 16px 28px;
+                font-size: 16px;
+            }
+
+            .main-content {
+                padding: var(--spacing-xl) 0;
+            }
+
+            .language-selector {
+                top: 10px;
+                right: 10px;
+            }
+
+            .floating-home-btn {
+                top: 20px;
+                left: 20px;
+                width: 60px;
+                height: 60px;
+            }
+
+            .floating-camera-icon {
+                width: 30px;
+                height: 30px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Terms of Service</h1>
-    <p class="last-updated">Last updated: January 20, 2025</p>
-
-    <div class="highlight">
-        <strong>Quick Summary:</strong> This is a free tool. Use it responsibly for legitimate passport/ID photos. We're not responsible if the print shop rejects your photos or if you use this for anything illegal.
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="languageSelect" class="language-select" aria-label="Select language">
+            <option value="en">🇬🇧 English</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="pt">🇵🇹 Português</option>
+            <option value="it">🇮🇹 Italiano</option>
+            <option value="ja">🇯🇵 日本語</option>
+            <option value="ko">🇰🇷 한국어</option>
+            <option value="zh">🇨🇳 中文</option>
+            <option value="ar">🇸🇦 العربية</option>
+            <option value="hi">🇮🇳 हिन्दी</option>
+            <option value="ru">🇷🇺 Русский</option>
+        </select>
     </div>
 
-    <h2>1. Acceptance of Terms</h2>
-    <p>By accessing and using Photo Sheet Maker ("the Service"), you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Service.</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <div class="hero-camera-icon">
+                    <div class="hero-camera-body">
+                        <div class="hero-viewfinder"></div>
+                        <div class="hero-flash"></div>
+                        <div class="hero-lens">
+                            <div class="hero-lens-inner">
+                                <div class="hero-lens-glare"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h1 class="hero-title" data-i18n="title">Terms of Service</h1>
+            <p class="hero-subtitle" data-i18n="heroSubtitle">Please read these terms carefully before using our service</p>
+            <a href="index.html" class="hero-cta">
+                <span data-i18n="backToHome">← Back to Home</span>
+            </a>
+        </div>
+        <div class="scroll-indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </div>
+    </section>
 
-    <h2>2. Description of Service</h2>
-    <p>Photo Sheet Maker is a free, browser-based tool that allows users to:</p>
-    <ul>
-        <li>Upload passport or ID photos</li>
-        <li>Arrange multiple copies on standard print sizes (4×6", 5×7", 8×10")</li>
-        <li>Download the resulting composite image for printing</li>
-    </ul>
-    <p>All processing happens in your web browser. No photos are uploaded to our servers.</p>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <p class="last-updated" data-i18n="lastUpdated">Last updated: January 20, 2025</p>
 
-    <h2>3. Free Service</h2>
-    <p>The Service is provided free of charge. We reserve the right to:</p>
-    <ul>
-        <li>Modify or discontinue the Service at any time without notice</li>
-        <li>Introduce premium features in the future</li>
-        <li>Display advertisements (currently we don't)</li>
-    </ul>
+            <div class="highlight">
+                <strong data-i18n="quickSummary">Quick Summary:</strong> <span data-i18n="summaryText">This is a free tool. Use it responsibly for legitimate passport/ID photos. We're not responsible if the print shop rejects your photos or if you use this for anything illegal.</span>
+            </div>
 
-    <h2>4. User Responsibilities</h2>
-    <p>You agree to:</p>
-    <ul>
-        <li>Use the Service only for lawful purposes</li>
-        <li>Only upload photos you have the right to use</li>
-        <li>Not use the Service for creating fraudulent documents</li>
-        <li>Verify that your printed photos meet official requirements (size, quality, background, etc.)</li>
-        <li>Not attempt to reverse engineer, hack, or exploit the Service</li>
-        <li>Not use automated tools to access the Service excessively</li>
-    </ul>
+            <h2 data-i18n="section1">1. Acceptance of Terms</h2>
+            <p>By accessing and using Photo Sheet Maker ("the Service"), you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Service.</p>
 
-    <h2>5. Photo Requirements and Quality</h2>
-    <p><strong>Important:</strong> While this tool arranges photos on a sheet, you are responsible for ensuring your original photo meets official passport/ID requirements:</p>
-    <ul>
-        <li>Correct dimensions (2×2 inches or 51×51mm are common sizes, but varies by country)</li>
-        <li>Appropriate background color (usually white or off-white)</li>
-        <li>Proper lighting and no shadows</li>
-        <li>Correct facial expression and positioning</li>
-        <li>Meeting specific official requirements for your country</li>
-    </ul>
-    <p>We recommend reviewing official requirements from your passport or ID issuing authority before creating your photo sheet.</p>
+            <h2 data-i18n="section2">2. Description of Service</h2>
+            <p>Photo Sheet Maker is a free, browser-based tool that allows users to:</p>
+            <ul>
+                <li>Upload passport or ID photos</li>
+                <li>Arrange multiple copies on standard print sizes (4×6", 5×7", 8×10")</li>
+                <li>Download the resulting composite image for printing</li>
+            </ul>
+            <p>All processing happens in your web browser. No photos are uploaded to our servers.</p>
 
-    <h2>6. No Guarantees</h2>
-    <p>We provide this Service "as is" without any warranties. Specifically:</p>
-    <ul>
-        <li><strong>No guarantee of acceptance:</strong> We do not guarantee that photos printed using this tool will be accepted by passport offices or other official document services</li>
-        <li><strong>No guarantee of quality:</strong> Print quality depends on your printer or print service, not our tool</li>
-        <li><strong>No guarantee of availability:</strong> The Service may be unavailable due to maintenance, technical issues, or other reasons</li>
-        <li><strong>No guarantee of compatibility:</strong> The Service requires a modern web browser with JavaScript enabled</li>
-    </ul>
+            <h2 data-i18n="section3">3. Free Service</h2>
+            <p>The Service is provided free of charge. We reserve the right to:</p>
+            <ul>
+                <li>Modify or discontinue the Service at any time without notice</li>
+                <li>Introduce premium features in the future</li>
+                <li>Display advertisements (currently we don't)</li>
+            </ul>
 
-    <h2>7. Limitation of Liability</h2>
-    <p>To the maximum extent permitted by law:</p>
-    <ul>
-        <li>We are not liable for any rejected photos</li>
-        <li>We are not liable for printing costs or fees</li>
-        <li>We are not liable for any delays in processing applications due to photo issues</li>
-        <li>We are not liable for any indirect, incidental, or consequential damages</li>
-        <li>Our maximum liability is limited to $0 (zero dollars), as the Service is free</li>
-    </ul>
+            <h2 data-i18n="section4">4. User Responsibilities</h2>
+            <p>You agree to:</p>
+            <ul>
+                <li>Use the Service only for lawful purposes</li>
+                <li>Only upload photos you have the right to use</li>
+                <li>Not use the Service for creating fraudulent documents</li>
+                <li>Verify that your printed photos meet official requirements (size, quality, background, etc.)</li>
+                <li>Not attempt to reverse engineer, hack, or exploit the Service</li>
+                <li>Not use automated tools to access the Service excessively</li>
+            </ul>
 
-    <h2>8. Intellectual Property and Open Source</h2>
-    <p><strong>Your Photos:</strong> You retain all rights to photos you upload. We don't claim any rights to your photos because we never receive or store them.</p>
-    <p><strong>Our Service:</strong> The source code of Photo Sheet Maker is released under the MIT License and is available on <a href="https://github.com/aniltv06/passportphotosheet" target="_blank">GitHub</a>. This means:</p>
-    <ul>
-        <li>You are free to use, copy, modify, and distribute the code</li>
-        <li>You can use it for commercial purposes</li>
-        <li>You must include the original copyright notice and license</li>
-        <li>The software is provided "as is" without warranty</li>
-    </ul>
-    <p>See the <a href="https://github.com/aniltv06/passportphotosheet/blob/main/LICENSE" target="_blank">LICENSE file</a> for complete terms.</p>
+            <h2 data-i18n="section5">5. Photo Requirements and Quality</h2>
+            <p><strong>Important:</strong> While this tool arranges photos on a sheet, you are responsible for ensuring your original photo meets official passport/ID requirements:</p>
+            <ul>
+                <li>Correct dimensions (2×2 inches or 51×51mm are common sizes, but varies by country)</li>
+                <li>Appropriate background color (usually white or off-white)</li>
+                <li>Proper lighting and no shadows</li>
+                <li>Correct facial expression and positioning</li>
+                <li>Meeting specific official requirements for your country</li>
+            </ul>
+            <p>We recommend reviewing official requirements from your passport or ID issuing authority before creating your photo sheet.</p>
 
-    <h2>9. Third-Party Services</h2>
-    <p>Our Service uses:</p>
-    <ul>
-        <li>Google Analytics for usage statistics</li>
-        <li>Microsoft Clarity for user experience insights</li>
-    </ul>
-    <p>These services have their own terms of service and privacy policies, which you should review.</p>
+            <h2 data-i18n="section6">6. No Guarantees</h2>
+            <p>We provide this Service "as is" without any warranties. Specifically:</p>
+            <ul>
+                <li><strong>No guarantee of acceptance:</strong> We do not guarantee that photos printed using this tool will be accepted by passport offices or other official document services</li>
+                <li><strong>No guarantee of quality:</strong> Print quality depends on your printer or print service, not our tool</li>
+                <li><strong>No guarantee of availability:</strong> The Service may be unavailable due to maintenance, technical issues, or other reasons</li>
+                <li><strong>No guarantee of compatibility:</strong> The Service requires a modern web browser with JavaScript enabled</li>
+            </ul>
 
-    <h2>10. Print Services Disclaimer</h2>
-    <p>When you print your photo sheet at local or online photo printing services:</p>
-    <ul>
-        <li>We are not affiliated with any printing businesses</li>
-        <li>Prices and availability vary by region and service provider</li>
-        <li>Print shops may have policies regarding passport photo printing</li>
-        <li>Print quality varies by service, equipment, and location</li>
-        <li>Follow the print shop's instructions for best results</li>
-        <li>Some services may require you to confirm the photos are for personal use</li>
-    </ul>
+            <h2 data-i18n="section7">7. Limitation of Liability</h2>
+            <p>To the maximum extent permitted by law:</p>
+            <ul>
+                <li>We are not liable for any rejected photos</li>
+                <li>We are not liable for printing costs or fees</li>
+                <li>We are not liable for any delays in processing applications due to photo issues</li>
+                <li>We are not liable for any indirect, incidental, or consequential damages</li>
+                <li>Our maximum liability is limited to $0 (zero dollars), as the Service is free</li>
+            </ul>
 
-    <h2>11. Legal Use Only</h2>
-    <p>You may NOT use this Service to:</p>
-    <ul>
-        <li>Create fake IDs or fraudulent documents</li>
-        <li>Violate any laws or regulations</li>
-        <li>Infringe on anyone's privacy or rights</li>
-        <li>Upload photos of other people without their consent</li>
-    </ul>
-    <p>Violations may be reported to appropriate authorities.</p>
+            <h2 data-i18n="section8">8. Intellectual Property and Open Source</h2>
+            <p><strong>Your Photos:</strong> You retain all rights to photos you upload. We don't claim any rights to your photos because we never receive or store them.</p>
+            <p><strong>Our Service:</strong> The source code of Photo Sheet Maker is released under the MIT License and is available on <a href="https://github.com/aniltv06/passportphotosheet" target="_blank">GitHub</a>. This means:</p>
+            <ul>
+                <li>You are free to use, copy, modify, and distribute the code</li>
+                <li>You can use it for commercial purposes</li>
+                <li>You must include the original copyright notice and license</li>
+                <li>The software is provided "as is" without warranty</li>
+            </ul>
+            <p>See the <a href="https://github.com/aniltv06/passportphotosheet/blob/main/LICENSE" target="_blank">LICENSE file</a> for complete terms.</p>
 
-    <h2>12. Age Restrictions</h2>
-    <p>You must be at least 13 years old to use this Service. If you are under 18, you should have parental consent to use the Service.</p>
+            <h2 data-i18n="section9">9. Third-Party Services</h2>
+            <p>Our Service uses:</p>
+            <ul>
+                <li>Google Analytics for usage statistics</li>
+                <li>Microsoft Clarity for user experience insights</li>
+            </ul>
+            <p>These services have their own terms of service and privacy policies, which you should review.</p>
 
-    <h2>13. Data and Privacy</h2>
-    <p>Please review our <a href="/privacy-policy.html">Privacy Policy</a> to understand how we handle information. Key points:</p>
-    <ul>
-        <li>Your photos are processed entirely in your browser</li>
-        <li>We never upload or store your photos</li>
-        <li>We collect anonymous usage statistics</li>
-    </ul>
+            <h2 data-i18n="section10">10. Print Services Disclaimer</h2>
+            <p>When you print your photo sheet at local or online photo printing services:</p>
+            <ul>
+                <li>We are not affiliated with any printing businesses</li>
+                <li>Prices and availability vary by region and service provider</li>
+                <li>Print shops may have policies regarding passport photo printing</li>
+                <li>Print quality varies by service, equipment, and location</li>
+                <li>Follow the print shop's instructions for best results</li>
+                <li>Some services may require you to confirm the photos are for personal use</li>
+            </ul>
 
-    <h2>14. Modifications to Terms</h2>
-    <p>We reserve the right to modify these Terms at any time. Changes will be effective immediately upon posting. Your continued use of the Service after changes constitutes acceptance of the new Terms.</p>
+            <h2 data-i18n="section11">11. Legal Use Only</h2>
+            <p>You may NOT use this Service to:</p>
+            <ul>
+                <li>Create fake IDs or fraudulent documents</li>
+                <li>Violate any laws or regulations</li>
+                <li>Infringe on anyone's privacy or rights</li>
+                <li>Upload photos of other people without their consent</li>
+            </ul>
+            <p>Violations may be reported to appropriate authorities.</p>
 
-    <h2>15. Termination</h2>
-    <p>We may terminate or suspend access to the Service immediately, without prior notice or liability, for any reason, including:</p>
-    <ul>
-        <li>Violation of these Terms</li>
-        <li>Suspected illegal activity</li>
-        <li>Technical or security reasons</li>
-    </ul>
+            <h2 data-i18n="section12">12. Age Restrictions</h2>
+            <p>You must be at least 13 years old to use this Service. If you are under 18, you should have parental consent to use the Service.</p>
 
-    <h2>16. Governing Law</h2>
-    <p>These Terms are governed by the laws of [Your State/Country]. Any disputes will be resolved in the courts of [Your Jurisdiction].</p>
+            <h2 data-i18n="section13">13. Data and Privacy</h2>
+            <p>Please review our <a href="/privacy-policy.html">Privacy Policy</a> to understand how we handle information. Key points:</p>
+            <ul>
+                <li>Your photos are processed entirely in your browser</li>
+                <li>We never upload or store your photos</li>
+                <li>We collect anonymous usage statistics</li>
+            </ul>
 
-    <h2>17. Severability</h2>
-    <p>If any provision of these Terms is found to be unenforceable, the remaining provisions will continue in full force and effect.</p>
+            <h2 data-i18n="section14">14. Modifications to Terms</h2>
+            <p>We reserve the right to modify these Terms at any time. Changes will be effective immediately upon posting. Your continued use of the Service after changes constitutes acceptance of the new Terms.</p>
 
-    <h2>18. No Professional Advice</h2>
-    <p>This Service does not provide professional photography advice, legal advice, or official document services. For official requirements, consult your local passport or ID issuing authority.</p>
+            <h2 data-i18n="section15">15. Termination</h2>
+            <p>We may terminate or suspend access to the Service immediately, without prior notice or liability, for any reason, including:</p>
+            <ul>
+                <li>Violation of these Terms</li>
+                <li>Suspected illegal activity</li>
+                <li>Technical or security reasons</li>
+            </ul>
 
-    <h2>19. Feedback and Suggestions</h2>
-    <p>If you provide us with feedback or suggestions about the Service, we may use them without any obligation to compensate you.</p>
+            <h2 data-i18n="section16">16. Governing Law</h2>
+            <p>These Terms are governed by the laws of [Your State/Country]. Any disputes will be resolved in the courts of [Your Jurisdiction].</p>
 
-    <h2>20. Contact Information</h2>
-    <p>For questions about these Terms, please contact us at:</p>
-    <p>Email: <a href="mailto:aniltv06@gmail.com">aniltv06@gmail.com</a></p>
+            <h2 data-i18n="section17">17. Severability</h2>
+            <p>If any provision of these Terms is found to be unenforceable, the remaining provisions will continue in full force and effect.</p>
 
-    <h2>21. Acknowledgment</h2>
-    <p>By using Photo Sheet Maker, you acknowledge that:</p>
-    <ul>
-        <li>You have read and understood these Terms</li>
-        <li>You agree to be bound by these Terms</li>
-        <li>You are responsible for ensuring your photos meet official requirements</li>
-        <li>This is a convenience tool, not an official service</li>
-    </ul>
+            <h2 data-i18n="section18">18. No Professional Advice</h2>
+            <p>This Service does not provide professional photography advice, legal advice, or official document services. For official requirements, consult your local passport or ID issuing authority.</p>
 
-    <hr>
-    <p style="text-align: center; color: #666; font-size: 14px; margin-top: 40px;">
-        <a href="index.html">Return to Photo Sheet Maker</a> |
-        <a href="privacy-policy.html">Privacy Policy</a> |
-        <a href="contact.html">Contact</a>
-    </p>
+            <h2 data-i18n="section19">19. Feedback and Suggestions</h2>
+            <p>If you provide us with feedback or suggestions about the Service, we may use them without any obligation to compensate you.</p>
+
+            <h2 data-i18n="section20">20. Contact Information</h2>
+            <p>For questions about these Terms, please contact us at:</p>
+            <p>Email: <a href="mailto:aniltv06@gmail.com">aniltv06@gmail.com</a></p>
+
+            <h2 data-i18n="section21">21. Acknowledgment</h2>
+            <p>By using Photo Sheet Maker, you acknowledge that:</p>
+            <ul>
+                <li>You have read and understood these Terms</li>
+                <li>You agree to be bound by these Terms</li>
+                <li>You are responsible for ensuring your photos meet official requirements</li>
+                <li>This is a convenience tool, not an official service</li>
+            </ul>
+
+            <hr>
+            <p style="text-align: center; color: #666; font-size: 14px; margin-top: 40px;">
+                <a href="index.html" data-i18n="returnHome">Return to Photo Sheet Maker</a> |
+                <a href="privacy-policy.html" data-i18n="privacyPolicy">Privacy Policy</a> |
+                <a href="contact.html" data-i18n="contact">Contact</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        'use strict';
+
+        const translations = {
+            en: {
+                title: "Terms of Service",
+                heroSubtitle: "Please read these terms carefully before using our service",
+                backToHome: "← Back to Home",
+                lastUpdated: "Last updated: January 20, 2025",
+                quickSummary: "Quick Summary:",
+                summaryText: "This is a free tool. Use it responsibly for legitimate passport/ID photos. We're not responsible if the print shop rejects your photos or if you use this for anything illegal.",
+                section1: "1. Acceptance of Terms",
+                section2: "2. Description of Service",
+                section3: "3. Free Service",
+                section4: "4. User Responsibilities",
+                section5: "5. Photo Requirements and Quality",
+                section6: "6. No Guarantees",
+                section7: "7. Limitation of Liability",
+                section8: "8. Intellectual Property and Open Source",
+                section9: "9. Third-Party Services",
+                section10: "10. Print Services Disclaimer",
+                section11: "11. Legal Use Only",
+                section12: "12. Age Restrictions",
+                section13: "13. Data and Privacy",
+                section14: "14. Modifications to Terms",
+                section15: "15. Termination",
+                section16: "16. Governing Law",
+                section17: "17. Severability",
+                section18: "18. No Professional Advice",
+                section19: "19. Feedback and Suggestions",
+                section20: "20. Contact Information",
+                section21: "21. Acknowledgment",
+                returnHome: "Return to Photo Sheet Maker",
+                privacyPolicy: "Privacy Policy",
+                contact: "Contact"
+            },
+            es: {
+                title: "Términos de Servicio",
+                heroSubtitle: "Por favor, lea estos términos cuidadosamente antes de usar nuestro servicio",
+                backToHome: "← Volver a Inicio",
+                lastUpdated: "Última actualización: 20 de enero de 2025",
+                quickSummary: "Resumen Rápido:",
+                summaryText: "Esta es una herramienta gratuita. Úsala responsablemente para fotos legítimas de pasaporte/identificación. No somos responsables si la imprenta rechaza tus fotos o si las usas para algo ilegal.",
+                section1: "1. Aceptación de Términos",
+                section2: "2. Descripción del Servicio",
+                section3: "3. Servicio Gratuito",
+                section4: "4. Responsabilidades del Usuario",
+                section5: "5. Requisitos y Calidad de la Foto",
+                section6: "6. Sin Garantías",
+                section7: "7. Limitación de Responsabilidad",
+                section8: "8. Propiedad Intelectual y Código Abierto",
+                section9: "9. Servicios de Terceros",
+                section10: "10. Exención de Responsabilidad de Servicios de Impresión",
+                section11: "11. Uso Legal Solamente",
+                section12: "12. Restricciones de Edad",
+                section13: "13. Datos y Privacidad",
+                section14: "14. Modificaciones a los Términos",
+                section15: "15. Terminación",
+                section16: "16. Ley Aplicable",
+                section17: "17. Divisibilidad",
+                section18: "18. Sin Asesoramiento Profesional",
+                section19: "19. Comentarios y Sugerencias",
+                section20: "20. Información de Contacto",
+                section21: "21. Reconocimiento",
+                returnHome: "Volver a Photo Sheet Maker",
+                privacyPolicy: "Política de Privacidad",
+                contact: "Contacto"
+            },
+            fr: {
+                title: "Conditions d'Utilisation",
+                heroSubtitle: "Veuillez lire ces conditions attentivement avant d'utiliser notre service",
+                backToHome: "← Retour à l'Accueil",
+                lastUpdated: "Dernière mise à jour : 20 janvier 2025",
+                quickSummary: "Résumé Rapide :",
+                summaryText: "Ceci est un outil gratuit. Utilisez-le de manière responsable pour des photos de passeport/carte d'identité légitimes. Nous ne sommes pas responsables si l'imprimerie rejette vos photos ou si vous l'utilisez pour quelque chose d'illégal.",
+                section1: "1. Acceptation des Conditions",
+                section2: "2. Description du Service",
+                section3: "3. Service Gratuit",
+                section4: "4. Responsabilités de l'Utilisateur",
+                section5: "5. Exigences et Qualité des Photos",
+                section6: "6. Aucune Garantie",
+                section7: "7. Limitation de Responsabilité",
+                section8: "8. Propriété Intellectuelle et Open Source",
+                section9: "9. Services Tiers",
+                section10: "10. Clause de Non-Responsabilité des Services d'Impression",
+                section11: "11. Utilisation Légale Uniquement",
+                section12: "12. Restrictions d'Âge",
+                section13: "13. Données et Confidentialité",
+                section14: "14. Modifications des Conditions",
+                section15: "15. Résiliation",
+                section16: "16. Loi Applicable",
+                section17: "17. Divisibilité",
+                section18: "18. Aucun Conseil Professionnel",
+                section19: "19. Commentaires et Suggestions",
+                section20: "20. Informations de Contact",
+                section21: "21. Reconnaissance",
+                returnHome: "Retour à Photo Sheet Maker",
+                privacyPolicy: "Politique de Confidentialité",
+                contact: "Contact"
+            },
+            de: {
+                title: "Nutzungsbedingungen",
+                heroSubtitle: "Bitte lesen Sie diese Bedingungen sorgfältig, bevor Sie unseren Service nutzen",
+                backToHome: "← Zurück zur Startseite",
+                lastUpdated: "Zuletzt aktualisiert: 20. Januar 2025",
+                quickSummary: "Kurzzusammenfassung:",
+                summaryText: "Dies ist ein kostenloses Tool. Verwenden Sie es verantwortungsvoll für legitime Pass-/Ausweisfotos. Wir sind nicht verantwortlich, wenn die Druckerei Ihre Fotos ablehnt oder wenn Sie dies für etwas Illegales verwenden.",
+                section1: "1. Annahme der Bedingungen",
+                section2: "2. Beschreibung des Dienstes",
+                section3: "3. Kostenloser Service",
+                section4: "4. Benutzerverantwortlichkeiten",
+                section5: "5. Fotoanforderungen und Qualität",
+                section6: "6. Keine Garantien",
+                section7: "7. Haftungsbeschränkung",
+                section8: "8. Geistiges Eigentum und Open Source",
+                section9: "9. Drittanbieterdienste",
+                section10: "10. Haftungsausschluss für Druckdienste",
+                section11: "11. Nur Legale Nutzung",
+                section12: "12. Altersbeschränkungen",
+                section13: "13. Daten und Datenschutz",
+                section14: "14. Änderungen der Bedingungen",
+                section15: "15. Kündigung",
+                section16: "16. Anwendbares Recht",
+                section17: "17. Salvatorische Klausel",
+                section18: "18. Keine professionelle Beratung",
+                section19: "19. Feedback und Vorschläge",
+                section20: "20. Kontaktinformationen",
+                section21: "21. Anerkennung",
+                returnHome: "Zurück zu Photo Sheet Maker",
+                privacyPolicy: "Datenschutzrichtlinie",
+                contact: "Kontakt"
+            },
+            pt: {
+                title: "Termos de Serviço",
+                heroSubtitle: "Por favor, leia estes termos cuidadosamente antes de usar nosso serviço",
+                backToHome: "← Voltar para Início",
+                lastUpdated: "Última atualização: 20 de janeiro de 2025",
+                quickSummary: "Resumo Rápido:",
+                summaryText: "Esta é uma ferramenta gratuita. Use-a com responsabilidade para fotos legítimas de passaporte/identificação. Não somos responsáveis se a gráfica rejeitar suas fotos ou se você usá-la para algo ilegal.",
+                section1: "1. Aceitação dos Termos",
+                section2: "2. Descrição do Serviço",
+                section3: "3. Serviço Gratuito",
+                section4: "4. Responsabilidades do Usuário",
+                section5: "5. Requisitos e Qualidade da Foto",
+                section6: "6. Sem Garantias",
+                section7: "7. Limitação de Responsabilidade",
+                section8: "8. Propriedade Intelectual e Open Source",
+                section9: "9. Serviços de Terceiros",
+                section10: "10. Isenção de Responsabilidade de Serviços de Impressão",
+                section11: "11. Uso Legal Apenas",
+                section12: "12. Restrições de Idade",
+                section13: "13. Dados e Privacidade",
+                section14: "14. Modificações aos Termos",
+                section15: "15. Rescisão",
+                section16: "16. Lei Aplicável",
+                section17: "17. Divisibilidade",
+                section18: "18. Sem Aconselhamento Profissional",
+                section19: "19. Comentários e Sugestões",
+                section20: "20. Informações de Contato",
+                section21: "21. Reconhecimento",
+                returnHome: "Voltar ao Photo Sheet Maker",
+                privacyPolicy: "Política de Privacidade",
+                contact: "Contato"
+            },
+            it: {
+                title: "Termini di Servizio",
+                heroSubtitle: "Si prega di leggere attentamente questi termini prima di utilizzare il nostro servizio",
+                backToHome: "← Torna alla Home",
+                lastUpdated: "Ultimo aggiornamento: 20 gennaio 2025",
+                quickSummary: "Riepilogo Rapido:",
+                summaryText: "Questo è uno strumento gratuito. Usalo responsabilmente per foto legittime di passaporto/ID. Non siamo responsabili se la stamperia rifiuta le tue foto o se lo usi per qualcosa di illegale.",
+                section1: "1. Accettazione dei Termini",
+                section2: "2. Descrizione del Servizio",
+                section3: "3. Servizio Gratuito",
+                section4: "4. Responsabilità dell'Utente",
+                section5: "5. Requisiti e Qualità delle Foto",
+                section6: "6. Nessuna Garanzia",
+                section7: "7. Limitazione di Responsabilità",
+                section8: "8. Proprietà Intellettuale e Open Source",
+                section9: "9. Servizi di Terze Parti",
+                section10: "10. Esclusione di Responsabilità dei Servizi di Stampa",
+                section11: "11. Solo Uso Legale",
+                section12: "12. Restrizioni di Età",
+                section13: "13. Dati e Privacy",
+                section14: "14. Modifiche ai Termini",
+                section15: "15. Rescissione",
+                section16: "16. Legge Applicabile",
+                section17: "17. Divisibilità",
+                section18: "18. Nessun Consiglio Professionale",
+                section19: "19. Feedback e Suggerimenti",
+                section20: "20. Informazioni di Contatto",
+                section21: "21. Riconoscimento",
+                returnHome: "Torna a Photo Sheet Maker",
+                privacyPolicy: "Informativa Privacy",
+                contact: "Contatto"
+            },
+            ja: {
+                title: "利用規約",
+                heroSubtitle: "当サービスをご利用になる前に、これらの規約を注意深くお読みください",
+                backToHome: "← ホームに戻る",
+                lastUpdated: "最終更新: 2025年1月20日",
+                quickSummary: "概要：",
+                summaryText: "これは無料ツールです。正当なパスポート/ID写真のために責任を持って使用してください。印刷店があなたの写真を拒否した場合や、違法な目的で使用した場合、当社は責任を負いません。",
+                section1: "1. 規約の承諾",
+                section2: "2. サービスの説明",
+                section3: "3. 無料サービス",
+                section4: "4. ユーザーの責任",
+                section5: "5. 写真の要件と品質",
+                section6: "6. 保証なし",
+                section7: "7. 責任の制限",
+                section8: "8. 知的財産とオープンソース",
+                section9: "9. 第三者サービス",
+                section10: "10. 印刷サービスの免責事項",
+                section11: "11. 合法的な使用のみ",
+                section12: "12. 年齢制限",
+                section13: "13. データとプライバシー",
+                section14: "14. 規約の変更",
+                section15: "15. 終了",
+                section16: "16. 準拠法",
+                section17: "17. 分離可能性",
+                section18: "18. 専門的アドバイスなし",
+                section19: "19. フィードバックと提案",
+                section20: "20. 連絡先情報",
+                section21: "21. 承認",
+                returnHome: "Photo Sheet Makerに戻る",
+                privacyPolicy: "プライバシーポリシー",
+                contact: "お問い合わせ"
+            },
+            ko: {
+                title: "서비스 약관",
+                heroSubtitle: "당사 서비스를 이용하기 전에 이 약관을 주의 깊게 읽어주세요",
+                backToHome: "← 홈으로 돌아가기",
+                lastUpdated: "최종 업데이트: 2025년 1월 20일",
+                quickSummary: "빠른 요약:",
+                summaryText: "이것은 무료 도구입니다. 합법적인 여권/신분증 사진을 위해 책임감 있게 사용하십시오. 인쇄소가 귀하의 사진을 거부하거나 불법적인 용도로 사용하는 경우 당사는 책임지지 않습니다.",
+                section1: "1. 약관 수락",
+                section2: "2. 서비스 설명",
+                section3: "3. 무료 서비스",
+                section4: "4. 사용자 책임",
+                section5: "5. 사진 요구사항 및 품질",
+                section6: "6. 보증 없음",
+                section7: "7. 책임 제한",
+                section8: "8. 지적 재산 및 오픈 소스",
+                section9: "9. 제3자 서비스",
+                section10: "10. 인쇄 서비스 면책 조항",
+                section11: "11. 합법적 사용만",
+                section12: "12. 연령 제한",
+                section13: "13. 데이터 및 개인정보 보호",
+                section14: "14. 약관 수정",
+                section15: "15. 종료",
+                section16: "16. 준거법",
+                section17: "17. 가분성",
+                section18: "18. 전문적 조언 없음",
+                section19: "19. 피드백 및 제안",
+                section20: "20. 연락처 정보",
+                section21: "21. 인정",
+                returnHome: "Photo Sheet Maker로 돌아가기",
+                privacyPolicy: "개인정보 처리방침",
+                contact: "문의하기"
+            },
+            zh: {
+                title: "服务条款",
+                heroSubtitle: "在使用我们的服务之前，请仔细阅读这些条款",
+                backToHome: "← 返回首页",
+                lastUpdated: "最后更新：2025年1月20日",
+                quickSummary: "快速摘要：",
+                summaryText: "这是一个免费工具。请负责任地将其用于合法的护照/身份证照片。如果打印店拒绝您的照片或您将其用于任何非法用途，我们概不负责。",
+                section1: "1. 接受条款",
+                section2: "2. 服务说明",
+                section3: "3. 免费服务",
+                section4: "4. 用户责任",
+                section5: "5. 照片要求和质量",
+                section6: "6. 无保证",
+                section7: "7. 责任限制",
+                section8: "8. 知识产权和开源",
+                section9: "9. 第三方服务",
+                section10: "10. 打印服务免责声明",
+                section11: "11. 仅限合法使用",
+                section12: "12. 年龄限制",
+                section13: "13. 数据和隐私",
+                section14: "14. 条款修改",
+                section15: "15. 终止",
+                section16: "16. 适用法律",
+                section17: "17. 可分割性",
+                section18: "18. 无专业建议",
+                section19: "19. 反馈和建议",
+                section20: "20. 联系信息",
+                section21: "21. 确认",
+                returnHome: "返回Photo Sheet Maker",
+                privacyPolicy: "隐私政策",
+                contact: "联系"
+            },
+            ar: {
+                title: "شروط الخدمة",
+                heroSubtitle: "يرجى قراءة هذه الشروط بعناية قبل استخدام خدمتنا",
+                backToHome: "← العودة إلى الصفحة الرئيسية",
+                lastUpdated: "آخر تحديث: 20 يناير 2025",
+                quickSummary: "ملخص سريع:",
+                summaryText: "هذه أداة مجانية. استخدمها بمسؤولية لصور جواز السفر/الهوية الشرعية. نحن غير مسؤولين إذا رفض متجر الطباعة صورك أو إذا استخدمت هذا لأي شيء غير قانوني.",
+                section1: "1. قبول الشروط",
+                section2: "2. وصف الخدمة",
+                section3: "3. خدمة مجانية",
+                section4: "4. مسؤوليات المستخدم",
+                section5: "5. متطلبات الصورة والجودة",
+                section6: "6. عدم وجود ضمانات",
+                section7: "7. حدود المسؤولية",
+                section8: "8. الملكية الفكرية والمصدر المفتوح",
+                section9: "9. خدمات الطرف الثالث",
+                section10: "10. إخلاء مسؤولية خدمات الطباعة",
+                section11: "11. الاستخدام القانوني فقط",
+                section12: "12. قيود العمر",
+                section13: "13. البيانات والخصوصية",
+                section14: "14. تعديلات على الشروط",
+                section15: "15. الإنهاء",
+                section16: "16. القانون الحاكم",
+                section17: "17. القابلية للانفصال",
+                section18: "18. لا توجد نصيحة مهنية",
+                section19: "19. التعليقات والاقتراحات",
+                section20: "20. معلومات الاتصال",
+                section21: "21. الإقرار",
+                returnHome: "العودة إلى Photo Sheet Maker",
+                privacyPolicy: "سياسة الخصوصية",
+                contact: "اتصل"
+            },
+            hi: {
+                title: "सेवा की शर्तें",
+                heroSubtitle: "कृपया हमारी सेवा का उपयोग करने से पहले इन शर्तों को ध्यान से पढ़ें",
+                backToHome: "← होम पर वापस जाएं",
+                lastUpdated: "अंतिम अपडेट: 20 जनवरी 2025",
+                quickSummary: "त्वरित सारांश:",
+                summaryText: "यह एक मुफ्त उपकरण है। वैध पासपोर्ट/आईडी फ़ोटो के लिए इसे जिम्मेदारी से उपयोग करें। यदि प्रिंट शॉप आपकी फ़ोटो को अस्वीकार करती है या यदि आप इसे किसी अवैध चीज़ के लिए उपयोग करते हैं तो हम ज़िम्मेदार नहीं हैं।",
+                section1: "1. शर्तों की स्वीकृति",
+                section2: "2. सेवा का विवरण",
+                section3: "3. मुफ्त सेवा",
+                section4: "4. उपयोगकर्ता जिम्मेदारियां",
+                section5: "5. फ़ोटो आवश्यकताएं और गुणवत्ता",
+                section6: "6. कोई गारंटी नहीं",
+                section7: "7. दायित्व की सीमा",
+                section8: "8. बौद्धिक संपदा और ओपन सोर्स",
+                section9: "9. तृतीय-पक्ष सेवाएं",
+                section10: "10. प्रिंट सेवाओं की अस्वीकरण",
+                section11: "11. केवल कानूनी उपयोग",
+                section12: "12. आयु प्रतिबंध",
+                section13: "13. डेटा और गोपनीयता",
+                section14: "14. शर्तों में संशोधन",
+                section15: "15. समाप्ति",
+                section16: "16. शासी कानून",
+                section17: "17. विभाज्यता",
+                section18: "18. कोई पेशेवर सलाह नहीं",
+                section19: "19. प्रतिक्रिया और सुझाव",
+                section20: "20. संपर्क जानकारी",
+                section21: "21. स्वीकृति",
+                returnHome: "Photo Sheet Maker पर वापस जाएं",
+                privacyPolicy: "गोपनीयता नीति",
+                contact: "संपर्क करें"
+            },
+            ru: {
+                title: "Условия Обслуживания",
+                heroSubtitle: "Пожалуйста, внимательно прочитайте эти условия перед использованием нашего сервиса",
+                backToHome: "← Вернуться на главную",
+                lastUpdated: "Последнее обновление: 20 января 2025 г.",
+                quickSummary: "Краткое Описание:",
+                summaryText: "Это бесплатный инструмент. Используйте его ответственно для легальных фотографий паспорта/удостоверения личности. Мы не несем ответственности, если типография отклонит ваши фотографии или если вы используете это для чего-либо незаконного.",
+                section1: "1. Принятие Условий",
+                section2: "2. Описание Сервиса",
+                section3: "3. Бесплатный Сервис",
+                section4: "4. Обязанности Пользователя",
+                section5: "5. Требования к Фотографиям и Качество",
+                section6: "6. Отсутствие Гарантий",
+                section7: "7. Ограничение Ответственности",
+                section8: "8. Интеллектуальная Собственность и Open Source",
+                section9: "9. Сторонние Сервисы",
+                section10: "10. Отказ от Ответственности за Услуги Печати",
+                section11: "11. Только Законное Использование",
+                section12: "12. Возрастные Ограничения",
+                section13: "13. Данные и Конфиденциальность",
+                section14: "14. Изменения Условий",
+                section15: "15. Прекращение",
+                section16: "16. Применимое Право",
+                section17: "17. Делимость",
+                section18: "18. Отсутствие Профессиональных Рекомендаций",
+                section19: "19. Отзывы и Предложения",
+                section20: "20. Контактная Информация",
+                section21: "21. Подтверждение",
+                returnHome: "Вернуться к Photo Sheet Maker",
+                privacyPolicy: "Политика Конфиденциальности",
+                contact: "Контакт"
+            }
+        };
+
+        // Get or set language preference using 'preferredLanguage' key
+        function getLanguage() {
+            return localStorage.getItem('preferredLanguage') || 'en';
+        }
+
+        function setLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Apply translations to the page
+        function applyTranslations(lang) {
+            const trans = translations[lang] || translations.en;
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (trans[key]) {
+                    element.textContent = trans[key];
+                }
+            });
+
+            document.documentElement.lang = lang;
+            document.title = trans.title + " - Photo Sheet Maker";
+        }
+
+        // Initialize language
+        const languageSelect = document.getElementById('languageSelect');
+        if (languageSelect) {
+            const currentLang = getLanguage();
+            languageSelect.value = currentLang;
+            applyTranslations(currentLang);
+
+            languageSelect.addEventListener('change', (e) => {
+                const newLang = e.target.value;
+                setLanguage(newLang);
+                applyTranslations(newLang);
+            });
+        }
+
+        // Apply translations on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const lang = getLanguage();
+            if (languageSelect) {
+                languageSelect.value = lang;
+            }
+            applyTranslations(lang);
+        });
+    </script>
+
+    <!-- Floating Home Button -->
+    <a href="index.html" class="floating-home-btn" aria-label="Go to home page" title="Back to Home">
+        <div class="floating-camera-icon">
+            <div class="floating-camera-body">
+                <div class="floating-viewfinder"></div>
+                <div class="floating-flash"></div>
+                <div class="floating-lens">
+                    <div class="floating-lens-inner">
+                        <div class="floating-lens-glare"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
 </body>
 </html>

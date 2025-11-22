@@ -8,298 +8,1294 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://yourwebsite.com/faq.html">
     <style>
+        :root {
+            --primary-color: #007AFF;
+            --primary-hover: #0051D5;
+            --secondary-color: #5856D6;
+            --accent-color: #FF2D55;
+            --success-color: #34C759;
+            --warning-color: #FF9500;
+            --danger-color: #FF3B30;
+            --text-primary: #1D1D1F;
+            --text-secondary: #86868B;
+            --background: #FFFFFF;
+            --surface: #FFFFFF;
+            --border: #D2D2D7;
+            --shadow: rgba(0, 0, 0, 0.08);
+            --shadow-md: rgba(0, 0, 0, 0.12);
+            --shadow-lg: rgba(0, 0, 0, 0.16);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+            --spacing-3xl: 64px;
+            --spacing-4xl: 96px;
+            --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: var(--font-system);
+            background: var(--background);
+            color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section - Apple Style */
+        .hero {
+            position: relative;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--spacing-4xl) var(--spacing-lg);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto var(--spacing-xl);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-icon svg {
+            width: 60px;
+            height: 60px;
+        }
+
+        /* Hero Camera Icon */
+        .hero-camera-icon {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+        .hero-camera-body {
+            width: 100%;
+            height: 70%;
+            background: white;
+            border-radius: 8px;
+            position: absolute;
+            bottom: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .hero-lens {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow:
+                inset 0 1px 3px rgba(0, 0, 0, 0.1),
+                0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+        .hero-lens-inner {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .hero-lens-glare {
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+        }
+        .hero-flash {
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 15%;
+            right: 15%;
+            box-shadow: 0 2px 6px rgba(255, 165, 0, 0.4);
+        }
+        .hero-viewfinder {
+            width: 8px;
+            height: 6px;
+            background: #333;
+            border-radius: 2px;
+            position: absolute;
+            top: 12%;
+            left: 15%;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-title {
+            font-size: clamp(48px, 8vw, 72px);
+            font-weight: 700;
+            color: white;
+            margin-bottom: var(--spacing-lg);
+            letter-spacing: -2px;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--spacing-2xl);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: 18px 36px;
+            background: white;
+            color: var(--primary-color);
+            border-radius: 980px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: var(--spacing-2xl);
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-indicator svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+            opacity: 0.7;
+        }
+
+        /* Main Content Section */
+        .main-content {
+            background: var(--background);
+            padding: var(--spacing-4xl) 0;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 12px;
+            padding: 10px 14px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: var(--transition);
+        }
+
+        .language-selector:hover {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .language-selector select {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 4px 24px 4px 8px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%231D1D1F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        .language-selector select:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* Floating Home Button */
+        .floating-home-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 1000;
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 50%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            animation: floatButton 3s ease-in-out infinite;
+        }
+
+        .floating-home-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.3);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .floating-home-btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        @keyframes floatButton {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Camera icon for floating button */
+        .floating-camera-icon {
+            width: 35px;
+            height: 35px;
+            position: relative;
+        }
+
+        .floating-camera-body {
+            width: 100%;
+            height: 70%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            position: absolute;
+            bottom: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-lens {
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.15);
+        }
+
+        .floating-lens-inner {
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-lens-glare {
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+        }
+
+        .floating-flash {
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 10%;
+            right: 12%;
+            box-shadow: 0 1px 4px rgba(255, 165, 0, 0.4);
+        }
+
+        .floating-viewfinder {
+            width: 5px;
+            height: 4px;
+            background: #333;
+            border-radius: 1px;
+            position: absolute;
+            top: 8%;
+            left: 12%;
+        }
+
+        .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 40px 20px;
-            color: #333;
+            padding: 0 var(--spacing-lg);
         }
-        h1 { color: #007AFF; margin-bottom: 30px; }
-        h2 { color: #007AFF; margin-top: 30px; font-size: 18px; }
-        a { color: #007AFF; text-decoration: none; }
-        a:hover { text-decoration: underline; }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-top: 30px;
+            font-size: 18px;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: var(--primary-hover);
+        }
+
         .faq-item {
             background: #F5F5F7;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: var(--radius-md);
             margin-bottom: 15px;
+            transition: var(--transition);
         }
+
+        .faq-item:hover {
+            background: #EBEBED;
+            transform: translateY(-2px);
+        }
+
         .faq-question {
             font-weight: 600;
-            color: #007AFF;
+            color: var(--primary-color);
             margin-bottom: 10px;
         }
+
         .category {
             background: #E3F2FD;
             padding: 10px 15px;
-            border-radius: 8px;
+            border-radius: var(--radius-md);
             margin: 30px 0 15px 0;
             font-weight: 600;
-            color: #007AFF;
+            color: var(--primary-color);
         }
+
         .btn {
             display: inline-block;
-            background: #007AFF;
+            background: var(--primary-color);
             color: white;
             padding: 12px 24px;
-            border-radius: 8px;
+            border-radius: var(--radius-md);
             text-decoration: none;
             margin: 20px 10px 20px 0;
+            font-weight: 600;
+            transition: var(--transition);
         }
+
         .btn:hover {
-            background: #0051D5;
+            background: var(--primary-hover);
             text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 122, 255, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 50vh;
+                padding: var(--spacing-3xl) var(--spacing-md);
+            }
+
+            .hero-icon {
+                width: 90px;
+                height: 90px;
+            }
+
+            .hero-icon svg {
+                width: 45px;
+                height: 45px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .hero-cta {
+                padding: 16px 28px;
+                font-size: 16px;
+            }
+
+            .language-selector {
+                top: 10px;
+                right: 10px;
+            }
+
+            .main-content {
+                padding: var(--spacing-xl) 0;
+            }
+
+            .floating-home-btn {
+                top: 20px;
+                left: 20px;
+                width: 60px;
+                height: 60px;
+            }
+
+            .floating-camera-icon {
+                width: 30px;
+                height: 30px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Frequently Asked Questions (FAQ)</h1>
-
-    <p style="text-align: center;">
-        <a href="index.html" class="btn">Try Photo Sheet Maker</a>
-        <a href="contact.html" class="btn" style="background: #5856D6;">Contact Us</a>
-    </p>
-
-    <div class="category">🚀 Getting Started</div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: What is Photo Sheet Maker?</div>
-        <div class="faq-answer">A: Photo Sheet Maker is a free online tool that helps you arrange multiple passport or ID photos on a single print sheet. Instead of paying high prices for individual photos, you can print 6-20 photos on a single sheet at any local or online photo printing service, saving you significant money.</div>
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="languageSelect" class="language-select" aria-label="Select language">
+            <option value="en">🇬🇧 English</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="pt">🇵🇹 Português</option>
+            <option value="it">🇮🇹 Italiano</option>
+            <option value="ja">🇯🇵 日本語</option>
+            <option value="ko">🇰🇷 한국어</option>
+            <option value="zh">🇨🇳 中文</option>
+            <option value="ar">🇸🇦 العربية</option>
+            <option value="hi">🇮🇳 हिन्दी</option>
+            <option value="ru">🇷🇺 Русский</option>
+        </select>
     </div>
 
-    <div class="faq-item">
-        <div class="faq-question">Q: How does it work?</div>
-        <div class="faq-answer">A: Simply upload your 2×2 inch passport photo, choose your print size (4×6", 5×7", or 8×10"), and download the composite image. Then take that file to any photo printing service.</div>
-    </div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <div class="hero-camera-icon">
+                    <div class="hero-camera-body">
+                        <div class="hero-viewfinder"></div>
+                        <div class="hero-flash"></div>
+                        <div class="hero-lens">
+                            <div class="hero-lens-inner">
+                                <div class="hero-lens-glare"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h1 class="hero-title" data-i18n="title">Frequently Asked Questions</h1>
+            <p class="hero-subtitle" data-i18n="heroSubtitle">Find answers to common questions about creating passport photo sheets</p>
+            <a href="index.html" class="hero-cta">
+                <span data-i18n="backToHome">← Back to Home</span>
+            </a>
+        </div>
+        <div class="scroll-indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </div>
+    </section>
 
-    <div class="faq-item">
-        <div class="faq-question">Q: Is it really free?</div>
-        <div class="faq-answer">A: Yes! There are no hidden fees, no account required, and no watermarks on your downloads.</div>
-    </div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <p style="text-align: center;">
+                <a href="index.html" class="btn" data-i18n="tryPhotoMaker">Try Photo Sheet Maker</a>
+                <a href="contact.html" class="btn" style="background: #5856D6;" data-i18n="contactUs">Contact Us</a>
+            </p>
 
-    <div class="category">📸 Photo Requirements</div>
+            <div class="category" data-i18n="gettingStartedTitle">🚀 Getting Started</div>
 
-    <div class="faq-item">
-        <div class="faq-question">Q: What size should my original photo be?</div>
-        <div class="faq-answer">A: Your photo should be 2×2 inches (600×600 pixels at 300 DPI). This is the standard size for US passport photos and many ID photos.</div>
-    </div>
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q1">Q: What is Photo Sheet Maker?</div>
+                <div class="faq-answer" data-i18n="a1">A: Photo Sheet Maker is a free online tool that helps you arrange multiple passport or ID photos on a single print sheet. Instead of paying high prices for individual photos, you can print 6-20 photos on a single sheet at any local or online photo printing service, saving you significant money.</div>
+            </div>
 
-    <div class="faq-item">
-        <div class="faq-question">Q: What if I don't have a 2×2 inch photo?</div>
-        <div class="faq-answer">A: You'll need to crop your photo to 2×2 inches first using a photo editor or online cropping tool. Many passport photo services offer templates or apps to help you create compliant photos.</div>
-    </div>
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q2">Q: How does it work?</div>
+                <div class="faq-answer" data-i18n="a2">A: Simply upload your 2×2 inch passport photo, choose your print size (4×6", 5×7", or 8×10"), and download the composite image. Then take that file to any photo printing service.</div>
+            </div>
 
-    <div class="faq-item">
-        <div class="faq-question">Q: What background should my photo have?</div>
-        <div class="faq-answer">A: For US passports, you need a white or off-white background. Other countries may have different requirements. Our tool doesn't change your photo - it just arranges copies on a sheet - so make sure your original photo already meets official requirements.</div>
-    </div>
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q3">Q: Is it really free?</div>
+                <div class="faq-answer" data-i18n="a3">A: Yes! There are no hidden fees, no account required, and no watermarks on your downloads.</div>
+            </div>
 
-    <div class="faq-item">
-        <div class="faq-question">Q: Can I use a photo I took with my phone?</div>
-        <div class="faq-answer">A: Yes, as long as it meets official requirements (proper background, lighting, size, facial expression, etc.). There are many apps that help you take compliant passport photos with your phone.</div>
-    </div>
+            <div class="category" data-i18n="photoRequirementsTitle">📸 Photo Requirements</div>
 
-    <div class="category">🖨️ Printing</div>
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q4">Q: What size should my original photo be?</div>
+                <div class="faq-answer" data-i18n="a4">A: Your photo should be 2×2 inches (600×600 pixels at 300 DPI). This is the standard size for US passport photos and many ID photos.</div>
+            </div>
 
-    <div class="faq-item">
-        <div class="faq-question">Q: Where can I print my photo sheet?</div>
-        <div class="faq-answer">A: You can print at any photo printing service worldwide:
-            <ul>
-                <li><strong>Local photo shops:</strong> Visit your neighborhood photo printing store</li>
-                <li><strong>Pharmacy chains:</strong> Many pharmacy stores offer photo printing services</li>
-                <li><strong>Supermarkets:</strong> Large supermarkets often have photo printing kiosks</li>
-                <li><strong>Online services:</strong> Upload and order delivery or pickup</li>
-                <li><strong>Home printer:</strong> Use photo paper for best results</li>
-                <li><strong>Copy centers:</strong> Professional printing shops in your area</li>
-            </ul>
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q5">Q: What if I don't have a 2×2 inch photo?</div>
+                <div class="faq-answer" data-i18n="a5">A: You'll need to crop your photo to 2×2 inches first using a photo editor or online cropping tool. Many passport photo services offer templates or apps to help you create compliant photos.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q6">Q: What background should my photo have?</div>
+                <div class="faq-answer" data-i18n="a6">A: For US passports, you need a white or off-white background. Other countries may have different requirements. Our tool doesn't change your photo - it just arranges copies on a sheet - so make sure your original photo already meets official requirements.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q7">Q: Can I use a photo I took with my phone?</div>
+                <div class="faq-answer" data-i18n="a7">A: Yes, as long as it meets official requirements (proper background, lighting, size, facial expression, etc.). There are many apps that help you take compliant passport photos with your phone.</div>
+            </div>
+
+            <div class="category" data-i18n="printingTitle">🖨️ Printing</div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q8">Q: Where can I print my photo sheet?</div>
+                <div class="faq-answer">
+                    <span data-i18n="a8intro">A: You can print at any photo printing service worldwide:</span>
+                    <ul>
+                        <li><strong data-i18n="a8item1label">Local photo shops:</strong> <span data-i18n="a8item1">Visit your neighborhood photo printing store</span></li>
+                        <li><strong data-i18n="a8item2label">Pharmacy chains:</strong> <span data-i18n="a8item2">Many pharmacy stores offer photo printing services</span></li>
+                        <li><strong data-i18n="a8item3label">Supermarkets:</strong> <span data-i18n="a8item3">Large supermarkets often have photo printing kiosks</span></li>
+                        <li><strong data-i18n="a8item4label">Online services:</strong> <span data-i18n="a8item4">Upload and order delivery or pickup</span></li>
+                        <li><strong data-i18n="a8item5label">Home printer:</strong> <span data-i18n="a8item5">Use photo paper for best results</span></li>
+                        <li><strong data-i18n="a8item6label">Copy centers:</strong> <span data-i18n="a8item6">Professional printing shops in your area</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q9">Q: What print settings should I use?</div>
+                <div class="faq-answer">
+                    <span data-i18n="a9intro">A: When ordering prints:</span>
+                    <ul>
+                        <li data-i18n="a9item1">Select the SAME size you chose in our tool (4×6", 5×7", or 8×10")</li>
+                        <li data-i18n="a9item2">Choose "Matte" finish (recommended for passport photos)</li>
+                        <li data-i18n="a9item3">Select "No adjustments" or "Print as is"</li>
+                        <li data-i18n="a9item4">Do NOT select "Fit to page" or "Auto-crop"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q10">Q: How do I cut the photos?</div>
+                <div class="faq-answer" data-i18n="a10">A: Use sharp scissors or a paper cutter. If you selected "With Cutting Lines" in our tool, follow those guides. Cut carefully to ensure each photo is exactly 2×2 inches.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q11">Q: Will the print shop refuse to print passport photos?</div>
+                <div class="faq-answer" data-i18n="a11">A: Some locations may have policies against printing passport photos due to legal concerns. If this happens, try a different location or use their online ordering service instead.</div>
+            </div>
+
+            <div class="category" data-i18n="privacySecurityTitle">🔒 Privacy & Security</div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q12">Q: Is my photo uploaded to your server?</div>
+                <div class="faq-answer" data-i18n="a12">A: No! All processing happens entirely in your web browser. Your photo never leaves your device. We never see, store, or transmit your photos.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q13">Q: Is it safe to use?</div>
+                <div class="faq-answer" data-i18n="a13">A: Yes. Since everything runs in your browser, your photos are as safe as any other file on your computer. We use HTTPS to secure the website connection.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q14">Q: Do you collect any information?</div>
+                <div class="faq-answer" data-i18n="a14">A: We collect anonymous usage statistics (like page views and button clicks) through Google Analytics and Microsoft Clarity to improve the tool. We do NOT collect or store your photos. See our Privacy Policy for details.</div>
+            </div>
+
+            <div class="category" data-i18n="technicalTitle">⚙️ Technical Questions</div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q15">Q: Which browsers are supported?</div>
+                <div class="faq-answer" data-i18n="a15">A: Photo Sheet Maker works on modern browsers including Chrome, Firefox, Safari, and Edge. We recommend using the latest version for best results.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q16">Q: Can I use it on my phone?</div>
+                <div class="faq-answer" data-i18n="a16">A: Yes! The tool is fully responsive and works on mobile devices. You can upload photos from your phone's camera or photo library.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q17">Q: Does it work offline?</div>
+                <div class="faq-answer" data-i18n="a17">A: Once you've loaded the page, it can work offline thanks to PWA (Progressive Web App) technology. However, you'll need to be online for the first visit.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q18">Q: What file formats are supported?</div>
+                <div class="faq-answer" data-i18n="a18">A: We support JPG, JPEG, and PNG files up to 10MB in size.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q19">Q: Why is my download blurry?</div>
+                <div class="faq-answer">
+                    <span data-i18n="a19intro">A: Make sure you:</span>
+                    <ul>
+                        <li data-i18n="a19item1">Select "Professional (300 DPI)" quality in the options</li>
+                        <li data-i18n="a19item2">Upload a high-resolution original photo</li>
+                        <li data-i18n="a19item3">Order from a quality print service</li>
+                        <li data-i18n="a19item4">Don't zoom in too much on the downloaded file</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="category" data-i18n="costSavingsTitle">💰 Cost & Savings</div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q20">Q: How much money can I save?</div>
+                <div class="faq-answer">
+                    <span data-i18n="a20intro">A: Traditional passport photo services can be expensive, often charging premium prices for just 2-4 photos. Using our tool, you can:</span>
+                    <ul>
+                        <li data-i18n="a20item1">Print 6 photos on a 4×6" or 5×7" sheet at standard photo print prices</li>
+                        <li data-i18n="a20item2">Print 20 photos on an 8×10" sheet for maximum savings</li>
+                        <li data-i18n="a20item3">Save 80-95% compared to traditional passport photo services</li>
+                        <li data-i18n="a20item4">Print as many copies as you need for multiple applications</li>
+                    </ul>
+                    <span data-i18n="a20outro">Check your local photo printing prices to calculate your exact savings!</span>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q21">Q: How much do prints cost?</div>
+                <div class="faq-answer">
+                    <span data-i18n="a21intro">A: Printing costs vary by country, region, and service provider. Generally:</span>
+                    <ul>
+                        <li data-i18n="a21item1">4×6" prints: Usually the most affordable option (lowest cost per print)</li>
+                        <li data-i18n="a21item2">5×7" prints: Mid-range pricing</li>
+                        <li data-i18n="a21item3">8×10" prints: Best value when you need many photos</li>
+                    </ul>
+                    <span data-i18n="a21outro">Check with your local photo printing services for current pricing in your area.</span>
+                </div>
+            </div>
+
+            <div class="category" data-i18n="officialRequirementsTitle">📋 Official Requirements</div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q22">Q: Will these photos be accepted for my passport?</div>
+                <div class="faq-answer" data-i18n="a22">A: We cannot guarantee acceptance. This tool only arranges photos on a sheet - it doesn't verify that your photo meets official requirements. You must ensure your original photo meets all requirements for composition, lighting, background, etc. Check with your local passport office or embassy for specific requirements.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q23">Q: What are common passport photo requirements?</div>
+                <div class="faq-answer">
+                    <span data-i18n="a23intro">A: Common requirements include:</span>
+                    <ul>
+                        <li data-i18n="a23item1">Standard size: 2×2 inches (51×51mm) - varies by country</li>
+                        <li data-i18n="a23item2">Recent photo (taken within last 3-6 months)</li>
+                        <li data-i18n="a23item3">Plain white or light-colored background</li>
+                        <li data-i18n="a23item4">Full face, front view, eyes open</li>
+                        <li data-i18n="a23item5">Neutral expression, mouth closed</li>
+                        <li data-i18n="a23item6">No accessories that obscure face</li>
+                        <li data-i18n="a23item7">Proper head positioning and sizing</li>
+                    </ul>
+                    <strong data-i18n="a23important">Important:</strong> <span data-i18n="a23outro">Requirements vary significantly by country. Always check with your passport issuing authority for exact specifications.</span>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q24">Q: How do I find my country's requirements?</div>
+                <div class="faq-answer">
+                    <span data-i18n="a24intro">A: Contact or visit:</span>
+                    <ul>
+                        <li data-i18n="a24item1">Your local passport office</li>
+                        <li data-i18n="a24item2">Embassy or consulate</li>
+                        <li data-i18n="a24item3">Government passport application centers</li>
+                        <li data-i18n="a24item4">Official government passport website for your country</li>
+                    </ul>
+                    <span data-i18n="a24outro">Each country has specific requirements for size, background color, photo age, and composition.</span>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q25">Q: What about other countries or ID types?</div>
+                <div class="faq-answer">
+                    <span data-i18n="a25intro">A: Different countries and ID types have different requirements. Common variations include:</span>
+                    <ul>
+                        <li><strong data-i18n="a25item1label">Size:</strong> <span data-i18n="a25item1">2×2" (US, Canada), 35×45mm (EU), 45×35mm (Australia), varies widely</span></li>
+                        <li><strong data-i18n="a25item2label">Background:</strong> <span data-i18n="a25item2">White, blue, grey, or other colors depending on country</span></li>
+                        <li><strong data-i18n="a25item3label">Expression:</strong> <span data-i18n="a25item3">Some allow smiling, others require neutral expression</span></li>
+                        <li><strong data-i18n="a25item4label">Head coverage:</strong> <span data-i18n="a25item4">Rules vary for religious or medical reasons</span></li>
+                    </ul>
+                    <span data-i18n="a25outro">Always verify requirements with your specific issuing authority.</span>
+                </div>
+            </div>
+
+            <div class="category" data-i18n="troubleshootingTitle">🛠️ Troubleshooting</div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q26">Q: The upload isn't working. What should I do?</div>
+                <div class="faq-answer">
+                    <span data-i18n="a26intro">A: Try these steps:</span>
+                    <ul>
+                        <li data-i18n="a26item1">Make sure your file is JPG or PNG format</li>
+                        <li data-i18n="a26item2">Check that file size is under 10MB</li>
+                        <li data-i18n="a26item3">Try a different browser</li>
+                        <li data-i18n="a26item4">Disable browser extensions that might block uploads</li>
+                        <li data-i18n="a26item5">Make sure JavaScript is enabled</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q27">Q: The download button isn't working.</div>
+                <div class="faq-answer" data-i18n="a27">A: Check if your browser is blocking pop-ups or downloads. Try right-clicking the canvas and selecting "Save image as" as an alternative.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="q28">Q: Can I save my work and come back later?</div>
+                <div class="faq-answer" data-i18n="a28">A: No, the tool doesn't save your photos. However, the process only takes a minute, so there's no need to save progress.</div>
+            </div>
+
+            <div class="category" data-i18n="stillQuestionsTitle">❓ Still Have Questions?</div>
+
+            <p data-i18n="stillQuestionsText">If your question isn't answered here, please contact us. We're happy to help!</p>
+
+            <hr style="margin: 40px 0;">
+            <p style="text-align: center; color: #666; font-size: 14px;">
+                <a href="index.html" data-i18n="returnHome">Return to Photo Sheet Maker</a> |
+                <a href="privacy-policy.html" data-i18n="privacyPolicy">Privacy Policy</a> |
+                <a href="terms-of-service.html" data-i18n="termsOfService">Terms of Service</a>
+            </p>
         </div>
     </div>
 
-    <div class="faq-item">
-        <div class="faq-question">Q: What print settings should I use?</div>
-        <div class="faq-answer">A: When ordering prints:
-            <ul>
-                <li>Select the SAME size you chose in our tool (4×6", 5×7", or 8×10")</li>
-                <li>Choose "Matte" finish (recommended for passport photos)</li>
-                <li>Select "No adjustments" or "Print as is"</li>
-                <li>Do NOT select "Fit to page" or "Auto-crop"</li>
-            </ul>
+    <script>
+        'use strict';
+
+        // Translations for FAQ page
+        const translations = {};
+
+        // English translations (complete)
+        translations.en = {
+                title: "Frequently Asked Questions",
+                heroSubtitle: "Find answers to common questions about creating passport photo sheets",
+                backToHome: "← Back to Home",
+                tryPhotoMaker: "Try Photo Sheet Maker",
+                contactUs: "Contact Us",
+
+                // Getting Started
+                gettingStartedTitle: "🚀 Getting Started",
+                q1: "Q: What is Photo Sheet Maker?",
+                a1: "A: Photo Sheet Maker is a free online tool that helps you arrange multiple passport or ID photos on a single print sheet. Instead of paying high prices for individual photos, you can print 6-20 photos on a single sheet at any local or online photo printing service, saving you significant money.",
+                q2: "Q: How does it work?",
+                a2: "A: Simply upload your 2×2 inch passport photo, choose your print size (4×6\", 5×7\", or 8×10\"), and download the composite image. Then take that file to any photo printing service.",
+                q3: "Q: Is it really free?",
+                a3: "A: Yes! There are no hidden fees, no account required, and no watermarks on your downloads.",
+
+                // Photo Requirements
+                photoRequirementsTitle: "📸 Photo Requirements",
+                q4: "Q: What size should my original photo be?",
+                a4: "A: Your photo should be 2×2 inches (600×600 pixels at 300 DPI). This is the standard size for US passport photos and many ID photos.",
+                q5: "Q: What if I don't have a 2×2 inch photo?",
+                a5: "A: You'll need to crop your photo to 2×2 inches first using a photo editor or online cropping tool. Many passport photo services offer templates or apps to help you create compliant photos.",
+                q6: "Q: What background should my photo have?",
+                a6: "A: For US passports, you need a white or off-white background. Other countries may have different requirements. Our tool doesn't change your photo - it just arranges copies on a sheet - so make sure your original photo already meets official requirements.",
+                q7: "Q: Can I use a photo I took with my phone?",
+                a7: "A: Yes, as long as it meets official requirements (proper background, lighting, size, facial expression, etc.). There are many apps that help you take compliant passport photos with your phone.",
+
+                // Printing
+                printingTitle: "🖨️ Printing",
+                q8: "Q: Where can I print my photo sheet?",
+                a8intro: "A: You can print at any photo printing service worldwide:",
+                a8item1label: "Local photo shops:",
+                a8item1: "Visit your neighborhood photo printing store",
+                a8item2label: "Pharmacy chains:",
+                a8item2: "Many pharmacy stores offer photo printing services",
+                a8item3label: "Supermarkets:",
+                a8item3: "Large supermarkets often have photo printing kiosks",
+                a8item4label: "Online services:",
+                a8item4: "Upload and order delivery or pickup",
+                a8item5label: "Home printer:",
+                a8item5: "Use photo paper for best results",
+                a8item6label: "Copy centers:",
+                a8item6: "Professional printing shops in your area",
+                q9: "Q: What print settings should I use?",
+                a9intro: "A: When ordering prints:",
+                a9item1: "Select the SAME size you chose in our tool (4×6\", 5×7\", or 8×10\")",
+                a9item2: "Choose \"Matte\" finish (recommended for passport photos)",
+                a9item3: "Select \"No adjustments\" or \"Print as is\"",
+                a9item4: "Do NOT select \"Fit to page\" or \"Auto-crop\"",
+                q10: "Q: How do I cut the photos?",
+                a10: "A: Use sharp scissors or a paper cutter. If you selected \"With Cutting Lines\" in our tool, follow those guides. Cut carefully to ensure each photo is exactly 2×2 inches.",
+                q11: "Q: Will the print shop refuse to print passport photos?",
+                a11: "A: Some locations may have policies against printing passport photos due to legal concerns. If this happens, try a different location or use their online ordering service instead.",
+
+                // Privacy & Security
+                privacySecurityTitle: "🔒 Privacy & Security",
+                q12: "Q: Is my photo uploaded to your server?",
+                a12: "A: No! All processing happens entirely in your web browser. Your photo never leaves your device. We never see, store, or transmit your photos.",
+                q13: "Q: Is it safe to use?",
+                a13: "A: Yes. Since everything runs in your browser, your photos are as safe as any other file on your computer. We use HTTPS to secure the website connection.",
+                q14: "Q: Do you collect any information?",
+                a14: "A: We collect anonymous usage statistics (like page views and button clicks) through Google Analytics and Microsoft Clarity to improve the tool. We do NOT collect or store your photos. See our Privacy Policy for details.",
+
+                // Technical Questions
+                technicalTitle: "⚙️ Technical Questions",
+                q15: "Q: Which browsers are supported?",
+                a15: "A: Photo Sheet Maker works on modern browsers including Chrome, Firefox, Safari, and Edge. We recommend using the latest version for best results.",
+                q16: "Q: Can I use it on my phone?",
+                a16: "A: Yes! The tool is fully responsive and works on mobile devices. You can upload photos from your phone's camera or photo library.",
+                q17: "Q: Does it work offline?",
+                a17: "A: Once you've loaded the page, it can work offline thanks to PWA (Progressive Web App) technology. However, you'll need to be online for the first visit.",
+                q18: "Q: What file formats are supported?",
+                a18: "A: We support JPG, JPEG, and PNG files up to 10MB in size.",
+                q19: "Q: Why is my download blurry?",
+                a19intro: "A: Make sure you:",
+                a19item1: "Select \"Professional (300 DPI)\" quality in the options",
+                a19item2: "Upload a high-resolution original photo",
+                a19item3: "Order from a quality print service",
+                a19item4: "Don't zoom in too much on the downloaded file",
+
+                // Cost & Savings
+                costSavingsTitle: "💰 Cost & Savings",
+                q20: "Q: How much money can I save?",
+                a20intro: "A: Traditional passport photo services can be expensive, often charging premium prices for just 2-4 photos. Using our tool, you can:",
+                a20item1: "Print 6 photos on a 4×6\" or 5×7\" sheet at standard photo print prices",
+                a20item2: "Print 20 photos on an 8×10\" sheet for maximum savings",
+                a20item3: "Save 80-95% compared to traditional passport photo services",
+                a20item4: "Print as many copies as you need for multiple applications",
+                a20outro: "Check your local photo printing prices to calculate your exact savings!",
+                q21: "Q: How much do prints cost?",
+                a21intro: "A: Printing costs vary by country, region, and service provider. Generally:",
+                a21item1: "4×6\" prints: Usually the most affordable option (lowest cost per print)",
+                a21item2: "5×7\" prints: Mid-range pricing",
+                a21item3: "8×10\" prints: Best value when you need many photos",
+                a21outro: "Check with your local photo printing services for current pricing in your area.",
+
+                // Official Requirements
+                officialRequirementsTitle: "📋 Official Requirements",
+                q22: "Q: Will these photos be accepted for my passport?",
+                a22: "A: We cannot guarantee acceptance. This tool only arranges photos on a sheet - it doesn't verify that your photo meets official requirements. You must ensure your original photo meets all requirements for composition, lighting, background, etc. Check with your local passport office or embassy for specific requirements.",
+                q23: "Q: What are common passport photo requirements?",
+                a23intro: "A: Common requirements include:",
+                a23item1: "Standard size: 2×2 inches (51×51mm) - varies by country",
+                a23item2: "Recent photo (taken within last 3-6 months)",
+                a23item3: "Plain white or light-colored background",
+                a23item4: "Full face, front view, eyes open",
+                a23item5: "Neutral expression, mouth closed",
+                a23item6: "No accessories that obscure face",
+                a23item7: "Proper head positioning and sizing",
+                a23important: "Important:",
+                a23outro: "Requirements vary significantly by country. Always check with your passport issuing authority for exact specifications.",
+                q24: "Q: How do I find my country's requirements?",
+                a24intro: "A: Contact or visit:",
+                a24item1: "Your local passport office",
+                a24item2: "Embassy or consulate",
+                a24item3: "Government passport application centers",
+                a24item4: "Official government passport website for your country",
+                a24outro: "Each country has specific requirements for size, background color, photo age, and composition.",
+                q25: "Q: What about other countries or ID types?",
+                a25intro: "A: Different countries and ID types have different requirements. Common variations include:",
+                a25item1label: "Size:",
+                a25item1: "2×2\" (US, Canada), 35×45mm (EU), 45×35mm (Australia), varies widely",
+                a25item2label: "Background:",
+                a25item2: "White, blue, grey, or other colors depending on country",
+                a25item3label: "Expression:",
+                a25item3: "Some allow smiling, others require neutral expression",
+                a25item4label: "Head coverage:",
+                a25item4: "Rules vary for religious or medical reasons",
+                a25outro: "Always verify requirements with your specific issuing authority.",
+
+                // Troubleshooting
+                troubleshootingTitle: "🛠️ Troubleshooting",
+                q26: "Q: The upload isn't working. What should I do?",
+                a26intro: "A: Try these steps:",
+                a26item1: "Make sure your file is JPG or PNG format",
+                a26item2: "Check that file size is under 10MB",
+                a26item3: "Try a different browser",
+                a26item4: "Disable browser extensions that might block uploads",
+                a26item5: "Make sure JavaScript is enabled",
+                q27: "Q: The download button isn't working.",
+                a27: "A: Check if your browser is blocking pop-ups or downloads. Try right-clicking the canvas and selecting \"Save image as\" as an alternative.",
+                q28: "Q: Can I save my work and come back later?",
+                a28: "A: No, the tool doesn't save your photos. However, the process only takes a minute, so there's no need to save progress.",
+
+                // Footer
+                stillQuestionsTitle: "❓ Still Have Questions?",
+                stillQuestionsText: "If your question isn't answered here, please contact us. We're happy to help!",
+                returnHome: "Return to Photo Sheet Maker",
+                privacyPolicy: "Privacy Policy",
+                termsOfService: "Terms of Service"
+            };
+
+        // Spanish translations (inherits from English with overrides)
+        translations.es = Object.assign({}, translations.en, {
+                title: "Preguntas Frecuentes",
+                heroSubtitle: "Encuentra respuestas a preguntas comunes sobre la creación de hojas de fotos de pasaporte",
+                backToHome: "← Volver al Inicio",
+                tryPhotoMaker: "Probar Photo Sheet Maker",
+                contactUs: "Contáctanos",
+                gettingStartedTitle: "🚀 Primeros Pasos",
+                photoRequirementsTitle: "📸 Requisitos de Foto",
+                printingTitle: "🖨️ Impresión",
+                privacySecurityTitle: "🔒 Privacidad y Seguridad",
+                technicalTitle: "⚙️ Preguntas Técnicas",
+                costSavingsTitle: "💰 Costo y Ahorros",
+                officialRequirementsTitle: "📋 Requisitos Oficiales",
+                troubleshootingTitle: "🛠️ Solución de Problemas",
+                stillQuestionsTitle: "❓ ¿Aún tienes preguntas?",
+                returnHome: "Volver a Photo Sheet Maker",
+                privacyPolicy: "Política de Privacidad",
+                termsOfService: "Términos de Servicio"
+            });
+
+        // French translations (inherits from English with overrides)
+        translations.fr = Object.assign({}, translations.en, {
+                title: "Questions Fréquemment Posées",
+                heroSubtitle: "Trouvez des réponses aux questions courantes sur la création de planches de photos de passeport",
+                backToHome: "← Retour à l'Accueil",
+                tryPhotoMaker: "Essayer Photo Sheet Maker",
+                contactUs: "Contactez-nous",
+                gettingStartedTitle: "🚀 Pour Commencer",
+                photoRequirementsTitle: "📸 Exigences Photo",
+                printingTitle: "🖨️ Impression",
+                privacySecurityTitle: "🔒 Confidentialité et Sécurité",
+                technicalTitle: "⚙️ Questions Techniques",
+                costSavingsTitle: "💰 Coût et Économies",
+                officialRequirementsTitle: "📋 Exigences Officielles",
+                troubleshootingTitle: "🛠️ Dépannage",
+                stillQuestionsTitle: "❓ Encore des questions?",
+                returnHome: "Retour à Photo Sheet Maker",
+                privacyPolicy: "Politique de Confidentialité",
+                termsOfService: "Conditions d'Utilisation"
+            });
+
+        // German translations (inherits from English with overrides)
+        translations.de = Object.assign({}, translations.en, {
+                title: "Häufig gestellte Fragen",
+                heroSubtitle: "Finden Sie Antworten auf häufig gestellte Fragen zum Erstellen von Passfoto-Blättern",
+                backToHome: "← Zurück zur Startseite",
+                tryPhotoMaker: "Photo Sheet Maker ausprobieren",
+                contactUs: "Kontaktieren Sie uns",
+                gettingStartedTitle: "🚀 Erste Schritte",
+                photoRequirementsTitle: "📸 Fotoanforderungen",
+                printingTitle: "🖨️ Drucken",
+                privacySecurityTitle: "🔒 Datenschutz und Sicherheit",
+                technicalTitle: "⚙️ Technische Fragen",
+                costSavingsTitle: "💰 Kosten und Einsparungen",
+                officialRequirementsTitle: "📋 Offizielle Anforderungen",
+                troubleshootingTitle: "🛠️ Fehlerbehebung",
+                stillQuestionsTitle: "❓ Noch Fragen?",
+                returnHome: "Zurück zu Photo Sheet Maker",
+                privacyPolicy: "Datenschutzrichtlinie",
+                termsOfService: "Nutzungsbedingungen"
+            });
+
+        // Portuguese translations (inherits from English with overrides)
+        translations.pt = Object.assign({}, translations.en, {
+                title: "Perguntas Frequentes",
+                heroSubtitle: "Encontre respostas para perguntas comuns sobre a criação de folhas de fotos de passaporte",
+                backToHome: "← Voltar ao Início",
+                tryPhotoMaker: "Experimentar Photo Sheet Maker",
+                contactUs: "Entre em Contato",
+                gettingStartedTitle: "🚀 Primeiros Passos",
+                photoRequirementsTitle: "📸 Requisitos de Foto",
+                printingTitle: "🖨️ Impressão",
+                privacySecurityTitle: "🔒 Privacidade e Segurança",
+                technicalTitle: "⚙️ Perguntas Técnicas",
+                costSavingsTitle: "💰 Custo e Economias",
+                officialRequirementsTitle: "📋 Requisitos Oficiais",
+                troubleshootingTitle: "🛠️ Solução de Problemas",
+                stillQuestionsTitle: "❓ Ainda tem perguntas?",
+                returnHome: "Voltar para Photo Sheet Maker",
+                privacyPolicy: "Política de Privacidade",
+                termsOfService: "Termos de Serviço"
+            });
+
+        // Italian translations (inherits from English with overrides)
+        translations.it = Object.assign({}, translations.en, {
+                title: "Domande Frequenti",
+                heroSubtitle: "Trova risposte alle domande comuni sulla creazione di fogli di foto per passaporto",
+                backToHome: "← Torna alla Home",
+                tryPhotoMaker: "Prova Photo Sheet Maker",
+                contactUs: "Contattaci",
+                gettingStartedTitle: "🚀 Per Iniziare",
+                photoRequirementsTitle: "📸 Requisiti Foto",
+                printingTitle: "🖨️ Stampa",
+                privacySecurityTitle: "🔒 Privacy e Sicurezza",
+                technicalTitle: "⚙️ Domande Tecniche",
+                costSavingsTitle: "💰 Costi e Risparmi",
+                officialRequirementsTitle: "📋 Requisiti Ufficiali",
+                troubleshootingTitle: "🛠️ Risoluzione Problemi",
+                stillQuestionsTitle: "❓ Altre domande?",
+                returnHome: "Torna a Photo Sheet Maker",
+                privacyPolicy: "Informativa Privacy",
+                termsOfService: "Termini di Servizio"
+            });
+
+        // Japanese translations (inherits from English with overrides)
+        translations.ja = Object.assign({}, translations.en, {
+                title: "よくある質問",
+                heroSubtitle: "パスポート写真シート作成に関するよくある質問への回答を見つける",
+                backToHome: "← ホームに戻る",
+                tryPhotoMaker: "Photo Sheet Makerを試す",
+                contactUs: "お問い合わせ",
+                gettingStartedTitle: "🚀 はじめに",
+                photoRequirementsTitle: "📸 写真の要件",
+                printingTitle: "🖨️ 印刷",
+                privacySecurityTitle: "🔒 プライバシーとセキュリティ",
+                technicalTitle: "⚙️ 技術的な質問",
+                costSavingsTitle: "💰 費用と節約",
+                officialRequirementsTitle: "📋 公式要件",
+                troubleshootingTitle: "🛠️ トラブルシューティング",
+                stillQuestionsTitle: "❓ まだ質問がありますか？",
+                returnHome: "Photo Sheet Makerに戻る",
+                privacyPolicy: "プライバシーポリシー",
+                termsOfService: "利用規約"
+            });
+
+        // Korean translations (inherits from English with overrides)
+        translations.ko = Object.assign({}, translations.en, {
+                title: "자주 묻는 질문",
+                heroSubtitle: "여권 사진 시트 만들기에 대한 일반적인 질문에 대한 답변 찾기",
+                backToHome: "← 홈으로 돌아가기",
+                tryPhotoMaker: "Photo Sheet Maker 사용해보기",
+                contactUs: "문의하기",
+                gettingStartedTitle: "🚀 시작하기",
+                photoRequirementsTitle: "📸 사진 요구사항",
+                printingTitle: "🖨️ 인쇄",
+                privacySecurityTitle: "🔒 개인정보 보호 및 보안",
+                technicalTitle: "⚙️ 기술적인 질문",
+                costSavingsTitle: "💰 비용 및 절감",
+                officialRequirementsTitle: "📋 공식 요구사항",
+                troubleshootingTitle: "🛠️ 문제 해결",
+                stillQuestionsTitle: "❓ 아직 궁금한 점이 있으신가요?",
+                returnHome: "Photo Sheet Maker로 돌아가기",
+                privacyPolicy: "개인정보 처리방침",
+                termsOfService: "서비스 약관"
+            });
+
+        // Chinese translations (inherits from English with overrides)
+        translations.zh = Object.assign({}, translations.en, {
+                title: "常见问题",
+                heroSubtitle: "查找有关创建护照照片页的常见问题解答",
+                backToHome: "← 返回首页",
+                tryPhotoMaker: "尝试 Photo Sheet Maker",
+                contactUs: "联系我们",
+                gettingStartedTitle: "🚀 入门指南",
+                photoRequirementsTitle: "📸 照片要求",
+                printingTitle: "🖨️ 打印",
+                privacySecurityTitle: "🔒 隐私与安全",
+                technicalTitle: "⚙️ 技术问题",
+                costSavingsTitle: "💰 费用与节省",
+                officialRequirementsTitle: "📋 官方要求",
+                troubleshootingTitle: "🛠️ 故障排除",
+                stillQuestionsTitle: "❓ 还有问题？",
+                returnHome: "返回 Photo Sheet Maker",
+                privacyPolicy: "隐私政策",
+                termsOfService: "服务条款"
+            });
+
+        // Arabic translations (inherits from English with overrides)
+        translations.ar = Object.assign({}, translations.en, {
+                title: "الأسئلة الشائعة",
+                heroSubtitle: "اعثر على إجابات للأسئلة الشائعة حول إنشاء صفحات صور جواز السفر",
+                backToHome: "← العودة إلى الصفحة الرئيسية",
+                tryPhotoMaker: "جرب Photo Sheet Maker",
+                contactUs: "اتصل بنا",
+                gettingStartedTitle: "🚀 البدء",
+                photoRequirementsTitle: "📸 متطلبات الصورة",
+                printingTitle: "🖨️ الطباعة",
+                privacySecurityTitle: "🔒 الخصوصية والأمان",
+                technicalTitle: "⚙️ الأسئلة التقنية",
+                costSavingsTitle: "💰 التكلفة والتوفير",
+                officialRequirementsTitle: "📋 المتطلبات الرسمية",
+                troubleshootingTitle: "🛠️ استكشاف الأخطاء",
+                stillQuestionsTitle: "❓ هل لا تزال لديك أسئلة؟",
+                returnHome: "العودة إلى Photo Sheet Maker",
+                privacyPolicy: "سياسة الخصوصية",
+                termsOfService: "شروط الخدمة"
+            });
+
+        // Hindi translations (inherits from English with overrides)
+        translations.hi = Object.assign({}, translations.en, {
+                title: "अक्सर पूछे जाने वाले प्रश्न",
+                heroSubtitle: "पासपोर्ट फोटो शीट बनाने के बारे में सामान्य प्रश्नों के उत्तर खोजें",
+                backToHome: "← होम पर वापस जाएं",
+                tryPhotoMaker: "Photo Sheet Maker आज़माएं",
+                contactUs: "हमसे संपर्क करें",
+                gettingStartedTitle: "🚀 शुरुआत करना",
+                photoRequirementsTitle: "📸 फोटो आवश्यकताएं",
+                printingTitle: "🖨️ प्रिंटिंग",
+                privacySecurityTitle: "🔒 गोपनीयता और सुरक्षा",
+                technicalTitle: "⚙️ तकनीकी प्रश्न",
+                costSavingsTitle: "💰 लागत और बचत",
+                officialRequirementsTitle: "📋 आधिकारिक आवश्यकताएं",
+                troubleshootingTitle: "🛠️ समस्या निवारण",
+                stillQuestionsTitle: "❓ अभी भी प्रश्न हैं?",
+                returnHome: "Photo Sheet Maker पर वापस जाएं",
+                privacyPolicy: "गोपनीयता नीति",
+                termsOfService: "सेवा की शर्तें"
+            });
+
+        // Russian translations (inherits from English with overrides)
+        translations.ru = Object.assign({}, translations.en, {
+                title: "Часто задаваемые вопросы",
+                heroSubtitle: "Найдите ответы на распространенные вопросы о создании листов с фотографиями для паспорта",
+                backToHome: "← Вернуться на главную",
+                tryPhotoMaker: "Попробовать Photo Sheet Maker",
+                contactUs: "Свяжитесь с нами",
+                gettingStartedTitle: "🚀 Начало работы",
+                photoRequirementsTitle: "📸 Требования к фото",
+                printingTitle: "🖨️ Печать",
+                privacySecurityTitle: "🔒 Конфиденциальность и безопасность",
+                technicalTitle: "⚙️ Технические вопросы",
+                costSavingsTitle: "💰 Стоимость и экономия",
+                officialRequirementsTitle: "📋 Официальные требования",
+                troubleshootingTitle: "🛠️ Устранение неполадок",
+                stillQuestionsTitle: "❓ Остались вопросы?",
+                returnHome: "Вернуться к Photo Sheet Maker",
+                privacyPolicy: "Политика конфиденциальности",
+                termsOfService: "Условия обслуживания"
+            });
+
+        // Get or set language preference using 'preferredLanguage' key
+        function getLanguage() {
+            return localStorage.getItem('preferredLanguage') || 'en';
+        }
+
+        function setLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Apply translations to the page
+        function applyTranslations(lang) {
+            const trans = translations[lang] || translations.en;
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (trans[key]) {
+                    element.textContent = trans[key];
+                }
+            });
+
+            document.documentElement.lang = lang;
+            document.title = trans.title + " - Photo Sheet Maker";
+        }
+
+        // Initialize language
+        const languageSelect = document.getElementById('languageSelect');
+        if (languageSelect) {
+            const currentLang = getLanguage();
+            languageSelect.value = currentLang;
+            applyTranslations(currentLang);
+
+            languageSelect.addEventListener('change', (e) => {
+                const newLang = e.target.value;
+                setLanguage(newLang);
+                applyTranslations(newLang);
+            });
+        }
+
+        // Apply translations on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const lang = getLanguage();
+            if (languageSelect) {
+                languageSelect.value = lang;
+            }
+            applyTranslations(lang);
+        });
+    </script>
+
+    <!-- Floating Home Button -->
+    <a href="index.html" class="floating-home-btn" aria-label="Go to home page" title="Back to Home">
+        <div class="floating-camera-icon">
+            <div class="floating-camera-body">
+                <div class="floating-viewfinder"></div>
+                <div class="floating-flash"></div>
+                <div class="floating-lens">
+                    <div class="floating-lens-inner">
+                        <div class="floating-lens-glare"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: How do I cut the photos?</div>
-        <div class="faq-answer">A: Use sharp scissors or a paper cutter. If you selected "With Cutting Lines" in our tool, follow those guides. Cut carefully to ensure each photo is exactly 2×2 inches.</div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: Will the print shop refuse to print passport photos?</div>
-        <div class="faq-answer">A: Some locations may have policies against printing passport photos due to legal concerns. If this happens, try a different location or use their online ordering service instead.</div>
-    </div>
-
-    <div class="category">🔒 Privacy & Security</div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: Is my photo uploaded to your server?</div>
-        <div class="faq-answer">A: No! All processing happens entirely in your web browser. Your photo never leaves your device. We never see, store, or transmit your photos.</div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: Is it safe to use?</div>
-        <div class="faq-answer">A: Yes. Since everything runs in your browser, your photos are as safe as any other file on your computer. We use HTTPS to secure the website connection.</div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: Do you collect any information?</div>
-        <div class="faq-answer">A: We collect anonymous usage statistics (like page views and button clicks) through Google Analytics and Microsoft Clarity to improve the tool. We do NOT collect or store your photos. See our <a href="/privacy-policy.html">Privacy Policy</a> for details.</div>
-    </div>
-
-    <div class="category">⚙️ Technical Questions</div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: Which browsers are supported?</div>
-        <div class="faq-answer">A: Photo Sheet Maker works on modern browsers including Chrome, Firefox, Safari, and Edge. We recommend using the latest version for best results.</div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: Can I use it on my phone?</div>
-        <div class="faq-answer">A: Yes! The tool is fully responsive and works on mobile devices. You can upload photos from your phone's camera or photo library.</div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: Does it work offline?</div>
-        <div class="faq-answer">A: Once you've loaded the page, it can work offline thanks to PWA (Progressive Web App) technology. However, you'll need to be online for the first visit.</div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: What file formats are supported?</div>
-        <div class="faq-answer">A: We support JPG, JPEG, and PNG files up to 10MB in size.</div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: Why is my download blurry?</div>
-        <div class="faq-answer">A: Make sure you:
-            <ul>
-                <li>Select "Professional (300 DPI)" quality in the options</li>
-                <li>Upload a high-resolution original photo</li>
-                <li>Order from a quality print service</li>
-                <li>Don't zoom in too much on the downloaded file</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="category">💰 Cost & Savings</div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: How much money can I save?</div>
-        <div class="faq-answer">A: Traditional passport photo services can be expensive, often charging premium prices for just 2-4 photos. Using our tool, you can:
-            <ul>
-                <li>Print 6 photos on a 4×6" or 5×7" sheet at standard photo print prices</li>
-                <li>Print 20 photos on an 8×10" sheet for maximum savings</li>
-                <li>Save 80-95% compared to traditional passport photo services</li>
-                <li>Print as many copies as you need for multiple applications</li>
-            </ul>
-            Check your local photo printing prices to calculate your exact savings!
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: How much do prints cost?</div>
-        <div class="faq-answer">A: Printing costs vary by country, region, and service provider. Generally:
-            <ul>
-                <li>4×6" prints: Usually the most affordable option (lowest cost per print)</li>
-                <li>5×7" prints: Mid-range pricing</li>
-                <li>8×10" prints: Best value when you need many photos</li>
-            </ul>
-            Check with your local photo printing services for current pricing in your area.
-        </div>
-    </div>
-
-    <div class="category">📋 Official Requirements</div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: Will these photos be accepted for my passport?</div>
-        <div class="faq-answer">A: We cannot guarantee acceptance. This tool only arranges photos on a sheet - it doesn't verify that your photo meets official requirements. You must ensure your original photo meets all requirements for composition, lighting, background, etc. Check with your local passport office or embassy for specific requirements.</div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: What are common passport photo requirements?</div>
-        <div class="faq-answer">A: Common requirements include:
-            <ul>
-                <li>Standard size: 2×2 inches (51×51mm) - varies by country</li>
-                <li>Recent photo (taken within last 3-6 months)</li>
-                <li>Plain white or light-colored background</li>
-                <li>Full face, front view, eyes open</li>
-                <li>Neutral expression, mouth closed</li>
-                <li>No accessories that obscure face</li>
-                <li>Proper head positioning and sizing</li>
-            </ul>
-            <strong>Important:</strong> Requirements vary significantly by country. Always check with your passport issuing authority for exact specifications.
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: How do I find my country's requirements?</div>
-        <div class="faq-answer">A: Contact or visit:
-            <ul>
-                <li>Your local passport office</li>
-                <li>Embassy or consulate</li>
-                <li>Government passport application centers</li>
-                <li>Official government passport website for your country</li>
-            </ul>
-            Each country has specific requirements for size, background color, photo age, and composition.
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: What about other countries or ID types?</div>
-        <div class="faq-answer">A: Different countries and ID types have different requirements. Common variations include:
-            <ul>
-                <li><strong>Size:</strong> 2×2" (US, Canada), 35×45mm (EU), 45×35mm (Australia), varies widely</li>
-                <li><strong>Background:</strong> White, blue, grey, or other colors depending on country</li>
-                <li><strong>Expression:</strong> Some allow smiling, others require neutral expression</li>
-                <li><strong>Head coverage:</strong> Rules vary for religious or medical reasons</li>
-            </ul>
-            Always verify requirements with your specific issuing authority.
-        </div>
-    </div>
-
-    <div class="category">🛠️ Troubleshooting</div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: The upload isn't working. What should I do?</div>
-        <div class="faq-answer">A: Try these steps:
-            <ul>
-                <li>Make sure your file is JPG or PNG format</li>
-                <li>Check that file size is under 10MB</li>
-                <li>Try a different browser</li>
-                <li>Disable browser extensions that might block uploads</li>
-                <li>Make sure JavaScript is enabled</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: The download button isn't working.</div>
-        <div class="faq-answer">A: Check if your browser is blocking pop-ups or downloads. Try right-clicking the canvas and selecting "Save image as" as an alternative.</div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">Q: Can I save my work and come back later?</div>
-        <div class="faq-answer">A: No, the tool doesn't save your photos. However, the process only takes a minute, so there's no need to save progress.</div>
-    </div>
-
-    <div class="category">❓ Still Have Questions?</div>
-
-    <p>If your question isn't answered here, please <a href="contact.html">contact us</a>. We're happy to help!</p>
-
-    <hr style="margin: 40px 0;">
-    <p style="text-align: center; color: #666; font-size: 14px;">
-        <a href="index.html">Return to Photo Sheet Maker</a> |
-        <a href="privacy-policy.html">Privacy Policy</a> |
-        <a href="terms-of-service.html">Terms of Service</a>
-    </p>
+    </a>
 </body>
 </html>

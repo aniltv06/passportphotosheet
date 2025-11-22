@@ -570,22 +570,60 @@
         }
 
         /* Upload Section - Modernized */
+        .upload-section-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-3xl);
+            align-items: start;
+        }
+
         .upload-area {
             border: 2px dashed var(--border);
             border-radius: var(--radius-xl);
-            padding: var(--spacing-3xl);
+            padding: var(--spacing-2xl);
             text-align: center;
             cursor: pointer;
             transition: var(--transition-smooth);
             background: #FAFAFA;
-            margin-bottom: var(--spacing-3xl);
-            min-height: 300px;
+            min-height: 280px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
+        }
+
+        .upload-actions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+
+        .action-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            transition: var(--transition-smooth);
+            text-align: center;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .action-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: var(--spacing-md);
+            font-weight: 500;
         }
 
         .upload-area:hover {
@@ -1106,6 +1144,14 @@
                 grid-template-columns: 1fr;
             }
 
+            .upload-section-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-actions {
+                margin-top: var(--spacing-lg);
+            }
+
             .instructions {
                 padding: var(--spacing-xl);
             }
@@ -1305,26 +1351,37 @@
                     </p>
                 </div>
 
-                <div class="upload-area"
-                     id="uploadArea"
-                     role="button"
-                     tabindex="0"
-                     aria-label="Upload your passport photo"
-                     aria-describedby="uploadHint">
-                    <div class="upload-icon" aria-hidden="true">📁</div>
-                    <div class="upload-text" data-i18n="uploadText">Choose Your Photo</div>
-                    <div class="upload-hint" id="uploadHint" data-i18n="uploadHint">Click here or drag and drop your 2×2" photo (JPG or PNG)</div>
-                    <div class="upload-success" data-i18n="uploadSuccess">✓ Photo uploaded successfully!</div>
-                    <input type="file"
-                           id="fileInput"
-                           accept="image/jpeg,image/png,image/jpg"
-                           aria-label="Choose photo file">
-                </div>
+                <div class="upload-section-wrapper">
+                    <div class="upload-area"
+                         id="uploadArea"
+                         role="button"
+                         tabindex="0"
+                         aria-label="Upload your passport photo"
+                         aria-describedby="uploadHint">
+                        <div class="upload-icon" aria-hidden="true">📁</div>
+                        <div class="upload-text" data-i18n="uploadText">Choose Your Photo</div>
+                        <div class="upload-hint" id="uploadHint" data-i18n="uploadHint">Click here or drag and drop your 2×2" photo (JPG or PNG)</div>
+                        <div class="upload-success" data-i18n="uploadSuccess">✓ Photo uploaded successfully!</div>
+                        <input type="file"
+                               id="fileInput"
+                               accept="image/jpeg,image/png,image/jpg"
+                               aria-label="Choose photo file">
+                    </div>
 
-                <div style="text-align: center; margin-top: var(--spacing-lg);">
-                    <button type="button" class="demo-btn" id="demoBtn" aria-label="Try with demo photo">
-                        <span data-i18n="tryDemo">🎨 Try Demo Photo</span>
-                    </button>
+                    <div class="upload-actions">
+                        <div class="action-card">
+                            <p class="action-text" data-i18n="needToEdit">Need to crop or edit your photo first?</p>
+                            <a href="photo-editor.html" class="demo-btn" style="text-decoration: none;">
+                                <span data-i18n="openPhotoEditor">✂️ Open Photo Editor</span>
+                            </a>
+                        </div>
+                        <div class="action-card">
+                            <p class="action-text" data-i18n="tryDemoText">Don't have a photo ready?</p>
+                            <button type="button" class="demo-btn" id="demoBtn" aria-label="Try with demo photo">
+                                <span data-i18n="tryDemo">🎨 Try Demo Photo</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <h2 class="section-title">
@@ -1483,6 +1540,9 @@
                 uploadText: "Choose Your Photo",
                 uploadHint: "Click here or drag and drop your 2×2\" photo (JPG or PNG)",
                 uploadSuccess: "✓ Photo uploaded successfully!",
+                needToEdit: "Need to crop or edit your photo first?",
+                openPhotoEditor: "✂️ Open Photo Editor",
+                tryDemoText: "Don't have a photo ready?",
                 tryDemo: "🎨 Try Demo Photo",
                 customizeTitle: "Customize Your Sheet",
                 sheetSizeLabel: "Sheet Size",
@@ -1545,6 +1605,9 @@
                 uploadText: "Elige tu Foto",
                 uploadHint: "Haz clic aquí o arrastra y suelta tu foto de 2×2\" (JPG o PNG)",
                 uploadSuccess: "✓ ¡Foto subida con éxito!",
+                needToEdit: "¿Necesitas recortar o editar tu foto primero?",
+                openPhotoEditor: "✂️ Abrir Editor de Fotos",
+                tryDemoText: "¿No tienes una foto lista?",
                 tryDemo: "🎨 Probar Foto Demo",
                 customizeTitle: "Personaliza tu Hoja",
                 sheetSizeLabel: "Tamaño de Hoja",
@@ -1607,6 +1670,9 @@
                 uploadText: "Choisissez votre Photo",
                 uploadHint: "Cliquez ici ou glissez-déposez votre photo 2×2\" (JPG ou PNG)",
                 uploadSuccess: "✓ Photo téléchargée avec succès!",
+                needToEdit: "Besoin de recadrer ou modifier votre photo d'abord ?",
+                openPhotoEditor: "✂️ Ouvrir l'Éditeur de Photos",
+                tryDemoText: "Vous n'avez pas de photo prête ?",
                 tryDemo: "🎨 Essayer Photo Démo",
                 customizeTitle: "Personnalisez votre Planche",
                 sheetSizeLabel: "Taille de Feuille",
@@ -1669,6 +1735,9 @@
                 uploadText: "Wählen Sie Ihr Foto",
                 uploadHint: "Klicken Sie hier oder ziehen Sie Ihr 2×2\" Foto (JPG oder PNG) per Drag & Drop",
                 uploadSuccess: "✓ Foto erfolgreich hochgeladen!",
+                needToEdit: "Müssen Sie Ihr Foto zuerst zuschneiden oder bearbeiten?",
+                openPhotoEditor: "✂️ Foto-Editor öffnen",
+                tryDemoText: "Haben Sie kein Foto bereit?",
                 tryDemo: "🎨 Demo-Foto Ausprobieren",
                 customizeTitle: "Passen Sie Ihr Blatt an",
                 sheetSizeLabel: "Blattgröße",
@@ -1731,6 +1800,9 @@
                 uploadText: "Escolha sua Foto",
                 uploadHint: "Clique aqui ou arraste e solte sua foto 2×2\" (JPG ou PNG)",
                 uploadSuccess: "✓ Foto carregada com sucesso!",
+                needToEdit: "Precisa recortar ou editar sua foto primeiro?",
+                openPhotoEditor: "✂️ Abrir Editor de Fotos",
+                tryDemoText: "Não tem uma foto pronta?",
                 tryDemo: "🎨 Experimentar Foto Demo",
                 customizeTitle: "Personalize sua Folha",
                 sheetSizeLabel: "Tamanho da Folha",
@@ -1793,6 +1865,9 @@
                 uploadText: "Scegli la tua Foto",
                 uploadHint: "Clicca qui o trascina e rilascia la tua foto 2×2\" (JPG o PNG)",
                 uploadSuccess: "✓ Foto caricata con successo!",
+                needToEdit: "Hai bisogno di ritagliare o modificare la tua foto prima?",
+                openPhotoEditor: "✂️ Apri Editor Foto",
+                tryDemoText: "Non hai una foto pronta?",
                 tryDemo: "🎨 Prova Foto Demo",
                 customizeTitle: "Personalizza il tuo Foglio",
                 sheetSizeLabel: "Dimensione Foglio",
@@ -1855,6 +1930,9 @@
                 uploadText: "写真を選択",
                 uploadHint: "ここをクリックするか、2×2\"の写真（JPGまたはPNG）をドラッグ＆ドロップ",
                 uploadSuccess: "✓ 写真が正常にアップロードされました！",
+                needToEdit: "最初に写真をトリミングまたは編集する必要がありますか？",
+                openPhotoEditor: "✂️ 写真エディターを開く",
+                tryDemoText: "準備ができている写真がありませんか？",
                 tryDemo: "🎨 デモ写真を試す",
                 customizeTitle: "シートをカスタマイズ",
                 sheetSizeLabel: "シートサイズ",
@@ -1917,6 +1995,9 @@
                 uploadText: "사진 선택",
                 uploadHint: "여기를 클릭하거나 2×2\" 사진(JPG 또는 PNG)을 드래그 앤 드롭",
                 uploadSuccess: "✓ 사진이 성공적으로 업로드되었습니다!",
+                needToEdit: "먼저 사진을 자르거나 편집해야 하나요?",
+                openPhotoEditor: "✂️ 사진 편집기 열기",
+                tryDemoText: "준비된 사진이 없나요?",
                 tryDemo: "🎨 데모 사진 시도",
                 customizeTitle: "시트 사용자 지정",
                 sheetSizeLabel: "시트 크기",
@@ -1979,6 +2060,9 @@
                 uploadText: "选择您的照片",
                 uploadHint: "点击此处或拖放您的2×2\"照片（JPG或PNG）",
                 uploadSuccess: "✓ 照片上传成功！",
+                needToEdit: "需要先裁剪或编辑您的照片吗？",
+                openPhotoEditor: "✂️ 打开照片编辑器",
+                tryDemoText: "还没有准备好照片吗？",
                 tryDemo: "🎨 试用演示照片",
                 customizeTitle: "自定义您的页面",
                 sheetSizeLabel: "页面尺寸",
@@ -2041,6 +2125,9 @@
                 uploadText: "اختر صورتك",
                 uploadHint: "انقر هنا أو اسحب وأفلت صورتك 2×2\" (JPG أو PNG)",
                 uploadSuccess: "✓ تم تحميل الصورة بنجاح!",
+                needToEdit: "هل تحتاج إلى اقتصاص صورتك أو تحريرها أولاً؟",
+                openPhotoEditor: "✂️ فتح محرر الصور",
+                tryDemoText: "ليس لديك صورة جاهزة؟",
                 tryDemo: "🎨 تجربة صورة تجريبية",
                 customizeTitle: "خصص صفحتك",
                 sheetSizeLabel: "حجم الصفحة",
@@ -2103,6 +2190,9 @@
                 uploadText: "अपनी फोटो चुनें",
                 uploadHint: "यहां क्लिक करें या अपनी 2×2\" फोटो (JPG या PNG) को ड्रैग और ड्रॉप करें",
                 uploadSuccess: "✓ फोटो सफलतापूर्वक अपलोड हो गई!",
+                needToEdit: "क्या आपको पहले अपनी फोटो को क्रॉप या संपादित करने की आवश्यकता है?",
+                openPhotoEditor: "✂️ फोटो संपादक खोलें",
+                tryDemoText: "कोई तैयार फोटो नहीं है?",
                 tryDemo: "🎨 डेमो फोटो आज़माएं",
                 customizeTitle: "अपनी शीट को कस्टमाइज़ करें",
                 sheetSizeLabel: "शीट का आकार",
@@ -2165,6 +2255,9 @@
                 uploadText: "Выберите ваше фото",
                 uploadHint: "Нажмите здесь или перетащите ваше фото 2×2\" (JPG или PNG)",
                 uploadSuccess: "✓ Фото успешно загружено!",
+                needToEdit: "Нужно сначала обрезать или отредактировать ваше фото?",
+                openPhotoEditor: "✂️ Открыть Фоторедактор",
+                tryDemoText: "Нет готового фото?",
                 tryDemo: "🎨 Попробовать Демо Фото",
                 customizeTitle: "Настройте ваш лист",
                 sheetSizeLabel: "Размер листа",
@@ -2210,7 +2303,7 @@
         };
 
         // i18n functionality
-        let currentLanguage = localStorage.getItem('language') || 'en';
+        let currentLanguage = localStorage.getItem('preferredLanguage') || 'en';
 
         function translatePage(lang) {
             const elements = document.querySelectorAll('[data-i18n]');
@@ -2221,7 +2314,7 @@
                 }
             });
             document.documentElement.lang = lang;
-            localStorage.setItem('language', lang);
+            localStorage.setItem('preferredLanguage', lang);
         }
 
         // Language selector
@@ -2771,6 +2864,31 @@
         // Initialize
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
+
+        // Check for edited photo from editor
+        window.addEventListener('load', () => {
+            const editedPhoto = localStorage.getItem('editedPhoto');
+            if (editedPhoto) {
+                // Load edited photo
+                const img = new Image();
+                img.onload = () => {
+                    uploadedImage = img;
+                    uploadArea.classList.add('has-image');
+                    createComposite();
+                    previewSection.classList.add('active');
+                    announceToScreenReader('Edited photo loaded successfully. Your photo sheet preview is ready.');
+
+                    // Clear from storage
+                    localStorage.removeItem('editedPhoto');
+
+                    // Scroll to preview
+                    setTimeout(() => {
+                        previewSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                };
+                img.src = editedPhoto;
+            }
+        });
 
         // Register Service Worker for PWA support
         if ('serviceWorker' in navigator) {
