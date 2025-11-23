@@ -1367,6 +1367,7 @@
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/ux-components.css">
+    <link rel="stylesheet" href="css/sticky-scroll.css">
 </head>
 <body>
     <!-- Skip Link for Screen Readers -->
@@ -1544,7 +1545,7 @@
                 <section class="preview-section" id="previewSection" aria-label="Preview and download your photo sheet">
                     <div class="customize-preview-layout">
                         <!-- Left Side: Customization Options -->
-                        <div class="customize-panel">
+                        <div class="customize-panel" data-sticky data-sticky-offset="80" data-sticky-behavior="fixed">
                             <h2 class="section-title">
                                 <span aria-hidden="true">⚙️</span>
                                 <span data-i18n="customizeTitle">Customize Your Sheet</span>
@@ -1587,7 +1588,7 @@
                         </div>
 
                         <!-- Right Side: Preview -->
-                        <div class="preview-panel">
+                        <div class="preview-panel" data-sticky data-sticky-offset="80" data-sticky-behavior="fixed">
                             <h2 class="section-title">
                                 <span aria-hidden="true">👁️</span>
                                 <span data-i18n="previewTitle">Your Photo Sheet</span>
@@ -2307,13 +2308,15 @@
             // Load and initialize UX components if available
             if (window.location.protocol !== 'file:') {
                 try {
-                    const { initMobileNav, initWorkflowSelector, initEditorBanner, initTooltips, initStickyNav, ProgressSteps, OnboardingModal } = await import('./js/ux-components.js');
+                    const { initMobileNav, initWorkflowSelector, initEditorBanner, initTooltips, initStickyNav, ProgressSteps } = await import('./js/ux-components.js');
+                    const { initStickyScroll } = await import('./js/sticky-scroll.js');
 
                     initMobileNav();
                     initWorkflowSelector();
                     initEditorBanner();
                     initTooltips();
                     initStickyNav();
+                    initStickyScroll();
 
                     // Initialize progress steps
                     const progressSteps = new ProgressSteps('#progressSteps');
