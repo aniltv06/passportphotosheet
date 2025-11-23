@@ -8,9 +8,9 @@ from http.server import SimpleHTTPRequestHandler, HTTPServer
 
 PORT = 8888
 BROWSER = 'safari'  # or 'chrome' or 'default'
-PRIVATE_MODE = True  # Set to True for private browsing (Safari only)
+PRIVATE_MODE = False  # Set to True for private browsing (Safari only)
 HOST = '0.0.0.0'
-CUSTOM_DOMAIN = 'dev.io'  # Change to your preferred domain
+CUSTOM_DOMAIN = 'dev.local'  # Change to your preferred domain
 
 class NoCacheHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
@@ -68,38 +68,65 @@ def kill_port(port):
         print(f"Error killing port {port}: {e}")
 
 def check_hosts_entry(domain):
-    """Check if domain is configured in /etc/hosts"""
+    """Check if domain is configured in /etc/hosts for both IPv4 and IPv6"""
     try:
         with open('/etc/hosts', 'r') as f:
-            for line in f:
-                if domain in line and not line.strip().startswith('#'):
-                    return True
-        return False
+            content = f.read()
+            has_ipv4 = f'127.0.0.1' in content and domain in content
+            has_ipv6 = f'::1' in content and domain in content
+            return has_ipv4, has_ipv6
     except:
-        return False
+        return False, False
 
 def add_hosts_entry(domain):
-    """Add domain to /etc/hosts if not present"""
-    if check_hosts_entry(domain):
-        print(f"✓ Domain '{domain}' already configured in /etc/hosts")
+    """Add domain to /etc/hosts if not present (both IPv4 and IPv6)"""
+    has_ipv4, has_ipv6 = check_hosts_entry(domain)
+    
+    if has_ipv4 and has_ipv6:
+        print(f"✓ Domain '{domain}' already configured in /etc/hosts (IPv4 & IPv6)")
         return True
     
-    print(f"⚠️  Domain '{domain}' not found in /etc/hosts")
-    print(f"Adding '127.0.0.1    {domain}' to /etc/hosts (requires sudo)...")
+    entries_to_add = []
     
-    try:
-        cmd = f"echo '127.0.0.1    {domain}' | sudo tee -a /etc/hosts"
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    if not has_ipv4:
+        entries_to_add.append(f"127.0.0.1       {domain}")
+        print(f"⚠️  IPv4 entry for '{domain}' missing")
+    
+    if not has_ipv6:
+        entries_to_add.append(f"::1             {domain}")
+        print(f"⚠️  IPv6 entry for '{domain}' missing")
+    
+    if entries_to_add:
+        print(f"Adding entries to /etc/hosts (requires sudo)...")
         
-        if result.returncode == 0:
-            print(f"✓ Successfully added '{domain}' to /etc/hosts")
-            return True
-        else:
-            print(f"✗ Failed to add domain to /etc/hosts")
+        try:
+            # Create a temporary file with entries
+            entries_text = '\n'.join(entries_to_add)
+            cmd = f"echo '{entries_text}' | sudo tee -a /etc/hosts"
+            result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            
+            if result.returncode == 0:
+                print(f"✓ Successfully added '{domain}' to /etc/hosts")
+                print(f"  Added: {', '.join(['IPv4' if not has_ipv4 else '', 'IPv6' if not has_ipv6 else ''])}")
+                return True
+            else:
+                print(f"✗ Failed to add domain to /etc/hosts")
+                return False
+        except Exception as e:
+            print(f"✗ Error adding domain: {e}")
             return False
+    
+    return True
+
+def flush_dns_cache():
+    """Flush DNS cache to ensure changes take effect"""
+    try:
+        print("Flushing DNS cache...")
+        subprocess.run(['sudo', 'dscacheutil', '-flushcache'], capture_output=True)
+        subprocess.run(['sudo', 'killall', '-HUP', 'mDNSResponder'], capture_output=True)
+        print("✓ DNS cache flushed")
     except Exception as e:
-        print(f"✗ Error adding domain: {e}")
-        return False
+        print(f"⚠️  Could not flush DNS cache: {e}")
 
 def open_browser(url, browser='default', private=False):
     """Open URL in specified browser"""
@@ -107,7 +134,6 @@ def open_browser(url, browser='default', private=False):
     
     if browser == 'safari':
         if private:
-            # Open Safari in private browsing mode
             applescript = f'''
             tell application "Safari"
                 activate
@@ -138,6 +164,10 @@ if __name__ == '__main__':
     
     # Check and add hosts entry if needed
     hosts_configured = add_hosts_entry(CUSTOM_DOMAIN)
+    
+    # Flush DNS cache if we added new entries
+    if hosts_configured:
+        flush_dns_cache()
     
     local_ip = get_local_ip()
     

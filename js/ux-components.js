@@ -13,21 +13,71 @@ export function initMobileNav() {
     const navLinks = document.querySelector('.nav-links');
 
     if (toggle && navLinks) {
-        toggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            const isOpen = navLinks.classList.contains('active');
-            toggle.setAttribute('aria-expanded', isOpen);
-            toggle.textContent = isOpen ? '✕' : '☰';
+        // Create backdrop overlay for mobile menu
+        const backdrop = document.createElement('div');
+        backdrop.className = 'mobile-nav-backdrop';
+        backdrop.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 998;
+        `;
+        document.body.appendChild(backdrop);
 
-            trackEvent('mobile_menu_toggle', { action: isOpen ? 'open' : 'close' });
+        const toggleMenu = (open) => {
+            if (open) {
+                navLinks.classList.add('active');
+                backdrop.style.opacity = '1';
+                backdrop.style.pointerEvents = 'all';
+                document.body.style.overflow = 'hidden'; // Prevent body scroll
+                toggle.setAttribute('aria-expanded', 'true');
+                toggle.textContent = '✕';
+                trackEvent('mobile_menu_toggle', { action: 'open' });
+            } else {
+                navLinks.classList.remove('active');
+                backdrop.style.opacity = '0';
+                backdrop.style.pointerEvents = 'none';
+                document.body.style.overflow = ''; // Restore body scroll
+                toggle.setAttribute('aria-expanded', 'false');
+                toggle.textContent = '☰';
+                trackEvent('mobile_menu_toggle', { action: 'close' });
+            }
+        };
+
+        toggle.addEventListener('click', () => {
+            const isOpen = navLinks.classList.contains('active');
+            toggleMenu(!isOpen);
+        });
+
+        // Close menu when clicking backdrop
+        backdrop.addEventListener('click', () => {
+            toggleMenu(false);
         });
 
         // Close menu when clicking outside
         document.addEventListener('click', (e) => {
             if (!toggle.contains(e.target) && !navLinks.contains(e.target)) {
-                navLinks.classList.remove('active');
-                toggle.setAttribute('aria-expanded', 'false');
-                toggle.textContent = '☰';
+                toggleMenu(false);
+            }
+        });
+
+        // Close menu when clicking on a nav link
+        navLinks.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                toggleMenu(false);
+            });
+        });
+
+        // Close menu with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                toggleMenu(false);
             }
         });
     }
@@ -140,119 +190,6 @@ export function initWorkflowSelector() {
 }
 
 /**
- * Onboarding Modal
- */
-export class OnboardingModal {
-    constructor() {
-        this.overlay = null;
-        this.hasShown = localStorage.getItem('onboarding_shown') === 'true';
-    }
-
-    show() {
-        if (this.hasShown) return;
-
-        this.create();
-        setTimeout(() => {
-            this.overlay.classList.add('active');
-        }, 500);
-
-        trackEvent('onboarding_shown');
-    }
-
-    hide() {
-        if (this.overlay) {
-            this.overlay.classList.remove('active');
-            setTimeout(() => {
-                this.overlay.remove();
-                this.overlay = null;
-            }, 300);
-
-            localStorage.setItem('onboarding_shown', 'true');
-            this.hasShown = true;
-        }
-
-        trackEvent('onboarding_dismissed');
-    }
-
-    create() {
-        this.overlay = document.createElement('div');
-        this.overlay.className = 'onboarding-overlay';
-        this.overlay.innerHTML = `
-            <div class="onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboarding-title">
-                <h2 id="onboarding-title">Welcome to Photo Sheet Maker! 👋</h2>
-
-                <div class="onboarding-steps">
-                    <div class="onboarding-step">
-                        <div class="onboarding-step-number">1</div>
-                        <div class="onboarding-step-content">
-                            <h3>Upload Your Photo</h3>
-                            <p>Have a 2×2" passport photo ready? Upload it directly.</p>
-                        </div>
-                    </div>
-
-                    <div class="onboarding-step">
-                        <div class="onboarding-step-number">2</div>
-                        <div class="onboarding-step-content">
-                            <h3>Choose Print Size</h3>
-                            <p>Select 4×6", 5×7", or 8×10" based on your printer.</p>
-                        </div>
-                    </div>
-
-                    <div class="onboarding-step">
-                        <div class="onboarding-step-number">3</div>
-                        <div class="onboarding-step-content">
-                            <h3>Download & Print</h3>
-                            <p>Get your photo sheet and print at any photo service.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="alert alert-info" style="margin: var(--spacing-lg) 0;">
-                    <strong>💡 Pro Tip:</strong> Don't have a photo ready?
-                    Use our <a href="photo-editor.html" style="color: var(--primary-color); font-weight: 600;">Photo Editor</a>
-                    to crop, resize, or remove backgrounds first!
-                </div>
-
-                <div class="onboarding-actions">
-                    <button class="btn btn-outline" onclick="this.closest('.onboarding-overlay').dispatchEvent(new Event('close'))">
-                        Skip for Now
-                    </button>
-                    <button class="btn" onclick="this.closest('.onboarding-overlay').dispatchEvent(new Event('close'))">
-                        Get Started
-                    </button>
-                </div>
-            </div>
-        `;
-
-        // Close on overlay click
-        this.overlay.addEventListener('click', (e) => {
-            if (e.target === this.overlay) {
-                this.hide();
-            }
-        });
-
-        // Close event
-        this.overlay.addEventListener('close', () => {
-            this.hide();
-        });
-
-        // Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.overlay) {
-                this.hide();
-            }
-        });
-
-        document.body.appendChild(this.overlay);
-    }
-
-    reset() {
-        localStorage.removeItem('onboarding_shown');
-        this.hasShown = false;
-    }
-}
-
-/**
  * Editor Banner Management
  */
 export function initEditorBanner() {
@@ -328,19 +265,10 @@ export function initUXComponents() {
     initTooltips();
     initStickyNav();
 
-    // Show onboarding for first-time users
-    const onboarding = new OnboardingModal();
-    onboarding.show();
-
     // Make available globally for debugging
     if (typeof window !== 'undefined') {
         window.UXComponents = {
-            ProgressSteps,
-            OnboardingModal,
-            resetOnboarding: () => {
-                localStorage.removeItem('onboarding_shown');
-                location.reload();
-            }
+            ProgressSteps
         };
     }
 }

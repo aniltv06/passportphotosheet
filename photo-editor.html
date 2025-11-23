@@ -43,9 +43,121 @@
     <!-- Production: Enables cache for better performance -->
     <script type="module" src="js/meta-loader.js"></script>
 
-    <!-- MediaPipe Libraries for Face Detection -->
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4"></script>
+    <!-- MediaPipe Libraries for Face Detection with CDN Fallback -->
+    <script>
+        // CDN Fallback System for MediaPipe
+        // Tries multiple CDNs and gracefully degrades if all fail
+
+        (function() {
+            const cdnSources = {
+                selfieSegmentation: [
+                    'https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1/selfie_segmentation.js',
+                    'https://unpkg.com/@mediapipe/selfie_segmentation@0.1/selfie_segmentation.js'
+                ],
+                faceDetection: [
+                    'https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4/face_detection.js',
+                    'https://unpkg.com/@mediapipe/face_detection@0.4/face_detection.js'
+                ]
+            };
+
+            let loadAttempts = {
+                selfieSegmentation: 0,
+                faceDetection: 0
+            };
+
+            // Load script with fallback
+            function loadScriptWithFallback(urls, libraryName, callback) {
+                const currentIndex = loadAttempts[libraryName];
+
+                if (currentIndex >= urls.length) {
+                    console.error(`Failed to load ${libraryName} from all CDN sources`);
+                    callback(false);
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = urls[currentIndex];
+
+                script.onload = () => {
+                    console.log(`✓ Loaded ${libraryName} from CDN ${currentIndex + 1}`);
+                    callback(true);
+                };
+
+                script.onerror = () => {
+                    console.warn(`✗ Failed to load ${libraryName} from CDN ${currentIndex + 1}, trying next...`);
+                    loadAttempts[libraryName]++;
+
+                    // Track CDN failure
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'cdn_fallback', {
+                            'event_category': 'Performance',
+                            'event_label': libraryName,
+                            'value': currentIndex
+                        });
+                    }
+
+                    // Try next CDN
+                    loadScriptWithFallback(urls, libraryName, callback);
+                };
+
+                document.head.appendChild(script);
+            }
+
+            // Load both libraries
+            let selfieLoaded = false;
+            let faceLoaded = false;
+
+            function checkAllLoaded() {
+                if (selfieLoaded !== null && faceLoaded !== null) {
+                    if (!selfieLoaded || !faceLoaded) {
+                        // At least one library failed to load
+                        console.warn('MediaPipe libraries unavailable - Face validation will be limited');
+                        window.mediaPipeAvailable = false;
+
+                        // Show user notification
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const validationResults = document.getElementById('validationResults');
+                            if (validationResults) {
+                                const lang = localStorage.getItem('preferredLanguage') || 'en';
+                                const trans = window.translations?.[lang] || window.translations?.en || {};
+
+                                validationResults.style.display = 'block';
+                                validationResults.style.background = '#FFF3CD';
+                                validationResults.style.borderLeft = '4px solid #FFA500';
+                                validationResults.innerHTML = `
+                                    <strong style="color: #856404;">${trans.faceValidationLimitedTitle || '⚠️ Limited Functionality'}</strong>
+                                    <p style="color: #856404; margin-top: 8px; font-size: 13px;">
+                                        ${trans.faceValidationLimitedDesc || 'Face detection libraries couldn\'t be loaded. Face validation feature is unavailable. All other editing features work normally.'}
+                                    </p>
+                                `;
+                            }
+                        });
+                    } else {
+                        window.mediaPipeAvailable = true;
+                    }
+                }
+            }
+
+            // Start loading
+            loadScriptWithFallback(
+                cdnSources.selfieSegmentation,
+                'selfieSegmentation',
+                (success) => {
+                    selfieLoaded = success;
+                    checkAllLoaded();
+                }
+            );
+
+            loadScriptWithFallback(
+                cdnSources.faceDetection,
+                'faceDetection',
+                (success) => {
+                    faceLoaded = success;
+                    checkAllLoaded();
+                }
+            );
+        })();
+    </script>
 
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BHSENQTDSF"></script>
@@ -242,364 +354,14 @@
             }
         }
 
-        /* Hero Section - Apple Style (from index.html) */
-        .hero {
-            position: relative;
-            min-height: 60vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: var(--spacing-4xl) var(--spacing-lg);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-            animation: pulse 10s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .hero-icon {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto var(--spacing-xl);
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .hero-icon svg {
-            width: 60px;
-            height: 60px;
-        }
-
-        /* Hero Camera Icon */
-        .hero-camera-icon {
-            width: 60px;
-            height: 60px;
-            position: relative;
-        }
-        .hero-camera-body {
-            width: 100%;
-            height: 70%;
-            background: white;
-            border-radius: 8px;
-            position: absolute;
-            bottom: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        .hero-lens {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow:
-                inset 0 1px 3px rgba(0, 0, 0, 0.1),
-                0 2px 4px rgba(0, 0, 0, 0.15);
-        }
-        .hero-lens-inner {
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-        .hero-lens-glare {
-            width: 6px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            position: absolute;
-            top: 25%;
-            left: 25%;
-        }
-        .hero-flash {
-            width: 10px;
-            height: 10px;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            border-radius: 50%;
-            position: absolute;
-            top: 15%;
-            right: 15%;
-            box-shadow: 0 2px 6px rgba(255, 165, 0, 0.4);
-        }
-        .hero-viewfinder {
-            width: 8px;
-            height: 6px;
-            background: #333;
-            border-radius: 2px;
-            position: absolute;
-            top: 12%;
-            left: 15%;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .hero-title {
-            font-size: clamp(48px, 8vw, 72px);
-            font-weight: 700;
-            color: white;
-            margin-bottom: var(--spacing-lg);
-            letter-spacing: -2px;
-            line-height: 1.1;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(18px, 3vw, 24px);
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: var(--spacing-2xl);
-            font-weight: 400;
-            line-height: 1.5;
-        }
-
-        .hero-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            padding: 18px 36px;
-            background: white;
-            color: var(--primary-color);
-            border-radius: 980px;
-            font-size: 18px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition-smooth);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: var(--spacing-2xl);
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(10px); }
-        }
-
-        .scroll-indicator svg {
-            width: 24px;
-            height: 24px;
-            color: white;
-            opacity: 0.7;
-        }
-
-        /* Language Selector */
-        .language-selector {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 12px;
-            padding: 10px 14px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: var(--transition);
-        }
-
-        .language-selector:hover {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .language-selector select {
-            border: none;
-            background: transparent;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-            cursor: pointer;
-            padding: 4px 24px 4px 8px;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%231D1D1F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 8px center;
-        }
-
-        .language-selector select:focus {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-            border-radius: 4px;
-        }
-
-        /* Floating Home Button */
-        .floating-home-btn {
-            position: fixed;
-            top: 30px;
-            left: 30px;
-            z-index: 1000;
-            width: 70px;
-            height: 70px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 50%;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            animation: floatButton 3s ease-in-out infinite;
-        }
-
-        .floating-home-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.3);
-            background: rgba(255, 255, 255, 1);
-        }
-
-        .floating-home-btn:active {
-            transform: translateY(-2px) scale(1.02);
-        }
-
-        @keyframes floatButton {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* Camera icon for floating button */
-        .floating-camera-icon {
-            width: 35px;
-            height: 35px;
-            position: relative;
-        }
-
-        .floating-camera-body {
-            width: 100%;
-            height: 70%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 4px;
-            position: absolute;
-            bottom: 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .floating-lens {
-            width: 16px;
-            height: 16px;
-            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.15);
-        }
-
-        .floating-lens-inner {
-            width: 12px;
-            height: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
-        }
-
-        .floating-lens-glare {
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 50%;
-            position: absolute;
-            top: 25%;
-            left: 25%;
-        }
-
-        .floating-flash {
-            width: 6px;
-            height: 6px;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            border-radius: 50%;
-            position: absolute;
-            top: 10%;
-            right: 12%;
-            box-shadow: 0 1px 4px rgba(255, 165, 0, 0.4);
-        }
-
-        .floating-viewfinder {
-            width: 5px;
-            height: 4px;
-            background: #333;
-            border-radius: 1px;
-            position: absolute;
-            top: 8%;
-            left: 12%;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .floating-home-btn {
-                top: 20px;
-                left: 20px;
-                width: 60px;
-                height: 60px;
-            }
-
-            .floating-camera-icon {
-                width: 30px;
-                height: 30px;
-            }
-        }
+        /* Language selector removed - using nav language selector instead */
 
         /* Main Content Section */
         .main-content {
             background: var(--background);
             padding: var(--spacing-4xl) 0;
+            /* Add top padding on mobile to account for sticky nav */
+            padding-top: calc(var(--spacing-xl) + env(safe-area-inset-top, 0px));
         }
 
         .container {
@@ -1236,32 +998,10 @@
         }
 
         @media (max-width: 768px) {
-            .hero {
-                min-height: 50vh;
-                padding: var(--spacing-3xl) var(--spacing-md);
-            }
-
-            .hero-icon {
-                width: 90px;
-                height: 90px;
-            }
-
-            .hero-icon svg {
-                width: 45px;
-                height: 45px;
-            }
-
-            .hero-title {
-                font-size: 36px;
-            }
-
-            .hero-subtitle {
-                font-size: 18px;
-            }
-
-            .hero-cta {
-                padding: 16px 28px;
-                font-size: 16px;
+            .main-content {
+                padding: var(--spacing-lg) 0;
+                /* Reduce top padding on mobile since sticky nav is thinner */
+                padding-top: var(--spacing-md);
             }
 
             .container {
@@ -1280,22 +1020,184 @@
                 gap: var(--spacing-md);
             }
 
-            .language-selector {
-                top: 10px;
-                right: 10px;
+            /* Canvas panel adjustments for mobile */
+            .canvas-panel {
+                min-height: 400px;
+                padding: var(--spacing-lg);
+            }
+
+            /* Make canvas responsive */
+            #editCanvas,
+            #overlayCanvas {
+                max-width: 100%;
+                height: auto !important;
+            }
+
+            /* Control sliders - make touch-friendly */
+            .slider {
+                height: 8px;
+            }
+
+            .slider::-webkit-slider-thumb {
+                width: 24px;
+                height: 24px;
+            }
+
+            .slider::-moz-range-thumb {
+                width: 24px;
+                height: 24px;
+            }
+
+            /* Buttons - make larger for touch */
+            .btn {
+                padding: 16px 20px;
+                font-size: 16px;
+            }
+
+            /* Info badges - more compact on mobile */
+            .info-badge {
+                font-size: 12px;
+                padding: var(--spacing-sm);
+            }
+
+            /* Instructions - collapsed by default on mobile */
+            .instructions {
+                font-size: 12px;
+            }
+
+            /* Validation results - more readable on mobile */
+            #validationResults {
+                font-size: 13px;
+            }
+
+            /* Adjust keyboard shortcuts display */
+            kbd {
+                font-size: 10px;
+                padding: 2px 4px;
             }
         }
 
         @media (max-width: 480px) {
-            .hero-title {
-                font-size: 28px;
+            /* Extra small mobile devices */
+            .main-content {
+                padding: var(--spacing-sm) 0;
             }
 
-            .hero-cta {
-                font-size: 14px;
-                padding: var(--spacing-xs) var(--spacing-sm);
+            .container {
+                padding: var(--spacing-md) var(--spacing-sm);
+            }
+
+            .panel {
+                padding: var(--spacing-sm);
+                border-radius: var(--radius-sm);
+            }
+
+            .panel h3 {
+                font-size: 16px;
+                margin-bottom: var(--spacing-sm);
+            }
+
+            /* Canvas - even more compact */
+            .canvas-panel {
+                min-height: 300px;
+                padding: var(--spacing-md);
+            }
+
+            /* Controls - stack better */
+            .control-group {
+                margin-bottom: var(--spacing-md);
+            }
+
+            .control-label {
+                font-size: 13px;
+            }
+
+            /* Buttons - full width on very small screens */
+            .btn {
+                padding: 14px 16px;
+                font-size: 15px;
+            }
+
+            /* Toggle items - more compact */
+            .toggle-item {
+                padding: 10px 12px;
+            }
+
+            .toggle-label {
+                font-size: 13px;
+            }
+
+            /* Info badges and instructions */
+            .info-badge,
+            .instructions {
+                font-size: 11px;
+                padding: 10px;
+            }
+
+            /* Make upload area more compact */
+            .upload-area {
+                min-height: 180px;
+                padding: var(--spacing-md);
+            }
+
+            .upload-icon {
+                font-size: 36px;
+                margin-bottom: var(--spacing-sm);
+            }
+
+            .upload-text {
+                font-size: 16px;
+            }
+
+            .upload-hint {
+                font-size: 12px;
             }
         }
+
+        /* Keyboard Shortcut Display */
+        kbd {
+            display: inline-block;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-family: var(--font-system);
+            font-weight: 600;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F7 100%);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+        }
+
+        /* Crop Rectangle Styles */
+        #cropRect {
+            position: absolute;
+            border: 3px solid rgba(255, 45, 85, 0.8);
+            background: rgba(255, 45, 85, 0.1);
+            cursor: move;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        #cropRect.active {
+            pointer-events: all;
+        }
+
+        .crop-handle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .crop-handle.nw { top: -6px; left: -6px; cursor: nwse-resize; }
+        .crop-handle.ne { top: -6px; right: -6px; cursor: nesw-resize; }
+        .crop-handle.sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
+        .crop-handle.se { bottom: -6px; right: -6px; cursor: nwse-resize; }
 
         /* Loading State */
         .loading {
@@ -1381,103 +1283,6 @@
                 0 0 120px rgba(102, 126, 234, 0.2);
         }
 
-        /* Progress Steps */
-        .progress-steps-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            margin-bottom: var(--spacing-xl);
-            box-shadow: 0 4px 16px var(--shadow);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .progress-steps {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .progress-step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-            position: relative;
-        }
-
-        .progress-step-number {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--surface-secondary);
-            border: 3px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 18px;
-            color: var(--text-secondary);
-            transition: all 0.3s ease;
-            z-index: 2;
-        }
-
-        .progress-step.active .progress-step-number {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-color: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
-            transform: scale(1.1);
-        }
-
-        .progress-step.completed .progress-step-number {
-            background: var(--success-color);
-            border-color: var(--success-color);
-            color: white;
-        }
-
-        .progress-step.completed .progress-step-number::before {
-            content: '✓';
-        }
-
-        .progress-step-label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-align: center;
-        }
-
-        .progress-step.active .progress-step-label {
-            color: var(--primary-color);
-        }
-
-        .progress-step.completed .progress-step-label {
-            color: var(--success-color);
-        }
-
-        .progress-connector {
-            height: 3px;
-            background: var(--border);
-            position: absolute;
-            top: 24px;
-            left: 50%;
-            right: -50%;
-            z-index: 1;
-            transition: background 0.3s ease;
-        }
-
-        .progress-step:last-child .progress-connector {
-            display: none;
-        }
-
-        .progress-step.completed .progress-connector {
-            background: var(--success-color);
-        }
-
         /* Touch Gesture Hints */
         .touch-hints {
             display: none;
@@ -1507,27 +1312,6 @@
         .touch-hint-icon {
             font-size: 20px;
             margin-bottom: 4px;
-        }
-
-        /* Mobile Improvements */
-        @media (max-width: 768px) {
-            .progress-steps {
-                gap: 8px;
-            }
-
-            .progress-step-number {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
-            }
-
-            .progress-step-label {
-                font-size: 11px;
-            }
-
-            .progress-connector {
-                top: 20px;
-            }
         }
     </style>
 
@@ -1584,63 +1368,9 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-icon">
-                <div class="hero-camera-icon">
-                    <div class="hero-camera-body">
-                        <div class="hero-viewfinder"></div>
-                        <div class="hero-flash"></div>
-                        <div class="hero-lens">
-                            <div class="hero-lens-inner">
-                                <div class="hero-lens-glare"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <h1 class="hero-title" data-i18n="page_title">Photo Editor</h1>
-            <p class="hero-subtitle" data-i18n="page_subtitle">Crop, adjust, and perfect your passport photo</p>
-            <a href="index.html" class="hero-cta">
-                <span data-i18n="backToHome">← Back to Home</span>
-            </a>
-        </div>
-        <div class="scroll-indicator">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-        </div>
-    </section>
-
     <!-- Main Content -->
     <div class="main-content">
     <div class="container">
-        <!-- Progress Steps -->
-        <div id="progressStepsContainer" class="progress-steps-container" style="display: none;" role="navigation" aria-label="Photo editing progress">
-            <div class="progress-steps">
-                <div id="progressStep1" class="progress-step" data-step="1">
-                    <div class="progress-step-number">1</div>
-                    <div class="progress-step-label">Upload</div>
-                    <div class="progress-connector"></div>
-                </div>
-                <div id="progressStep2" class="progress-step" data-step="2">
-                    <div class="progress-step-number">2</div>
-                    <div class="progress-step-label">Adjust</div>
-                    <div class="progress-connector"></div>
-                </div>
-                <div id="progressStep3" class="progress-step" data-step="3">
-                    <div class="progress-step-number">3</div>
-                    <div class="progress-step-label">Validate</div>
-                    <div class="progress-connector"></div>
-                </div>
-                <div id="progressStep4" class="progress-step" data-step="4">
-                    <div class="progress-step-number">4</div>
-                    <div class="progress-step-label">Export</div>
-                </div>
-            </div>
-        </div>
-
         <main id="main-content" class="editor-layout" role="main">
             <!-- Left Panel: Upload & Guidelines -->
             <div class="left-panel">
@@ -1769,6 +1499,50 @@
                             aria-label="Reset photo position, zoom, and rotation to defaults">
                         ↻ Reset Position
                     </button>
+
+                    <!-- Keyboard Shortcuts Info -->
+                    <div class="info-badge" style="margin-top: 16px; background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-color: rgba(0, 122, 255, 0.2);">
+                        <strong>⌨️ Keyboard Shortcuts</strong>
+                        <div style="font-size: 12px; margin-top: 8px; line-height: 1.6;">
+                            • <kbd>+</kbd> / <kbd>-</kbd> Zoom in/out<br>
+                            • <kbd>←</kbd> <kbd>→</kbd> Rotate left/right<br>
+                            • <kbd>R</kbd> Reset position<br>
+                            • <kbd>C</kbd> Toggle crop mode<br>
+                            • <kbd>V</kbd> Validate face<br>
+                            • <kbd>Esc</kbd> Cancel crop
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Crop Tool Section -->
+                <div class="panel" style="margin-top: 20px;">
+                    <h3>2b. Crop Tool</h3>
+
+                    <button class="btn btn-primary" id="cropModeBtn" disabled
+                            aria-label="Toggle crop mode to define crop area">
+                        ✂️ Enable Crop Mode
+                    </button>
+
+                    <div id="cropInstructions" style="display: none; margin-top: 16px; padding: 12px; background: rgba(0, 122, 255, 0.05); border-radius: 8px; border: 1px solid rgba(0, 122, 255, 0.2);">
+                        <strong style="color: var(--primary-color); font-size: 14px;">📐 Crop Mode Active</strong>
+                        <p style="font-size: 13px; margin-top: 8px; color: var(--text-secondary);">
+                            Click and drag on the image to define the crop area. The red rectangle shows what will be kept.
+                        </p>
+                        <p style="font-size: 12px; margin-top: 6px; color: var(--text-secondary); font-style: italic;">
+                            Note: Pan and zoom are disabled during crop mode.
+                        </p>
+                    </div>
+
+                    <div id="cropControls" style="display: none; margin-top: 16px;">
+                        <button class="btn btn-success" id="applyCropBtn"
+                                aria-label="Apply the crop and keep only the selected area">
+                            ✓ Apply Crop
+                        </button>
+                        <button class="btn btn-secondary" id="cancelCropBtn"
+                                aria-label="Cancel crop mode and return to normal editing">
+                            ✕ Cancel
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Background Removal Section - Hidden for future improvements -->
@@ -1826,21 +1600,6 @@
     <!-- Footer Container - Loaded from components/footer.html -->
     <div id="footer-container"></div>
 
-    <!-- Floating Home Button -->
-    <a href="index.html" class="floating-home-btn" aria-label="Go to home page" title="Back to Home">
-        <div class="floating-camera-icon">
-            <div class="floating-camera-body">
-                <div class="floating-viewfinder"></div>
-                <div class="floating-flash"></div>
-                <div class="floating-lens">
-                    <div class="floating-lens-inner">
-                        <div class="floating-lens-glare"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </a>
-
     <!-- Load translations from modular structure -->
     <script type="module" src="translations/index.js"></script>
 
@@ -1861,6 +1620,13 @@
         let dragStartX = 0;
         let dragStartY = 0;
         let backgroundRemoved = false;
+
+        // Crop mode state variables
+        let cropMode = false;
+        let cropRect = null;
+        let cropStartX = 0;
+        let cropStartY = 0;
+        let isCropping = false;
 
         // DOM elements
         const uploadArea = document.getElementById('uploadArea');
@@ -1888,12 +1654,12 @@
         const toggleFaceGuide = document.getElementById('toggleFaceGuide');
         const toggleGrid = document.getElementById('toggleGrid');
 
-        // UX Enhancement Elements - Progress Steps
-        const progressStepsContainer = document.getElementById('progressStepsContainer');
-        const progressStep1 = document.getElementById('progressStep1');
-        const progressStep2 = document.getElementById('progressStep2');
-        const progressStep3 = document.getElementById('progressStep3');
-        const progressStep4 = document.getElementById('progressStep4');
+        // Crop tool elements
+        const cropModeBtn = document.getElementById('cropModeBtn');
+        const cropInstructions = document.getElementById('cropInstructions');
+        const cropControls = document.getElementById('cropControls');
+        const applyCropBtn = document.getElementById('applyCropBtn');
+        const cancelCropBtn = document.getElementById('cancelCropBtn');
 
         // Initialize canvas
         editCanvas.width = CANVAS_SIZE;
@@ -1901,49 +1667,11 @@
         overlayCanvas.width = CANVAS_SIZE;
         overlayCanvas.height = CANVAS_SIZE;
 
-        // ========================================
-        // UX ENHANCEMENTS: Progress Tracking
-        // ========================================
-
-        // Progress tracking state
-        let currentStep = 1; // 1: Upload, 2: Adjust, 3: Validate, 4: Export
-
-        /**
-         * Update progress step indicator
-         * @param {number} stepNumber - Step to mark as active (1-4)
-         */
-        function updateProgressStep(stepNumber) {
-            currentStep = stepNumber;
-
-            // Show progress container on first step change
-            if (progressStepsContainer.style.display === 'none') {
-                progressStepsContainer.style.display = 'block';
-            }
-
-            // Reset all steps to default state
-            [progressStep1, progressStep2, progressStep3, progressStep4].forEach((step, index) => {
-                step.classList.remove('active', 'completed');
-
-                // Mark completed steps
-                if (index + 1 < stepNumber) {
-                    step.classList.add('completed');
-                }
-                // Mark active step
-                else if (index + 1 === stepNumber) {
-                    step.classList.add('active');
-                }
-            });
-
-            // Track progress in analytics
-            if (typeof gtag !== 'undefined') {
-                const stepNames = ['Upload', 'Adjust', 'Validate', 'Export'];
-                gtag('event', 'progress_step_reached', {
-                    'event_category': 'Photo Editor',
-                    'event_label': stepNames[stepNumber - 1],
-                    'value': stepNumber
-                });
-            }
-        }
+        // ======================================
+        // Photo Upload - Now handled by photoHandler module
+        // See: js/photoHandler.js and js/photoHandler-editor.js
+        // Integration script at bottom of file
+        // ======================================
 
         /**
          * Toggle instructions panel collapse/expand
@@ -2002,8 +1730,18 @@
 
         function enableControls() {
             resetBtn.disabled = false;
+            cropModeBtn.disabled = false;
             // removeBackgroundBtn.disabled = false; // Commented out - UI removed
-            validateFaceBtn.disabled = false;
+
+            // Only enable face validation if MediaPipe is available
+            if (window.mediaPipeAvailable !== false) {
+                validateFaceBtn.disabled = false;
+            } else {
+                validateFaceBtn.disabled = true;
+                validateFaceBtn.title = 'Face validation unavailable (CDN blocked)';
+                validateFaceBtn.style.opacity = '0.5';
+            }
+
             exportBtn.disabled = false;
             downloadBtn.disabled = false;
         }
@@ -2361,8 +2099,8 @@
 
         // Mouse wheel zoom (smooth)
         canvasContainer.addEventListener('wheel', (e) => {
-            // Prevent zoom while dragging
-            if (isDragging) {
+            // Prevent zoom while dragging or in crop mode
+            if (isDragging || cropMode) {
                 e.preventDefault();
                 return;
             }
@@ -2390,6 +2128,9 @@
 
         // Pan with mouse
         canvasContainer.addEventListener('mousedown', (e) => {
+            // Don't pan when in crop mode
+            if (cropMode) return;
+
             e.preventDefault(); // Prevent any default browser behavior
             isDragging = true;
             dragStartX = e.clientX - offsetX;
@@ -2418,6 +2159,9 @@
         let lastTouchDistance = 0;
 
         canvasContainer.addEventListener('touchstart', (e) => {
+            // Don't handle touch panning/zooming when in crop mode
+            if (cropMode) return;
+
             if (e.touches.length === 1) {
                 isDragging = true;
                 dragStartX = e.touches[0].clientX - offsetX;
@@ -2430,6 +2174,9 @@
         });
 
         canvasContainer.addEventListener('touchmove', (e) => {
+            // Don't handle touch panning/zooming when in crop mode
+            if (cropMode) return;
+
             e.preventDefault();
 
             if (e.touches.length === 1 && isDragging) {
@@ -2481,12 +2228,22 @@
             try {
                 console.log('Starting MediaPipe initialization...');
 
+                // Check if CDN fallback determined libraries are unavailable
+                if (window.mediaPipeAvailable === false) {
+                    console.warn('MediaPipe libraries unavailable (CDN blocked) - skipping initialization');
+                    return;
+                }
+
                 // Check if MediaPipe libraries are loaded
                 if (typeof SelfieSegmentation === 'undefined') {
                     console.warn('SelfieSegmentation not loaded');
+                    window.mediaPipeAvailable = false;
+                    return;
                 }
                 if (typeof FaceDetection === 'undefined') {
                     console.warn('FaceDetection not loaded');
+                    window.mediaPipeAvailable = false;
+                    return;
                 }
 
                 // Initialize Selfie Segmentation
@@ -2521,8 +2278,10 @@
                 console.log('FaceDetection initialized');
 
                 console.log('MediaPipe libraries initialized successfully');
+                window.mediaPipeAvailable = true;
             } catch (error) {
                 console.error('Failed to initialize MediaPipe:', error);
+                window.mediaPipeAvailable = false;
                 // Face detection is still available even if initialization partially fails
             }
         }
@@ -2571,10 +2330,283 @@
             }
         });
 
+        // ========================================
+        // CROP TOOL FUNCTIONALITY
+        // ========================================
+
+        // Toggle crop mode
+        cropModeBtn.addEventListener('click', () => {
+            cropMode = !cropMode;
+
+            if (cropMode) {
+                // Enable crop mode
+                cropModeBtn.textContent = '✂️ Disable Crop Mode';
+                cropModeBtn.classList.remove('btn-primary');
+                cropModeBtn.classList.add('btn-secondary');
+                cropInstructions.style.display = 'block';
+                cropControls.style.display = 'block';
+
+                // Disable pan/zoom while cropping
+                canvasContainer.style.cursor = 'crosshair';
+
+                // Track crop mode enabled
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'crop_mode_enabled', {
+                        'event_category': 'Photo Editor',
+                        'event_label': 'Crop Tool'
+                    });
+                }
+            } else {
+                // Disable crop mode
+                exitCropMode();
+            }
+        });
+
+        function exitCropMode() {
+            cropMode = false;
+            cropModeBtn.textContent = '✂️ Enable Crop Mode';
+            cropModeBtn.classList.remove('btn-secondary');
+            cropModeBtn.classList.add('btn-primary');
+            cropInstructions.style.display = 'none';
+            cropControls.style.display = 'none';
+            canvasContainer.style.cursor = 'move';
+
+            // Remove crop rectangle if exists
+            if (cropRect) {
+                cropRect.remove();
+                cropRect = null;
+            }
+
+            render();
+        }
+
+        // Handle crop rectangle drawing on canvas
+        canvasContainer.addEventListener('mousedown', (e) => {
+            if (!cropMode) return;
+
+            const rect = canvasContainer.getBoundingClientRect();
+            cropStartX = e.clientX - rect.left;
+            cropStartY = e.clientY - rect.top;
+            isCropping = true;
+
+            // Remove existing crop rectangle
+            if (cropRect) {
+                cropRect.remove();
+            }
+
+            // Create new crop rectangle
+            cropRect = document.createElement('div');
+            cropRect.id = 'cropRect';
+            cropRect.className = 'active';
+            cropRect.style.left = cropStartX + 'px';
+            cropRect.style.top = cropStartY + 'px';
+            cropRect.style.width = '0px';
+            cropRect.style.height = '0px';
+            canvasContainer.appendChild(cropRect);
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isCropping || !cropMode) return;
+
+            const rect = canvasContainer.getBoundingClientRect();
+            const currentX = e.clientX - rect.left;
+            const currentY = e.clientY - rect.top;
+
+            const width = Math.abs(currentX - cropStartX);
+            const height = Math.abs(currentY - cropStartY);
+            const left = Math.min(cropStartX, currentX);
+            const top = Math.min(cropStartY, currentY);
+
+            if (cropRect) {
+                cropRect.style.left = left + 'px';
+                cropRect.style.top = top + 'px';
+                cropRect.style.width = width + 'px';
+                cropRect.style.height = height + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isCropping) {
+                isCropping = false;
+            }
+        });
+
+        // Apply crop
+        applyCropBtn.addEventListener('click', () => {
+            if (!cropRect) {
+                alert(t('cropNoCropArea', 'Please draw a crop area first'));
+                return;
+            }
+
+            const rectStyle = cropRect.style;
+            const cropX = parseFloat(rectStyle.left);
+            const cropY = parseFloat(rectStyle.top);
+            const cropWidth = parseFloat(rectStyle.width);
+            const cropHeight = parseFloat(rectStyle.height);
+
+            if (cropWidth < 10 || cropHeight < 10) {
+                alert(t('cropAreaTooSmall', 'Crop area too small. Please draw a larger area.'));
+                return;
+            }
+
+            // Create temporary canvas to perform crop
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = CANVAS_SIZE;
+            tempCanvas.height = CANVAS_SIZE;
+            const tempCtx = tempCanvas.getContext('2d');
+
+            // Draw current canvas state to temp canvas
+            tempCtx.drawImage(editCanvas, 0, 0);
+
+            // Calculate crop coordinates relative to canvas
+            const scaleX = CANVAS_SIZE / canvasContainer.clientWidth;
+            const scaleY = CANVAS_SIZE / canvasContainer.clientHeight;
+
+            const sourceCropX = cropX * scaleX;
+            const sourceCropY = cropY * scaleY;
+            const sourceCropWidth = cropWidth * scaleX;
+            const sourceCropHeight = cropHeight * scaleY;
+
+            // Create new image with cropped content
+            const croppedCanvas = document.createElement('canvas');
+            croppedCanvas.width = sourceCropWidth;
+            croppedCanvas.height = sourceCropHeight;
+            const croppedCtx = croppedCanvas.getContext('2d');
+
+            croppedCtx.drawImage(
+                tempCanvas,
+                sourceCropX, sourceCropY, sourceCropWidth, sourceCropHeight,
+                0, 0, sourceCropWidth, sourceCropHeight
+            );
+
+            // Convert to image and update current image
+            const croppedImg = new Image();
+            croppedImg.onload = () => {
+                currentImage = croppedImg;
+                resetTransform();
+                render();
+                exitCropMode();
+
+                // Track crop applied
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'crop_applied', {
+                        'event_category': 'Photo Editor',
+                        'event_label': 'Crop Tool'
+                    });
+                }
+
+                alert(t('cropAppliedSuccess', 'Crop applied successfully!'));
+            };
+            croppedImg.src = croppedCanvas.toDataURL();
+        });
+
+        // Cancel crop
+        cancelCropBtn.addEventListener('click', () => {
+            exitCropMode();
+        });
+
+        // ========================================
+        // KEYBOARD SHORTCUTS
+        // ========================================
+
+        document.addEventListener('keydown', (e) => {
+            // Ignore if typing in an input field
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Don't handle shortcuts if no image is loaded
+            if (!currentImage) {
+                return;
+            }
+
+            switch(e.key.toLowerCase()) {
+                case '+':
+                case '=':
+                    // Zoom in
+                    e.preventDefault();
+                    scale = Math.min(3, scale + 0.1);
+                    zoomSlider.value = scale;
+                    updateSliderValues();
+                    render();
+                    break;
+
+                case '-':
+                case '_':
+                    // Zoom out
+                    e.preventDefault();
+                    scale = Math.max(0.1, scale - 0.1);
+                    zoomSlider.value = scale;
+                    updateSliderValues();
+                    render();
+                    break;
+
+                case 'arrowleft':
+                    // Rotate left
+                    e.preventDefault();
+                    rotation = Math.max(-45, rotation - 1);
+                    rotationSlider.value = rotation;
+                    updateSliderValues();
+                    render();
+                    break;
+
+                case 'arrowright':
+                    // Rotate right
+                    e.preventDefault();
+                    rotation = Math.min(45, rotation + 1);
+                    rotationSlider.value = rotation;
+                    updateSliderValues();
+                    render();
+                    break;
+
+                case 'r':
+                    // Reset position
+                    e.preventDefault();
+                    if (resetBtn && !resetBtn.disabled) {
+                        resetTransform();
+                        render();
+                    }
+                    break;
+
+                case 'c':
+                    // Toggle crop mode
+                    e.preventDefault();
+                    if (cropModeBtn && !cropModeBtn.disabled) {
+                        cropModeBtn.click();
+                    }
+                    break;
+
+                case 'v':
+                    // Validate face
+                    e.preventDefault();
+                    if (validateFaceBtn && !validateFaceBtn.disabled) {
+                        validateFaceBtn.click();
+                    }
+                    break;
+
+                case 'escape':
+                    // Cancel crop mode
+                    e.preventDefault();
+                    if (cropMode) {
+                        exitCropMode();
+                    }
+                    break;
+            }
+
+            // Track keyboard shortcut usage
+            if (typeof gtag !== 'undefined' && ['+',' ', '-', 'arrowleft', 'arrowright', 'r', 'c', 'v', 'escape'].includes(e.key.toLowerCase())) {
+                gtag('event', 'keyboard_shortcut_used', {
+                    'event_category': 'Photo Editor',
+                    'event_label': e.key
+                });
+            }
+        });
+
         // Face validation using MediaPipe Face Detection
         validateFaceBtn.addEventListener('click', async () => {
             console.log('Face validation button clicked');
             console.log('Current image:', currentImage);
+            console.log('MediaPipe available:', window.mediaPipeAvailable);
             console.log('Face detection initialized:', faceDetection);
 
             // Track face validation click
@@ -2585,11 +2617,24 @@
                 });
             }
 
-            // Update progress to step 3 (Validate)
-            updateProgressStep(3);
-
             if (!currentImage) {
                 console.error('No image loaded');
+                return;
+            }
+
+            // Check if MediaPipe libraries are available
+            if (window.mediaPipeAvailable === false) {
+                console.error('MediaPipe libraries not available (CDN blocked)');
+                validationResults.style.display = 'block';
+                validationResults.style.background = '#F8D7DA';
+                validationResults.style.borderLeft = '4px solid #DC3545';
+                validationResults.innerHTML = `
+                    <strong style="color: #721C24;">${t('faceValidationUnavailableTitle', '❌ Face Validation Unavailable')}</strong>
+                    <p style="color: #721C24; margin-top: 8px;">${t('faceValidationUnavailableDesc', 'Face detection libraries couldn\'t be loaded from CDN sources.')}</p>
+                    <p style="color: #721C24; margin-top: 8px; font-size: 13px;">
+                        ${t('faceValidationUnavailableHint', 'This may be due to network restrictions or ad blockers. All other editing features work normally. You can still adjust your photo using the zoom, rotation, and crop tools.')}
+                    </p>
+                `;
                 return;
             }
 
@@ -2599,15 +2644,15 @@
                 validationResults.style.background = '#FFF3CD';
                 validationResults.style.borderLeft = '4px solid #FFA500';
                 validationResults.innerHTML = `
-                    <strong style="color: #856404;">⚠️ Face Detection Not Ready</strong>
-                    <p style="color: #856404; margin-top: 8px;">Face detection is still loading. Please wait a moment and try again.</p>
-                    <p style="color: #856404; margin-top: 8px; font-size: 12px;">If this persists, try refreshing the page.</p>
+                    <strong style="color: #856404;">${t('faceDetectionNotReadyTitle', '⚠️ Face Detection Not Ready')}</strong>
+                    <p style="color: #856404; margin-top: 8px;">${t('faceDetectionNotReadyDesc', 'Face detection is still loading. Please wait a moment and try again.')}</p>
+                    <p style="color: #856404; margin-top: 8px; font-size: 12px;">${t('faceDetectionNotReadyHint', 'If this persists, try refreshing the page.')}</p>
                 `;
                 return;
             }
 
             validationResults.style.display = 'block';
-            validationResults.innerHTML = '<div class="spinner" style="width: 20px; height: 20px; margin: 0 auto;"></div><p style="text-align: center; margin-top: 10px;">Analyzing face position...</p>';
+            validationResults.innerHTML = `<div class="spinner" style="width: 20px; height: 20px; margin: 0 auto;"></div><p style="text-align: center; margin-top: 10px;">${t('faceValidationAnalyzing', 'Analyzing face position...')}</p>`;
             validateFaceBtn.disabled = true;
 
             try {
@@ -2636,13 +2681,13 @@
                     validationResults.style.background = '#FFF3CD';
                     validationResults.style.borderLeft = '4px solid #FFA500';
                     validationResults.innerHTML = `
-                        <strong style="color: #856404;">⚠️ No Face Detected</strong>
-                        <p style="color: #856404; margin-top: 8px;">Make sure:</p>
+                        <strong style="color: #856404;">${t('noFaceDetectedTitle', '⚠️ No Face Detected')}</strong>
+                        <p style="color: #856404; margin-top: 8px;">${t('noFaceDetectedDesc', 'Make sure:')}</p>
                         <ul style="color: #856404; margin-left: 20px; margin-top: 8px;">
-                            <li>Your face is clearly visible</li>
-                            <li>Good lighting conditions</li>
-                            <li>Face is centered in the photo</li>
-                            <li>Zoom in to make face larger</li>
+                            <li>${t('noFaceDetectedTip1', 'Your face is clearly visible')}</li>
+                            <li>${t('noFaceDetectedTip2', 'Good lighting conditions')}</li>
+                            <li>${t('noFaceDetectedTip3', 'Face is centered in the photo')}</li>
+                            <li>${t('noFaceDetectedTip4', 'Zoom in to make face larger')}</li>
                         </ul>
                     `;
                     validateFaceBtn.disabled = false;
@@ -2964,8 +3009,8 @@
                 }
 
                 let html = allGood
-                    ? '<strong style="color: #155724;">🎉 Perfect! Your photo aligns with the guideline</strong>'
-                    : '<strong style="color: #856404;">📊 Face Position Analysis</strong>';
+                    ? `<strong style="color: #155724;">${t('validationPerfect', '🎉 Perfect! Your photo aligns with the guideline')}</strong>`
+                    : `<strong style="color: #856404;">${t('validationAnalysis', '📊 Face Position Analysis')}</strong>`;
 
                 html += '<ul style="margin: 12px 0 0 20px; padding: 0;">';
                 results.forEach(result => {
@@ -2979,7 +3024,7 @@
                 html += `
                     <div style="text-align: center; margin-top: 12px;">
                         <button id="toggleStatsBtn" style="padding: 8px 16px; border: 1px solid #007AFF; background: white; color: #007AFF; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s;">
-                            🤓 Show Detailed Stats
+                            ${t('showDetailedStats', '🤓 Show Detailed Stats')}
                         </button>
                     </div>
                 `;
@@ -3045,7 +3090,7 @@
                         if (detailedStats) {
                             const isHidden = detailedStats.style.display === 'none';
                             detailedStats.style.display = isHidden ? 'block' : 'none';
-                            toggleBtn.textContent = isHidden ? '📊 Hide Detailed Stats' : '🤓 Show Detailed Stats';
+                            toggleBtn.textContent = isHidden ? t('hideDetailedStats', '📊 Hide Detailed Stats') : t('showDetailedStats', '🤓 Show Detailed Stats');
                             toggleBtn.style.background = isHidden ? '#007AFF' : 'white';
                             toggleBtn.style.color = isHidden ? 'white' : '#007AFF';
                         }
@@ -3057,9 +3102,9 @@
                 validationResults.style.background = '#F8D7DA';
                 validationResults.style.borderLeft = '4px solid #DC3545';
                 validationResults.innerHTML = `
-                    <strong style="color: #721C24;">❌ Validation Failed</strong>
+                    <strong style="color: #721C24;">${t('validationFailedTitle', '❌ Validation Failed')}</strong>
                     <p style="color: #721C24; margin-top: 8px;">${error.message}</p>
-                    <p style="color: #721C24; margin-top: 8px;">Please try again or use a different photo.</p>
+                    <p style="color: #721C24; margin-top: 8px;">${t('validationFailedDesc', 'Please try again or use a different photo.')}</p>
                 `;
             } finally {
                 validateFaceBtn.disabled = false;
@@ -3080,6 +3125,12 @@
         // The module automatically assigns to window.translations
         // Keeping this as a fallback for file:// protocol compatibility
         const translations = window.translations || {};
+
+        // Helper function to get translation with fallback
+        function t(key, fallback = '') {
+            const lang = getLanguage();
+            return translations[lang]?.[key] || translations.en?.[key] || fallback;
+        }
 
         // Get or set language preference
         function getLanguage() {
@@ -3218,8 +3269,7 @@
                     if (uploadPrompt) uploadPrompt.style.display = 'none';
                     if (canvasContainer) canvasContainer.style.display = 'block';
                     if (photoInfo) photoInfo.style.display = 'block';
-                },
-                updateProgressStep  // Pass progress update function
+                }
             );
 
             console.log('Photo handler initialized for photo editor');
@@ -3241,7 +3291,7 @@
 
                 const editCanvas = document.getElementById('editCanvas');
                 if (editCanvas) {
-                    handleUsePhoto(editCanvas, photoStorage, updateProgressStep);
+                    handleUsePhoto(editCanvas, photoStorage);
                 } else {
                     console.error('Edit canvas not found');
                 }

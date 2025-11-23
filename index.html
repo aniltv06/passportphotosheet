@@ -1554,9 +1554,9 @@
                                 <div class="form-group">
                                     <label for="paperSize" class="form-label" data-i18n="sheetSizeLabel">Sheet Size</label>
                                     <select id="paperSize" class="form-select" aria-label="Select print sheet size">
-                                        <option value="4x6" data-i18n="size4x6">Standard 4×6" Print (6 photos)</option>
+                                        <option value="4x6" selected data-i18n="size4x6">Standard 4×6" Print (6 photos)</option>
                                         <option value="5x7" data-i18n="size5x7">Medium 5×7" Print (6 photos)</option>
-                                        <option value="8x10" selected data-i18n="size8x10">Large 8×10" Print (20 photos) ⭐ Best Value</option>
+                                        <option value="8x10" data-i18n="size8x10">Large 8×10" Print (20 photos) ⭐ Best Value</option>
                                     </select>
                                     <div class="form-hint" data-i18n="sheetSizeHint">Choose the print size you want to order</div>
                                 </div>
@@ -1769,7 +1769,7 @@
         function validateImageFile(file) {
             // Basic check to ensure it's an image file
             if (!file.type.startsWith('image/')) {
-                throw new Error('Please upload an image file.');
+                throw new Error(translations[currentLanguage]?.errorImageUpload || 'Please upload an image file.');
             }
 
             return true;
@@ -1785,7 +1785,7 @@
         const handleOptionsChange = debounce(() => {
             if (uploadedImage) {
                 createComposite();
-                announceToScreenReader('Photo sheet updated with new settings.');
+                announceToScreenReader(translations[currentLanguage]?.srPhotoSheetUpdated || 'Photo sheet updated with new settings.');
 
                 // Track option changes
                 const [spacing, border] = cuttingGuide.value.split('-');
@@ -1937,7 +1937,7 @@
                 link.href = canvas.toDataURL('image/jpeg', 0.95);
                 link.click();
 
-                announceToScreenReader('Your photo sheet has been downloaded successfully.');
+                announceToScreenReader(translations[currentLanguage]?.srDownloadSuccess || 'Your photo sheet has been downloaded successfully.');
 
                 // Track download event
                 const [spacing, border] = cuttingGuide.value.split('-');
@@ -1950,7 +1950,7 @@
                     language: currentLanguage
                 });
             } catch (error) {
-                showError('Could not download the file. Please try again.');
+                showError(translations[currentLanguage]?.errorDownloadFailed || 'Could not download the file. Please try again.');
                 trackEvent('download_error', { error: error.message });
                 console.error(error);
             }
@@ -2204,7 +2204,7 @@
                 // Don't add has-image class - keep upload area available
                 createComposite();
                 previewSection.classList.add('active');
-                announceToScreenReader('Demo photo loaded successfully. Your photo sheet preview is ready.');
+                announceToScreenReader(translations[currentLanguage]?.srDemoLoaded || 'Demo photo loaded successfully. Your photo sheet preview is ready.');
 
                 // Track demo usage
                 trackEvent('demo_photo_used', {
@@ -2318,10 +2318,6 @@
                     // Initialize progress steps
                     const progressSteps = new ProgressSteps('#progressSteps');
                     window.progressSteps = progressSteps; // Make accessible globally
-
-                    // Show onboarding modal for first-time users
-                    const onboarding = new OnboardingModal();
-                    onboarding.show();
 
                     // Update progress steps when image is uploaded
                     const originalUploadArea = document.getElementById('uploadArea');

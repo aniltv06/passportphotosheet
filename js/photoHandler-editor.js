@@ -11,9 +11,8 @@ import { PhotoUploadHandler } from './photoHandler.js';
  * Uses the same UI as index.html for consistency
  * @param {Object} translations - Translation object for i18n support
  * @param {Function} onPhotoReadyCallback - Callback when photo is ready (e.g., loadImageToCanvas)
- * @param {Function} progressCallback - Optional progress step callback
  */
-export function initPhotoEditorUpload(translations, onPhotoReadyCallback, progressCallback) {
+export function initPhotoEditorUpload(translations, onPhotoReadyCallback) {
     // Initialize the photo upload handler with photo-editor specific configuration
     const photoHandler = new PhotoUploadHandler({
         containerId: 'uploadContainer', // Container where UI will be injected
@@ -37,11 +36,6 @@ export function initPhotoEditorUpload(translations, onPhotoReadyCallback, progre
         // Callback when photo is loaded
         onPhotoLoaded: (image, dataURL, metadata) => {
             console.log('Photo loaded in editor:', metadata);
-
-            // Update progress step if callback provided
-            if (progressCallback) {
-                progressCallback(2); // Move to "Adjust" step
-            }
 
             // Call the page-specific callback (e.g., loadImageToCanvas)
             if (onPhotoReadyCallback) {
@@ -156,14 +150,8 @@ export function exportEditedPhoto(canvas, photoStorage, metadata = {}) {
  * Handle "Use Photo" button - export and navigate to index page
  * @param {HTMLCanvasElement} canvas - Canvas with edited photo
  * @param {Object} photoStorage - PhotoStorage instance
- * @param {Function} progressCallback - Optional progress callback
  */
-export function handleUsePhoto(canvas, photoStorage, progressCallback) {
-    // Update progress step if callback provided
-    if (progressCallback) {
-        progressCallback(4); // Move to "Export" step
-    }
-
+export function handleUsePhoto(canvas, photoStorage) {
     // Export the edited photo
     const success = exportEditedPhoto(canvas, photoStorage, {
         action: 'use_photo',
