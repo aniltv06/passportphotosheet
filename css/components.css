@@ -304,3 +304,171 @@
 .tooltip:hover::after {
     opacity: 1;
 }
+
+/* ========================================
+   Upload Area Component (Dynamically Generated)
+   Used by photoHandler.js for file uploads
+   ======================================== */
+
+/* Base upload area styles */
+.upload-area {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl);
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    background: #FAFAFA;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-area:hover {
+    border-color: var(--primary-color);
+    background: #FFFFFF;
+    transform: scale(1.01);
+    box-shadow: 0 20px 40px rgba(0, 122, 255, 0.1);
+}
+
+.upload-area.dragover {
+    border-color: var(--primary-color);
+    background: rgba(0, 122, 255, 0.05);
+    transform: scale(1.02);
+    box-shadow: 0 20px 60px rgba(0, 122, 255, 0.2);
+}
+
+.upload-area.has-image {
+    border-color: var(--success-color);
+    background: rgba(52, 199, 89, 0.05);
+    border-style: solid;
+    box-shadow: 0 20px 40px rgba(52, 199, 89, 0.15);
+}
+
+.upload-icon {
+    font-size: 64px;
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.6;
+    transition: var(--transition);
+    position: relative;
+    z-index: 1;
+}
+
+.upload-area:hover .upload-icon {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.upload-text {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    position: relative;
+    z-index: 1;
+}
+
+.upload-hint {
+    font-size: 15px;
+    color: var(--text-secondary);
+    position: relative;
+    z-index: 1;
+}
+
+.upload-success {
+    display: none;
+    color: var(--success-color);
+    font-weight: 700;
+    font-size: 18px;
+    margin-top: var(--spacing-md);
+    position: relative;
+    z-index: 1;
+    animation: bounceIn 0.5s;
+}
+
+@keyframes bounceIn {
+    0% { opacity: 0; transform: scale(0.3); }
+    50% { transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.upload-area.has-image .upload-success {
+    display: block;
+}
+
+/* File input (hidden) */
+.upload-area input[type="file"] {
+    display: none;
+}
+
+/* Responsive upload area for narrow containers (photo-editor panel is 320px) */
+/* Apply reduced sizing to upload-area inside .panel or .left-panel */
+.panel .upload-area,
+.left-panel .upload-area {
+    padding: var(--spacing-lg) !important; /* Reduce padding from 48px to 24px */
+    min-height: 220px !important; /* Reduce min-height for narrow containers */
+    /* Force centering */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+}
+
+.panel .upload-icon,
+.left-panel .upload-icon {
+    font-size: 48px !important; /* Reduce icon from 64px to 48px */
+    margin-bottom: var(--spacing-md) !important; /* Reduce margin */
+    /* Force centering - apply same transform logic as hover state */
+    margin-left: auto !important;
+    margin-right: auto !important;
+    transform: scale(1) !important; /* Apply neutral transform to match hover rendering */
+}
+
+/* Keep hover scale effect */
+.panel .upload-area:hover .upload-icon,
+.left-panel .upload-area:hover .upload-icon {
+    transform: scale(1.1) !important;
+}
+
+.panel .upload-text,
+.left-panel .upload-text {
+    font-size: 18px !important; /* Reduce from 22px to 18px */
+}
+
+.panel .upload-hint,
+.left-panel .upload-hint {
+    font-size: 13px !important; /* Reduce from 15px to 13px */
+}
+
+/* Adjust title and description in narrow upload areas */
+.panel .upload-area h3,
+.left-panel .upload-area h3 {
+    font-size: 18px !important; /* Reduce from 24px */
+    margin-bottom: 8px !important;
+}
+
+.panel .upload-area > p,
+.left-panel .upload-area > p {
+    font-size: 13px !important; /* Reduce from 15px */
+    margin-bottom: 12px !important;
+    line-height: 1.4 !important;
+}
+
+/* Mobile: Further reduce sizing */
+@media (max-width: 768px) {
+    .panel .upload-area,
+    .left-panel .upload-area {
+        padding: var(--spacing-md) !important;
+        min-height: 200px !important;
+    }
+
+    .panel .upload-icon,
+    .left-panel .upload-icon {
+        font-size: 40px !important;
+    }
+}

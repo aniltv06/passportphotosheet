@@ -1,0 +1,68 @@
+<!--
+    Common Meta Tags Template
+    ========================
+
+    This file documents the common meta tag structure that should be used
+    across all pages. Copy this structure and customize page-specific values.
+
+    The js/meta-loader.js script will automatically add cache control based on environment:
+    - Development (localhost): no-cache for easier testing
+    - Production: caching enabled for better performance
+
+    Usage:
+    1. Copy this structure to your page's <head>
+    2. Update page-specific values (title, description, keywords, canonical, OG, Twitter)
+    3. Include <script type="module" src="js/meta-loader.js"></script> at the end of <head>
+    4. Keep common values consistent (author, theme-color, favicons)
+-->
+
+<!-- Basic Meta Tags -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Primary Meta Tags (CUSTOMIZE FOR EACH PAGE) -->
+<title>PAGE_TITLE - Passport Photo Maker</title>
+<meta name="title" content="PAGE_TITLE - Passport Photo Maker">
+<meta name="description" content="PAGE_DESCRIPTION">
+<meta name="keywords" content="PAGE_KEYWORDS">
+<meta name="author" content="Photo Sheet Maker">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://aniltv06.github.io/passportphotosheet/PAGE_URL">
+
+<!-- Open Graph / Facebook (CUSTOMIZE FOR EACH PAGE) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://aniltv06.github.io/passportphotosheet/PAGE_URL">
+<meta property="og:title" content="PAGE_TITLE - Passport Photo Maker">
+<meta property="og:description" content="PAGE_DESCRIPTION">
+<meta property="og:image" content="https://aniltv06.github.io/passportphotosheet/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Photo Sheet Maker">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter (CUSTOMIZE FOR EACH PAGE) -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://aniltv06.github.io/passportphotosheet/PAGE_URL">
+<meta name="twitter:title" content="PAGE_TITLE">
+<meta name="twitter:description" content="PAGE_DESCRIPTION">
+<meta name="twitter:image" content="https://aniltv06.github.io/passportphotosheet/twitter-image.jpg">
+
+<!-- Theme and Mobile (COMMON - Keep consistent) -->
+<meta name="theme-color" content="#007AFF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PAGE_SHORT_NAME">
+<meta name="format-detection" content="telephone=no">
+
+<!-- Favicons (COMMON - Keep consistent) -->
+<link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+
+<!-- Cache Control - Automatically added by meta-loader.js -->
+<!-- DO NOT add manually - meta-loader.js handles this based on environment -->
+
+<!-- Load Meta Loader for Dynamic Cache Control -->
+<script type="module" src="js/meta-loader.js"></script>
