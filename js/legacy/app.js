@@ -69,16 +69,16 @@ export class PhotoSheetApp {
 
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
-            uploadArea.classList.add('dragover');
+            uploadArea.classList.add('is-dragover');
         });
 
         uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
+            uploadArea.classList.remove('is-dragover');
         });
 
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
-            uploadArea.classList.remove('dragover');
+            uploadArea.classList.remove('is-dragover');
             const file = e.dataTransfer.files[0];
             if (file) this.handleImageUpload(file);
         });

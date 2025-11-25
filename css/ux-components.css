@@ -1,13 +1,15 @@
 /**
  * UX Components
  * Enhanced UI components for better user experience
+ * Updated with BEM naming convention
  */
 
 /* ============================================
-   NAVIGATION HEADER
+   NAVIGATION HEADER (BEM)
    ============================================ */
 
-.main-nav {
+/* Block: c-nav */
+.c-nav {
     position: sticky;
     top: 0;
     left: 0;
@@ -21,7 +23,8 @@
     transition: var(--transition);
 }
 
-.nav-container {
+/* Elements */
+.c-nav__container {
     max-width: 1100px;
     margin: 0 auto;
     padding: var(--spacing-md) var(--spacing-lg);
@@ -31,7 +34,7 @@
     gap: var(--spacing-lg);
 }
 
-.nav-logo {
+.c-nav__logo {
     font-size: 20px;
     font-weight: 700;
     color: var(--text-primary);
@@ -47,7 +50,7 @@
     line-height: 1;
 }
 
-.nav-logo:hover {
+.c-nav__logo:hover {
     color: var(--text-primary);
     background: rgba(102, 126, 234, 0.12);
     border-color: rgba(102, 126, 234, 0.25);
@@ -55,19 +58,19 @@
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
 }
 
-.nav-logo span {
+.c-nav__logo-text {
     line-height: 1;
     display: flex;
     align-items: center;
 }
 
-.nav-links {
+.c-nav__links {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
 }
 
-.nav-link {
+.c-nav__link {
     padding: var(--spacing-sm) var(--spacing-md);
     color: var(--text-primary);
     text-decoration: none;
@@ -78,29 +81,30 @@
     display: inline-block;
 }
 
-.nav-link:hover {
+.c-nav__link:hover {
     background: rgba(0, 122, 255, 0.1);
     color: var(--primary-color);
 }
 
-.nav-link.active {
+/* Modifiers */
+.c-nav__link--active {
     background: var(--primary-color);
     color: white;
 }
 
-.nav-link.featured {
+.c-nav__link--featured {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     font-weight: 600;
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.nav-link.featured:hover {
+.c-nav__link--featured:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
 }
 
-.nav-language {
+.c-nav__language {
     padding: var(--spacing-xs) var(--spacing-sm);
     background: var(--surface);
     border: 1px solid var(--border);
@@ -110,12 +114,11 @@
     transition: var(--transition);
 }
 
-.nav-language:hover {
+.c-nav__language:hover {
     border-color: var(--primary-color);
 }
 
-/* Mobile Navigation */
-.mobile-menu-toggle {
+.c-nav__toggle {
     display: none;
     background: none;
     border: none;
@@ -124,21 +127,114 @@
     padding: var(--spacing-xs);
 }
 
+/* Navigation Icon Elements (Camera Logo) */
+.c-nav__icon {
+    width: 28px;
+    height: 28px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.c-nav__icon-body {
+    width: 24px;
+    height: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px;
+    position: relative;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1),
+                0 2px 4px rgba(102, 126, 234, 0.2);
+}
+
+.c-nav__icon-lens {
+    width: 13px;
+    height: 13px;
+    background: #333;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.c-nav__icon-lens-inner {
+    width: 9px;
+    height: 9px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.c-nav__icon-lens-glare {
+    width: 3px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+}
+
+.c-nav__icon-flash {
+    width: 5px;
+    height: 5px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-radius: 50%;
+    position: absolute;
+    top: 8%;
+    right: 10%;
+    box-shadow: 0 1px 3px rgba(255, 165, 0, 0.4);
+}
+
+.c-nav__icon-viewfinder {
+    width: 4px;
+    height: 3px;
+    background: #333;
+    border-radius: 1px;
+    position: absolute;
+    top: 8%;
+    left: 10%;
+}
+
+/* Skip Link (BEM) */
+.c-skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 0 0 4px 0;
+    z-index: 10001;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.c-skip-link:focus {
+    top: 0;
+}
+
+/* Mobile Navigation */
 @media (max-width: 768px) {
-    .main-nav {
-        /* Ensure nav stays properly positioned on mobile */
+    .c-nav {
         position: sticky;
         top: 0;
     }
 
-    .nav-container {
+    .c-nav__container {
         padding: var(--spacing-sm) var(--spacing-md);
     }
 
-    .nav-links {
+    .c-nav__links {
         position: fixed;
-        /* Position just below the nav - using CSS variable for nav height */
-        top: calc(56px + env(safe-area-inset-top, 0px)); /* Approximate nav height on mobile */
+        top: calc(56px + env(safe-area-inset-top, 0px));
         left: 0;
         right: 0;
         background: white;
@@ -149,45 +245,146 @@
         opacity: 0;
         pointer-events: none;
         transition: var(--transition);
-        z-index: 999; /* Just below nav's z-index of 1000 */
-        /* Add max height to prevent overflow on small screens */
+        z-index: 999;
         max-height: calc(100vh - 56px - env(safe-area-inset-top, 0px));
         overflow-y: auto;
     }
 
-    .nav-links.active {
+    .c-nav__links.is-active {
         transform: translateY(0);
         opacity: 1;
         pointer-events: all;
     }
 
-    .nav-link {
+    .c-nav__link {
         width: 100%;
         text-align: center;
         padding: var(--spacing-md);
     }
 
-    .mobile-menu-toggle {
+    .c-nav__toggle {
         display: block;
     }
 
-    /* Make language selector more compact on mobile */
-    .nav-language {
+    .c-nav__language {
         font-size: 13px;
         padding: 6px 8px;
     }
 
-    /* Adjust nav logo size on mobile */
-    .nav-logo {
+    .c-nav__logo {
         font-size: 16px;
         padding: 6px 12px;
     }
 }
 
 /* ============================================
-   WORKFLOW SELECTOR
+   WORKFLOW SELECTOR (BEM)
    ============================================ */
 
+/* Block: Workflow Selector */
+.c-workflow-selector {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: var(--spacing-3xl) var(--spacing-lg);
+    text-align: center;
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-3xl);
+}
+
+/* Element: Title */
+.c-workflow-selector__title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Element: Options Container */
+.c-workflow-selector__options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Block: Workflow Card */
+.c-workflow-card {
+    background: white;
+    padding: var(--spacing-2xl);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 12px var(--shadow);
+    transition: var(--transition);
+    cursor: pointer;
+    border: 3px solid transparent;
+}
+
+.c-workflow-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px var(--shadow-md);
+    border-color: var(--primary-color);
+}
+
+/* Modifier: Featured */
+.c-workflow-card--featured {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    position: relative;
+}
+
+.c-workflow-card--featured::before {
+    content: '⭐ Recommended';
+    position: absolute;
+    top: -12px;
+    right: var(--spacing-lg);
+    background: var(--warning-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Modifier: Upload */
+.c-workflow-card--upload {
+    /* Upload-specific styles handled by .c-upload component */
+}
+
+/* Element: Icon */
+.c-workflow-card__icon {
+    font-size: 48px;
+    margin-bottom: var(--spacing-md);
+}
+
+/* Element: Title */
+.c-workflow-card__title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Element: Description */
+.c-workflow-card__description {
+    font-size: 15px;
+    opacity: 0.8;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Button within workflow card */
+.c-workflow-card .c-button {
+    width: 100%;
+}
+
+.c-workflow-card--featured .c-button {
+    background: white;
+    color: var(--primary-color);
+}
+
+.c-workflow-card--featured .c-button:hover {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--primary-hover);
+}
+
+/* Legacy compatibility */
 .workflow-selector {
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     padding: var(--spacing-3xl) var(--spacing-lg);
@@ -274,11 +471,14 @@
     color: var(--primary-color);
 }
 
+/* Responsive */
 @media (max-width: 768px) {
+    .c-workflow-selector__options,
     .workflow-options {
         grid-template-columns: 1fr;
     }
 
+    .c-workflow-selector__title,
     .workflow-selector h2 {
         font-size: 24px;
     }

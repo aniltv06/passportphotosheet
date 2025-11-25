@@ -1,0 +1,27 @@
+{
+  "name": "passportphotosheet",
+  "version": "2.0.0",
+  "description": "Free passport photo maker to print cheap passport photos. Create photo sheets with multiple 2x2 inch passport photos.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build && gh-pages -d dist"
+  },
+  "keywords": [
+    "passport-photo",
+    "photo-maker",
+    "photo-sheet",
+    "print-photos"
+  ],
+  "author": "Photo Sheet Maker",
+  "license": "MIT",
+  "devDependencies": {
+    "gh-pages": "^6.1.0",
+    "vite": "^7.2.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

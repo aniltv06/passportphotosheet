@@ -170,15 +170,21 @@ export async function loadFooter() {
         return;
     }
 
+    // Determine the correct path prefix based on current page location
+    // If we're in public/pages/, links should be relative (same folder)
+    // If we're in root, links should include public/pages/ prefix
+    const isInPublicPages = window.location.pathname.includes('public/pages/');
+    const pathPrefix = isInPublicPages ? '' : 'public/pages/';
+
     // Inline footer HTML for file:// protocol or as fallback
     const footerHTML = `
         <footer class="footer" role="contentinfo">
             <div class="footer-content">
                 <ul class="footer-links">
-                    <li><a href="privacy-policy.html" data-i18n="privacyPolicy">Privacy Policy</a></li>
-                    <li><a href="terms-of-service.html" data-i18n="termsOfService">Terms of Service</a></li>
-                    <li><a href="contact.html" data-i18n="contact">Contact Us</a></li>
-                    <li><a href="faq.html" data-i18n="faq">FAQ</a></li>
+                    <li><a href="${pathPrefix}privacy-policy.html" data-i18n="privacyPolicy">Privacy Policy</a></li>
+                    <li><a href="${pathPrefix}terms-of-service.html" data-i18n="termsOfService">Terms of Service</a></li>
+                    <li><a href="${pathPrefix}contact.html" data-i18n="contact">Contact Us</a></li>
+                    <li><a href="${pathPrefix}faq.html" data-i18n="faq">FAQ</a></li>
                 </ul>
                 <p class="footer-text" data-i18n="footerText">
                     All processing happens in your browser. Your photos are never uploaded to any server.
@@ -206,7 +212,15 @@ export async function loadFooter() {
             if (!response.ok) {
                 throw new Error(`Failed to load footer: ${response.status}`);
             }
-            const html = await response.text();
+            let html = await response.text();
+
+            // Adjust paths based on current page location
+            if (!isInPublicPages) {
+                // Root pages: add public/pages/ prefix to links
+                html = html.replace(/href="(privacy-policy|terms-of-service|contact|faq)\.html"/g,
+                                  'href="public/pages/$1.html"');
+            }
+
             footerContainer.innerHTML = html;
             setCurrentYear();
         } catch (error) {

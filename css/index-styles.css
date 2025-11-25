@@ -460,9 +460,11 @@
         }
 
         /* Feature Cards - Glass Morphism */
+        /* Layout moved to common.css as .l-feature-grid */
+        /* Old .feature-grid class kept for backward compatibility */
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: var(--spacing-xl);
             margin-bottom: var(--spacing-3xl);
         }
@@ -744,8 +746,9 @@
         }
 
         .customize-panel {
-            position: sticky;
-            top: 100px;
+            /* Removed sticky positioning - was causing scroll issues */
+            /* position: sticky; */
+            /* top: 100px; */
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -992,6 +995,11 @@
             animation: fadeInUp 0.5s ease-out;
         }
 
+        /* Hide workflow selector when preview is active */
+        body:has(.preview-section.active) .c-workflow-selector {
+            display: none;
+        }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -1076,10 +1084,7 @@
                 gap: var(--spacing-xl);
             }
 
-            .customize-panel {
-                position: relative;
-                top: 0;
-            }
+            /* No need to override position since sticky is removed */
         }
 
         @media (max-width: 768px) {

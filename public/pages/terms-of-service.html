@@ -6,10 +6,10 @@
     <title>Terms of Service - Photo Sheet Maker</title>
     <meta name="description" content="Terms of Service for Photo Sheet Maker. Learn about the terms and conditions for using our service.">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://aniltv06.github.io/passportphotosheet/terms-of-service.html">
+    <link rel="canonical" href="https://aniltv06.github.io/passportphotosheet/public/pages/terms-of-service.html">
 
     <!-- Dynamic Cache Control - Automatically manages cache based on environment -->
-    <script type="module" src="js/meta-loader.js"></script>
+    <script type="module" src="../../js/core/meta-loader.js"></script>
 
     <style>
         :root {
@@ -528,53 +528,95 @@
     </style>
 
     <!-- UX Component Styles -->
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/ux-components.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/ux-components.css">
 </head>
 <body>
     <!-- Skip Link for Screen Readers -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a href="#main-content"
+       class="c-skip-link"
+       data-testid="skip-link"
+       data-action="skip-to-content"
+       data-i18n="skipToContent">
+        Skip to main content
+    </a>
 
     <!-- NAVIGATION HEADER -->
-    <nav class="main-nav" role="navigation" aria-label="Main navigation">
-        <div class="nav-container">
+    <nav class="c-nav"
+         role="navigation"
+         aria-label="Main navigation"
+         data-testid="main-nav"
+         data-component="navigation">
+        <div class="c-nav__container l-container">
             <!-- Logo -->
-            <a href="index.html" class="nav-logo" aria-label="Home">
-                📸 Photo Sheet Maker
+            <a href="../../index.html"
+               class="c-nav__logo"
+               aria-label="Home"
+               data-testid="nav-logo"
+               data-action="navigate-home">
+                <div class="c-nav__icon">
+                    <div class="c-nav__icon-body">
+                        <div class="c-nav__icon-viewfinder"></div>
+                        <div class="c-nav__icon-flash"></div>
+                        <div class="c-nav__icon-lens">
+                            <div class="c-nav__icon-lens-inner">
+                                <div class="c-nav__icon-lens-glare"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span class="c-nav__logo-text">Photo Sheet Maker</span>
             </a>
 
             <!-- Navigation Links -->
-            <div class="nav-links">
-                <a href="index.html" class="nav-link">
+            <div class="c-nav__links">
+                <a href="../../index.html"
+                   class="c-nav__link"
+                   data-testid="nav-link-home">
                     <span data-i18n="photoMaker">Photo Maker</span>
                 </a>
-                <a href="photo-editor.html" class="nav-link featured">
+                <a href="../../photo-editor.html"
+                   class="c-nav__link c-nav__link--featured"
+                   data-testid="nav-link-editor"
+                   data-variant="featured">
                     ✂️ <span data-i18n="photoEditor">Photo Editor</span>
                 </a>
-                <a href="faq.html" class="nav-link">
+                <a href="faq.html"
+                   class="c-nav__link"
+                   data-testid="nav-link-help">
                     <span data-i18n="help">Help</span>
                 </a>
             </div>
 
             <!-- Language Selector -->
-            <select id="languageSelect" class="nav-language" aria-label="Select language">
-                <option value="en">🇺🇸 English</option>
-                <option value="es">🇪🇸 Español</option>
-                <option value="fr">🇫🇷 Français</option>
-                <option value="de">🇩🇪 Deutsch</option>
-                <option value="pt">🇵🇹 Português</option>
-                <option value="it">🇮🇹 Italiano</option>
-                <option value="ja">🇯🇵 日本語</option>
-                <option value="ko">🇰🇷 한국어</option>
-                <option value="zh">🇨🇳 中文</option>
-                <option value="ar">🇸🇦 العربية</option>
-                <option value="hi">🇮🇳 हिन्दी</option>
-                <option value="ru">🇷🇺 Русский</option>
+            <select id="languageSelect"
+                    class="c-nav__language"
+                    aria-label="Select language"
+                    data-testid="language-select"
+                    data-component="select"
+                    data-value="en">
+                <option value="en" data-testid="lang-option-en">🇺🇸 English</option>
+                <option value="es" data-testid="lang-option-es">🇪🇸 Español</option>
+                <option value="fr" data-testid="lang-option-fr">🇫🇷 Français</option>
+                <option value="de" data-testid="lang-option-de">🇩🇪 Deutsch</option>
+                <option value="pt" data-testid="lang-option-pt">🇵🇹 Português</option>
+                <option value="it" data-testid="lang-option-it">🇮🇹 Italiano</option>
+                <option value="ja" data-testid="lang-option-ja">🇯🇵 日本語</option>
+                <option value="ko" data-testid="lang-option-ko">🇰🇷 한국어</option>
+                <option value="zh" data-testid="lang-option-zh">🇨🇳 中文</option>
+                <option value="ar" data-testid="lang-option-ar">🇸🇦 العربية</option>
+                <option value="hi" data-testid="lang-option-hi">🇮🇳 हिन्दी</option>
+                <option value="ru" data-testid="lang-option-ru">🇷🇺 Русский</option>
             </select>
 
             <!-- Mobile Menu Toggle -->
-            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+            <button class="c-nav__toggle"
+                    aria-label="Toggle mobile menu"
+                    aria-expanded="false"
+                    data-testid="nav-toggle"
+                    data-action="toggle-menu"
+                    data-state="collapsed">
                 ☰
             </button>
         </div>
@@ -598,7 +640,7 @@
             </div>
             <h1 class="hero-title" data-i18n="title">Terms of Service</h1>
             <p class="hero-subtitle" data-i18n="heroSubtitle">Please read these terms carefully before using our service</p>
-            <a href="index.html" class="hero-cta">
+            <a href="../../index.html" class="hero-cta">
                 <span data-i18n="backToHome">← Back to Home</span>
             </a>
         </div>
@@ -773,7 +815,7 @@
     <div id="footer-container"></div>
 
     <!-- Load translations from modular structure -->
-    <script type="module" src="translations/index.js"></script>
+    <script type="module" src="../../translations/index.js"></script>
 
     <script>
         'use strict';
@@ -832,7 +874,7 @@
     </script>
 
     <!-- Floating Home Button -->
-    <a href="index.html" class="floating-home-btn" aria-label="Go to home page" title="Back to Home">
+    <a href="../../index.html" class="floating-home-btn" aria-label="Go to home page" title="Back to Home">
         <div class="floating-camera-icon">
             <div class="floating-camera-body">
                 <div class="floating-viewfinder"></div>
@@ -848,10 +890,10 @@
 
     <!-- UX Components Initialization -->
     <script type="module">
-        import { initMobileNav, initStickyNav } from './js/ux-components.js';
+        import { initMobileNav, initStickyNav } from '../../js/components/ux-components.js';
 
         // Import common utilities
-        import { initCommon } from './js/common.js';
+        import { initCommon } from '../../js/apps/common.js';
 
         // Initialize basic UX components
         document.addEventListener('DOMContentLoaded', async () => {

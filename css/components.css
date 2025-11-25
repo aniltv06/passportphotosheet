@@ -193,7 +193,66 @@
     background: var(--danger-color);
 }
 
-/* Form Elements */
+/* ============================================
+   FORMS (BEM)
+   ============================================ */
+
+/* Block: Form */
+.c-form {
+    /* Base form styles */
+}
+
+/* Element: Form Group */
+.c-form__group {
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Element: Form Label */
+.c-form__label {
+    display: block;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Element: Form Input */
+.c-form__input,
+.c-form__select {
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-system);
+    font-size: 16px;
+    color: var(--text-primary);
+    transition: var(--transition);
+}
+
+.c-form__input:focus,
+.c-form__select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+}
+
+.c-form__input:disabled,
+.c-form__select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #F5F5F7;
+}
+
+/* Element: Form Hint */
+.c-form__hint {
+    display: block;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: var(--spacing-xs);
+}
+
+/* Legacy compatibility (for old class references) */
 .form-group {
     margin-bottom: var(--spacing-lg);
 }
@@ -470,5 +529,182 @@
     .panel .upload-icon,
     .left-panel .upload-icon {
         font-size: 40px !important;
+    }
+}
+
+/* ============================================
+   FEATURE CARDS (BEM)
+   ============================================ */
+
+/* Block: Feature Card */
+.c-feature-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    transition: var(--transition-smooth);
+}
+
+.c-feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* Element: Feature Card Icon */
+.c-feature-card__icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-lg);
+    box-shadow: 0 8px 24px rgba(0, 122, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.c-feature-card__icon svg {
+    width: 30px;
+    height: 30px;
+    color: white;
+}
+
+/* Element: Feature Card Title */
+.c-feature-card__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Element: Feature Card Description */
+.c-feature-card__description {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* ============================================
+   STAT CARDS (BEM)
+   Modern statistics display with glass-morphism
+   ============================================ */
+
+/* Layout: Stat Grid */
+.l-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Block: Stat Card */
+.c-stat-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    text-align: center;
+    border: 2px solid rgba(0, 122, 255, 0.1);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transition: var(--transition-smooth);
+    overflow: hidden;
+}
+
+/* Gradient background overlay */
+.c-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+        rgba(0, 122, 255, 0.03) 0%,
+        rgba(88, 86, 214, 0.03) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+}
+
+.c-stat-card:hover::before {
+    opacity: 1;
+}
+
+.c-stat-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 122, 255, 0.3);
+    box-shadow:
+        0 8px 20px rgba(0, 122, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Element: Stat Card Value */
+.c-stat-card__value {
+    position: relative;
+    z-index: 1;
+    display: block;
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-xs);
+    letter-spacing: -1px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Element: Stat Card Label */
+.c-stat-card__label {
+    position: relative;
+    z-index: 1;
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+}
+
+/* Variant: Count stat with icon */
+.c-stat-card[data-variant="count"] .c-stat-card__value::before {
+    content: '📊';
+    display: block;
+    font-size: 24px;
+    margin-bottom: var(--spacing-xs);
+    filter: grayscale(0.3);
+    opacity: 0.6;
+}
+
+/* Variant: Size stat with icon */
+.c-stat-card[data-variant="size"] .c-stat-card__value::before {
+    content: '📏';
+    display: block;
+    font-size: 24px;
+    margin-bottom: var(--spacing-xs);
+    filter: grayscale(0.3);
+    opacity: 0.6;
+}
+
+/* Responsive: Stack on very small screens */
+@media (max-width: 480px) {
+    .l-stat-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .c-stat-card__value {
+        font-size: 40px;
     }
 }

@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - Photo Sheet Maker</title>
-    <meta name="description" content="Privacy policy for Photo Sheet Maker. Learn how we protect your privacy and handle your data.">
+    <title>Contact Us - Photo Sheet Maker</title>
+    <meta name="description" content="Contact Photo Sheet Maker for support, feedback, or questions about our free passport photo tool.">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://aniltv06.github.io/passportphotosheet/privacy-policy.html">
+    <link rel="canonical" href="https://aniltv06.github.io/passportphotosheet/public/pages/contact.html">
 
     <!-- Dynamic Cache Control - Automatically manages cache based on environment -->
-    <script type="module" src="js/meta-loader.js"></script>
+    <script type="module" src="../../js/core/meta-loader.js"></script>
 
     <style>
         :root {
@@ -260,7 +260,8 @@
             padding: var(--spacing-4xl) 0;
             max-width: 800px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding-left: var(--spacing-lg);
+            padding-right: var(--spacing-lg);
         }
 
         /* Language Selector */
@@ -284,7 +285,7 @@
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
         }
 
-        .language-selector select {
+        .language-select {
             border: none;
             background: transparent;
             font-size: 14px;
@@ -298,7 +299,7 @@
             background-position: right 8px center;
         }
 
-        .language-selector select:focus {
+        .language-select:focus {
             outline: 2px solid var(--primary-color);
             outline-offset: 2px;
             border-radius: 4px;
@@ -414,18 +415,103 @@
             left: 12%;
         }
 
-        /* Content Styling */
-        h1 { color: #007AFF; margin-bottom: 10px; font-size: 42px; }
-        h2 { color: #007AFF; margin-top: 30px; font-size: 28px; }
-        h3 { color: #007AFF; margin-top: 20px; font-size: 22px; }
-        .last-updated { color: #666; font-size: 14px; margin-bottom: 30px; }
-        a { color: #007AFF; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        .highlight { background: #E3F2FD; padding: 15px; border-radius: 8px; margin: 20px 0; }
-        ul { margin-left: 20px; margin-bottom: 20px; }
-        li { margin-bottom: 8px; }
-        p { margin-bottom: 15px; }
-        hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-top: 30px;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        .contact-method {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-xl);
+            margin: var(--spacing-lg) 0;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            transition: var(--transition-smooth);
+        }
+
+        .contact-method:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .contact-method h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            margin: 10px 10px 10px 0;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 122, 255, 0.4);
+            text-decoration: none;
+            color: white;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(88, 86, 214, 0.05) 100%);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-lg);
+            margin: var(--spacing-lg) 0;
+            border-left: 4px solid var(--primary-color);
+            border: 1px solid rgba(0, 122, 255, 0.1);
+        }
+
+        ul {
+            padding-left: var(--spacing-xl);
+            margin: var(--spacing-md) 0;
+        }
+
+        ul li {
+            margin: var(--spacing-sm) 0;
+            line-height: 1.7;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 40px 0;
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -439,7 +525,7 @@
                 height: 90px;
             }
 
-            .hero-icon svg {
+            .hero-camera-icon {
                 width: 45px;
                 height: 45px;
             }
@@ -466,6 +552,12 @@
                 padding: var(--spacing-xl) var(--spacing-md);
             }
 
+            .btn {
+                display: block;
+                text-align: center;
+                margin: 10px 0;
+            }
+
             .floating-home-btn {
                 top: 20px;
                 left: 20px;
@@ -477,6 +569,25 @@
                 width: 30px;
                 height: 30px;
             }
+        }
+
+        /* Accessibility */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        *:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 3px;
+            border-radius: 4px;
         }
 
         /* Reduced Motion Support */
@@ -492,53 +603,95 @@
     </style>
 
     <!-- UX Component Styles -->
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/ux-components.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/ux-components.css">
 </head>
 <body>
     <!-- Skip Link for Screen Readers -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a href="#main-content"
+       class="c-skip-link"
+       data-testid="skip-link"
+       data-action="skip-to-content"
+       data-i18n="skipToContent">
+        Skip to main content
+    </a>
 
     <!-- NAVIGATION HEADER -->
-    <nav class="main-nav" role="navigation" aria-label="Main navigation">
-        <div class="nav-container">
+    <nav class="c-nav"
+         role="navigation"
+         aria-label="Main navigation"
+         data-testid="main-nav"
+         data-component="navigation">
+        <div class="c-nav__container l-container">
             <!-- Logo -->
-            <a href="index.html" class="nav-logo" aria-label="Home">
-                📸 Photo Sheet Maker
+            <a href="../../index.html"
+               class="c-nav__logo"
+               aria-label="Home"
+               data-testid="nav-logo"
+               data-action="navigate-home">
+                <div class="c-nav__icon">
+                    <div class="c-nav__icon-body">
+                        <div class="c-nav__icon-viewfinder"></div>
+                        <div class="c-nav__icon-flash"></div>
+                        <div class="c-nav__icon-lens">
+                            <div class="c-nav__icon-lens-inner">
+                                <div class="c-nav__icon-lens-glare"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span class="c-nav__logo-text">Photo Sheet Maker</span>
             </a>
 
             <!-- Navigation Links -->
-            <div class="nav-links">
-                <a href="index.html" class="nav-link">
+            <div class="c-nav__links">
+                <a href="../../index.html"
+                   class="c-nav__link"
+                   data-testid="nav-link-home">
                     <span data-i18n="photoMaker">Photo Maker</span>
                 </a>
-                <a href="photo-editor.html" class="nav-link featured">
+                <a href="../../photo-editor.html"
+                   class="c-nav__link c-nav__link--featured"
+                   data-testid="nav-link-editor"
+                   data-variant="featured">
                     ✂️ <span data-i18n="photoEditor">Photo Editor</span>
                 </a>
-                <a href="faq.html" class="nav-link">
+                <a href="faq.html"
+                   class="c-nav__link"
+                   data-testid="nav-link-help">
                     <span data-i18n="help">Help</span>
                 </a>
             </div>
 
             <!-- Language Selector -->
-            <select id="languageSelect" class="nav-language" aria-label="Select language">
-                <option value="en">🇺🇸 English</option>
-                <option value="es">🇪🇸 Español</option>
-                <option value="fr">🇫🇷 Français</option>
-                <option value="de">🇩🇪 Deutsch</option>
-                <option value="pt">🇵🇹 Português</option>
-                <option value="it">🇮🇹 Italiano</option>
-                <option value="ja">🇯🇵 日本語</option>
-                <option value="ko">🇰🇷 한국어</option>
-                <option value="zh">🇨🇳 中文</option>
-                <option value="ar">🇸🇦 العربية</option>
-                <option value="hi">🇮🇳 हिन्दी</option>
-                <option value="ru">🇷🇺 Русский</option>
+            <select id="languageSelect"
+                    class="c-nav__language"
+                    aria-label="Select language"
+                    data-testid="language-select"
+                    data-component="select"
+                    data-value="en">
+                <option value="en" data-testid="lang-option-en">🇺🇸 English</option>
+                <option value="es" data-testid="lang-option-es">🇪🇸 Español</option>
+                <option value="fr" data-testid="lang-option-fr">🇫🇷 Français</option>
+                <option value="de" data-testid="lang-option-de">🇩🇪 Deutsch</option>
+                <option value="pt" data-testid="lang-option-pt">🇵🇹 Português</option>
+                <option value="it" data-testid="lang-option-it">🇮🇹 Italiano</option>
+                <option value="ja" data-testid="lang-option-ja">🇯🇵 日本語</option>
+                <option value="ko" data-testid="lang-option-ko">🇰🇷 한국어</option>
+                <option value="zh" data-testid="lang-option-zh">🇨🇳 中文</option>
+                <option value="ar" data-testid="lang-option-ar">🇸🇦 العربية</option>
+                <option value="hi" data-testid="lang-option-hi">🇮🇳 हिन्दी</option>
+                <option value="ru" data-testid="lang-option-ru">🇷🇺 Русский</option>
             </select>
 
             <!-- Mobile Menu Toggle -->
-            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+            <button class="c-nav__toggle"
+                    aria-label="Toggle mobile menu"
+                    aria-expanded="false"
+                    data-testid="nav-toggle"
+                    data-action="toggle-menu"
+                    data-state="collapsed">
                 ☰
             </button>
         </div>
@@ -560,9 +713,9 @@
                     </div>
                 </div>
             </div>
-            <h1 class="hero-title" data-i18n="title">Privacy Policy</h1>
-            <p class="hero-subtitle" data-i18n="heroSubtitle">Your privacy matters. Learn how we protect your data and respect your rights</p>
-            <a href="index.html" class="hero-cta">
+            <h1 class="hero-title" data-i18n="title">Contact Us</h1>
+            <p class="hero-subtitle" data-i18n="heroSubtitle">We'd love to hear from you! Get in touch with any questions or feedback</p>
+            <a href="../../index.html" class="hero-cta">
                 <span data-i18n="backToHome">← Back to Home</span>
             </a>
         </div>
@@ -575,116 +728,74 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <p class="last-updated" data-i18n="lastUpdated">Last updated: January 20, 2025</p>
+        <p data-i18n="intro">We'd love to hear from you! Whether you have a question, feedback, or need help, we're here to assist.</p>
 
-        <div class="highlight">
-            <strong data-i18n="tldr">TL;DR:</strong> <span data-i18n="tldrText">We don't collect, store, or transmit your photos. Everything happens in your browser. We use analytics to improve the service, and you can opt out anytime.</span>
+        <div class="info-box">
+            <strong data-i18n="proTip">💡 Pro Tip:</strong> <span data-i18n="checkFaq">Check our <a href="faq.html">FAQ page</a> first - your question might already be answered there!</span>
         </div>
 
-        <h2 data-i18n="section1">1. Introduction</h2>
-        <p data-i18n="section1Text">Welcome to Photo Sheet Maker ("we," "our," or "us"). We are committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our website.</p>
+        <h2 data-i18n="getInTouch">Get in Touch</h2>
 
-        <h2 data-i18n="section2">2. Information We Don't Collect</h2>
-        <p><strong data-i18n="yourPhotos">Your Photos:</strong> <span data-i18n="section2Text1">All image processing happens entirely in your web browser. Your photos are NEVER uploaded to our servers or any third-party service. When you upload a photo, it stays on your device.</span></p>
+        <div class="contact-method">
+            <h3 data-i18n="emailSupport">📧 Email Support</h3>
+            <p data-i18n="emailDesc">For general inquiries, support, feedback, bug reports, or feature requests:</p>
+            <p><strong data-i18n="emailLabel">Email:</strong> <a href="mailto:aniltv06@gmail.com">aniltv06@gmail.com</a></p>
+            <p><em data-i18n="responseTime">We typically respond within 24-48 hours.</em></p>
+        </div>
 
-        <p><strong data-i18n="personalInfo">Personal Information:</strong> <span data-i18n="section2Text2">We do not require you to create an account, provide your name, email address, or any other personal information to use our service.</span></p>
+        <h2 data-i18n="connectWithMe">Connect With Me</h2>
+        <p data-i18n="findMeOn">Find me on these platforms:</p>
+        <p>
+            <a href="http://linkedin.com/in/anilthatha/" class="btn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://github.com/aniltv06" class="btn" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </p>
 
-        <h2 data-i18n="section3">3. Information We Collect</h2>
-        <p data-i18n="section3Intro">We use analytics services to understand how people use our tool and improve it. This includes:</p>
-
-        <h3 data-i18n="googleAnalytics">Google Analytics</h3>
+        <h2 data-i18n="beforeContact">Before You Contact Us</h2>
+        <p data-i18n="toHelpBetter">To help us assist you better:</p>
         <ul>
-            <li>Page views and navigation patterns</li>
-            <li>Device type and browser information</li>
-            <li>Approximate geographic location (country/city level)</li>
-            <li>Actions taken (upload, download, option changes)</li>
-            <li>Your IP address is anonymized</li>
+            <li data-i18n="checkFaqList">✅ Check the <a href="faq.html">FAQ page</a> for common questions</li>
+            <li data-i18n="reviewPrivacy">✅ Review our <a href="privacy-policy.html">Privacy Policy</a> for privacy questions</li>
+            <li data-i18n="readTerms">✅ Read the <a href="terms-of-service.html">Terms of Service</a> for legal questions</li>
+            <li data-i18n="modernBrowser">✅ Make sure you're using a modern, updated browser</li>
         </ul>
 
-        <h3 data-i18n="microsoftClarity">Microsoft Clarity</h3>
+        <h2 data-i18n="responseTimes">Response Times</h2>
+        <p data-i18n="aimToRespond">We aim to respond to all inquiries within:</p>
         <ul>
-            <li>Session recordings (showing cursor movement and clicks, but NOT your photos)</li>
-            <li>Heatmaps of where users click</li>
-            <li>General usage statistics</li>
+            <li><strong data-i18n="generalSupport">General support:</strong> <span data-i18n="time24">24-48 hours</span></li>
+            <li><strong data-i18n="bugReports">Bug reports:</strong> <span data-i18n="time48">48-72 hours</span></li>
+            <li><strong data-i18n="legal">Legal/privacy:</strong> <span data-i18n="time5">5-7 business days</span></li>
+            <li><strong data-i18n="featureRequests">Feature requests:</strong> <span data-i18n="featureNote">We read all suggestions, but may not respond individually</span></li>
         </ul>
 
-        <h2 data-i18n="section4">4. How We Use This Information</h2>
-        <p>We use analytics data to:</p>
+        <div class="info-box">
+            <strong data-i18n="important">⚠️ Important:</strong> <span data-i18n="cannotHelp">We cannot help with rejected passport photos or official application requirements. For those questions, please contact your local passport office or ID issuing authority directly.</span>
+        </div>
+
+        <h2 data-i18n="businessInquiries">Business Inquiries</h2>
+        <p data-i18n="forPartnership">For partnership, advertising, or business opportunities:</p>
+        <p><strong data-i18n="emailLabel">Email:</strong> <a href="mailto:aniltv06@gmail.com">aniltv06@gmail.com</a></p>
+
+        <h2 data-i18n="officeHours">Office Hours</h2>
+        <p data-i18n="toolAvailable">While our tool is available 24/7, support responses are typically:</p>
         <ul>
-            <li>Understand which features are most useful</li>
-            <li>Identify and fix bugs or errors</li>
-            <li>Improve the user experience</li>
-            <li>Make informed decisions about new features</li>
+            <li><strong data-i18n="weekdays">Monday - Friday:</strong> <span data-i18n="bestResponse">Best response times</span></li>
+            <li><strong data-i18n="weekends">Weekends:</strong> <span data-i18n="limitedAvailability">Limited availability</span></li>
+            <li><strong data-i18n="holidays">Holidays:</strong> <span data-i18n="closedHolidays">Closed on major holidays</span></li>
         </ul>
 
-        <h2 data-i18n="section5">5. Cookies and Tracking</h2>
-        <p>We use cookies for:</p>
-        <ul>
-            <li><strong>Analytics:</strong> Google Analytics and Microsoft Clarity use cookies to track your session</li>
-            <li><strong>Preferences:</strong> Remembering your settings (optional, stored locally in your browser)</li>
-        </ul>
-        <p>You can disable cookies in your browser settings, though this may limit some analytics functionality.</p>
+        <hr>
 
-        <h2 data-i18n="section6">6. Third-Party Services</h2>
-        <p>We use these third-party services:</p>
-        <ul>
-            <li><strong>Google Analytics:</strong> <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a></li>
-            <li><strong>Microsoft Clarity:</strong> <a href="https://privacy.microsoft.com/en-us/privacystatement" target="_blank">Privacy Policy</a></li>
-        </ul>
-
-        <h2 data-i18n="section7">7. Data Retention</h2>
-        <p>Since we don't store your photos or personal data, there's nothing for us to retain. Analytics data is retained according to Google and Microsoft's policies (typically 26-50 months, anonymized).</p>
-
-        <h2 data-i18n="section8">8. Your Rights</h2>
-        <p>You have the right to:</p>
-        <ul>
-            <li>Use our service without providing any personal information</li>
-            <li>Opt out of analytics tracking using browser extensions like <a href="https://tools.google.com/dlpage/gaoptout" target="_blank">Google Analytics Opt-out</a></li>
-            <li>Clear cookies from your browser at any time</li>
-            <li>Use ad blockers or privacy tools to prevent tracking</li>
-        </ul>
-
-        <h2 data-i18n="section9">9. Children's Privacy</h2>
-        <p>Our service does not knowingly collect information from children under 13. If you are a parent or guardian and believe your child has used our service, please note that no personal data is collected or stored.</p>
-
-        <h2 data-i18n="section10">10. Security</h2>
-        <p>Since all processing happens in your browser:</p>
-        <ul>
-            <li>Your photos never leave your device</li>
-            <li>We use HTTPS to secure the connection to our website</li>
-            <li>No photo data is transmitted over the internet</li>
-        </ul>
-
-        <h2 data-i18n="section11">11. Changes to This Policy</h2>
-        <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.</p>
-
-        <h2 data-i18n="section12">12. Contact Us</h2>
-        <p>If you have any questions about this Privacy Policy, please contact us at:</p>
-        <p>Email: <a href="mailto:aniltv06@gmail.com">aniltv06@gmail.com</a></p>
-
-        <h2 data-i18n="section13">13. GDPR Compliance (EU Users)</h2>
-        <p>If you are in the European Union:</p>
-        <ul>
-            <li>We do not process or store your photos (Article 5 - Data Minimization)</li>
-            <li>Analytics data is our legitimate interest (Article 6(1)(f))</li>
-            <li>You can opt out of tracking at any time</li>
-            <li>Your data is not sold or shared except with analytics providers</li>
-        </ul>
-
-        <h2 data-i18n="section14">14. California Privacy Rights (CCPA)</h2>
-        <p>California residents have the right to:</p>
-        <ul>
-            <li>Know what personal information is collected (see Section 3)</li>
-            <li>Request deletion of personal information (we don't store any)</li>
-            <li>Opt out of the sale of personal information (we don't sell data)</li>
-        </ul>
+        <p style="text-align: center;">
+            <a href="../../index.html" class="btn" data-i18n="usePhotoMaker">Use Photo Sheet Maker</a>
+        </p>
     </div>
 
     <!-- Footer Container - Loaded from components/footer.html -->
     <div id="footer-container"></div>
 
     <!-- Load translations from modular structure -->
-    <script type="module" src="translations/index.js"></script>
+    <script type="module" src="../../translations/index.js"></script>
 
     <script>
         'use strict';
@@ -743,7 +854,7 @@
     </script>
 
     <!-- Floating Home Button -->
-    <a href="index.html" class="floating-home-btn" aria-label="Go to home page" title="Back to Home">
+    <a href="../../index.html" class="floating-home-btn" aria-label="Go to home page" title="Back to Home">
         <div class="floating-camera-icon">
             <div class="floating-camera-body">
                 <div class="floating-viewfinder"></div>
@@ -759,10 +870,10 @@
 
     <!-- UX Components Initialization -->
     <script type="module">
-        import { initMobileNav, initStickyNav } from './js/ux-components.js';
+        import { initMobileNav, initStickyNav } from '../../js/components/ux-components.js';
 
         // Import common utilities
-        import { initCommon } from './js/common.js';
+        import { initCommon } from '../../js/apps/common.js';
 
         // Initialize basic UX components
         document.addEventListener('DOMContentLoaded', async () => {

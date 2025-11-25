@@ -3,12 +3,12 @@
  * Main coordinator for photo editing functionality
  */
 
-import { CanvasEditor } from './modules/canvas-editor.js';
-import { GuidelinesManager } from './modules/guidelines-manager.js';
-import { CropManager } from './modules/crop-manager.js';
-import { PhotoExporter } from './modules/photo-exporter.js';
-import { debounce, showError, announceToScreenReader, getElement, toggleVisibility } from './utils/dom-utils.js';
-import { trackEvent, trackPageView, trackPhotoUpload, trackError } from './utils/analytics.js';
+import { CanvasEditor } from '../modules/canvas-editor.js';
+import { GuidelinesManager } from '../modules/guidelines-manager.js';
+import { CropManager } from '../modules/crop-manager.js';
+import { PhotoExporter } from '../modules/photo-exporter.js';
+import { debounce, showError, announceToScreenReader, getElement, toggleVisibility } from '../utils/dom-utils.js';
+import { trackEvent, trackPageView, trackPhotoUpload, trackError } from '../utils/analytics.js';
 
 /**
  * Photo Editor App Class

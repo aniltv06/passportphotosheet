@@ -3,7 +3,7 @@
  * Interactive functionality for improved UX components
  */
 
-import { trackEvent } from './analytics.js';
+import { trackEvent } from '../utils/analytics.js';
 
 /**
  * Mobile Navigation Toggle

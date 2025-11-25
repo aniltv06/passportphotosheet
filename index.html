@@ -51,7 +51,7 @@
     <!-- Dynamic Cache Control - Automatically manages cache based on environment -->
     <!-- Development: Disables cache for easier testing -->
     <!-- Production: Enables cache for better performance -->
-    <script type="module" src="js/meta-loader.js"></script>
+    <script type="module" src="js/core/meta-loader.js"></script>
 
     <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://www.googletagmanager.com">
@@ -127,1335 +127,190 @@
     }
     </script>
 
-    <style>
-        :root {
-            --primary-color: #007AFF;
-            --primary-hover: #0051D5;
-            --secondary-color: #5856D6;
-            --accent-color: #FF2D55;
-            --success-color: #34C759;
-            --warning-color: #FF9500;
-            --danger-color: #FF3B30;
-            --text-primary: #1D1D1F;
-            --text-secondary: #86868B;
-            --background: #FFFFFF;
-            --surface: #FFFFFF;
-            --border: #D2D2D7;
-            --shadow: rgba(0, 0, 0, 0.08);
-            --shadow-md: rgba(0, 0, 0, 0.12);
-            --shadow-lg: rgba(0, 0, 0, 0.16);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 20px;
-            --radius-xl: 24px;
-            --spacing-xs: 8px;
-            --spacing-sm: 12px;
-            --spacing-md: 16px;
-            --spacing-lg: 24px;
-            --spacing-xl: 32px;
-            --spacing-2xl: 48px;
-            --spacing-3xl: 64px;
-            --spacing-4xl: 96px;
-            --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Navigation Camera Icon */
-        .nav-camera-icon {
-            width: 28px;
-            height: 28px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .nav-camera-body {
-            width: 100%;
-            height: 70%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 4px;
-            position: absolute;
-            bottom: 50%;
-            transform: translateY(50%);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        }
-        .nav-lens {
-            width: 13px;
-            height: 13px;
-            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        .nav-lens-inner {
-            width: 9px;
-            height: 9px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
-        }
-        .nav-lens-glare {
-            width: 3px;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 50%;
-            position: absolute;
-            top: 25%;
-            left: 25%;
-        }
-        .nav-flash {
-            width: 5px;
-            height: 5px;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            border-radius: 50%;
-            position: absolute;
-            top: 8%;
-            right: 10%;
-            box-shadow: 0 1px 3px rgba(255, 165, 0, 0.4);
-        }
-        .nav-viewfinder {
-            width: 4px;
-            height: 3px;
-            background: #333;
-            border-radius: 1px;
-            position: absolute;
-            top: 8%;
-            left: 10%;
-        }
-
-        /* Upload Card Specific Styles */
-        .workflow-card.upload-card {
-            padding: 0;
-            overflow: hidden;
-        }
-
-        .workflow-card.upload-card .upload-area {
-            margin: 0;
-            padding: 40px 30px;
-            border: 2px dashed var(--border);
-            border-radius: var(--radius-lg);
-            background: var(--surface);
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-            min-height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .workflow-card.upload-card .upload-area:hover {
-            border-color: var(--primary-color);
-            background: rgba(0, 122, 255, 0.02);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px var(--shadow-md);
-        }
-
-        .workflow-card.upload-card .upload-area.drag-over {
-            border-color: var(--success-color);
-            background: rgba(52, 199, 89, 0.05);
-            transform: scale(1.02);
-        }
-
-        .workflow-card.upload-card .upload-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-
-        .workflow-card.upload-card .upload-text {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 8px;
-        }
-
-        .workflow-card.upload-card .upload-hint {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        /* Skip Link for Accessibility */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: var(--primary-color);
-            color: white;
-            padding: 8px 16px;
-            text-decoration: none;
-            border-radius: 0 0 4px 0;
-            z-index: 100;
-            font-weight: 600;
-        }
-
-        .skip-link:focus {
-            top: 0;
-        }
-
-        body {
-            font-family: var(--font-system);
-            background: var(--background);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 var(--spacing-lg);
-        }
-
-        /* Hero Section - Apple Style */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: var(--spacing-4xl) var(--spacing-lg);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-            animation: pulse 10s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .hero-icon {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto var(--spacing-xl);
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .hero-icon svg {
-            width: 60px;
-            height: 60px;
-        }
-
-        /* Hero Camera Icon */
-        .hero-camera-icon {
-            width: 60px;
-            height: 60px;
-            position: relative;
-        }
-        .hero-camera-body {
-            width: 100%;
-            height: 70%;
-            background: white;
-            border-radius: 8px;
-            position: absolute;
-            bottom: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        .hero-lens {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow:
-                inset 0 1px 3px rgba(0, 0, 0, 0.1),
-                0 2px 4px rgba(0, 0, 0, 0.15);
-        }
-        .hero-lens-inner {
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-        .hero-lens-glare {
-            width: 6px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            position: absolute;
-            top: 25%;
-            left: 25%;
-        }
-        .hero-flash {
-            width: 10px;
-            height: 10px;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            border-radius: 50%;
-            position: absolute;
-            top: 15%;
-            right: 15%;
-            box-shadow: 0 2px 6px rgba(255, 165, 0, 0.4);
-        }
-        .hero-viewfinder {
-            width: 8px;
-            height: 6px;
-            background: #333;
-            border-radius: 2px;
-            position: absolute;
-            top: 12%;
-            left: 15%;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .hero-title {
-            font-size: clamp(48px, 8vw, 72px);
-            font-weight: 700;
-            color: white;
-            margin-bottom: var(--spacing-lg);
-            letter-spacing: -2px;
-            line-height: 1.1;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(18px, 3vw, 24px);
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: var(--spacing-2xl);
-            font-weight: 400;
-            line-height: 1.5;
-        }
-
-        .hero-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            padding: 18px 36px;
-            background: white;
-            color: var(--primary-color);
-            border-radius: 980px;
-            font-size: 18px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition-smooth);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: var(--spacing-2xl);
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(10px); }
-        }
-
-        .scroll-indicator svg {
-            width: 24px;
-            height: 24px;
-            color: white;
-            opacity: 0.7;
-        }
-
-        /* Main Content Section */
-        .main-content {
-            background: var(--background);
-            padding: var(--spacing-4xl) 0;
-        }
-
-        /* Language Selector */
-        .language-selector {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 12px;
-            padding: 10px 14px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: var(--transition);
-        }
-
-        .language-selector:hover {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .language-selector select {
-            border: none;
-            background: transparent;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-            cursor: pointer;
-            padding: 4px 24px 4px 8px;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%231D1D1F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 8px center;
-        }
-
-        .language-selector select:focus {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-            border-radius: 4px;
-        }
-
-        /* Section Headers */
-        .section-header {
-            text-align: center;
-            margin-bottom: var(--spacing-3xl);
-        }
-
-        .section-title {
-            font-size: clamp(32px, 5vw, 48px);
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-md);
-            letter-spacing: -1px;
-        }
-
-        .section-subtitle {
-            font-size: clamp(16px, 3vw, 20px);
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Header */
-        .header {
-            display: none; /* Hidden in new design - hero replaces it */
-        }
-
-        /* Feature Cards - Glass Morphism */
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--spacing-xl);
-            margin-bottom: var(--spacing-3xl);
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-xl);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-            transition: var(--transition-smooth);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: var(--spacing-lg);
-            box-shadow: 0 8px 24px rgba(0, 122, 255, 0.3);
-        }
-
-        .feature-icon svg {
-            width: 30px;
-            height: 30px;
-            color: white;
-        }
-
-        .feature-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .feature-description {
-            font-size: 16px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        /* Card */
-        .card {
-            background: var(--surface);
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-3xl);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-            margin-bottom: var(--spacing-3xl);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        /* Info Banner - Redesigned */
-        .info-banner {
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(88, 86, 214, 0.05) 100%);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-xl);
-            margin-bottom: var(--spacing-3xl);
-            border-left: 4px solid var(--primary-color);
-            border: 1px solid rgba(0, 122, 255, 0.1);
-        }
-
-        .info-banner-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-md);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-        }
-
-        .info-banner-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .info-banner-list li {
-            padding: 10px 0;
-            color: var(--text-secondary);
-            font-size: 16px;
-            display: flex;
-            align-items: flex-start;
-            gap: var(--spacing-md);
-            line-height: 1.6;
-        }
-
-        .info-banner-list li::before {
-            content: "✨";
-            flex-shrink: 0;
-            font-size: 20px;
-        }
-
-        /* Upload Section - Modernized */
-        .upload-section-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: var(--spacing-xl);
-            margin-bottom: var(--spacing-3xl);
-            align-items: start;
-        }
-
-        .upload-area {
-            border: 2px dashed var(--border);
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-2xl);
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            background: #FAFAFA;
-            min-height: 280px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .upload-actions {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-lg);
-        }
-
-        .action-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-xl);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-            transition: var(--transition-smooth);
-            text-align: center;
-        }
-
-        .action-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .action-text {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: var(--spacing-md);
-            font-weight: 500;
-        }
-
-        .upload-area:hover {
-            border-color: var(--primary-color);
-            background: #FFFFFF;
-            transform: scale(1.01);
-            box-shadow: 0 20px 40px rgba(0, 122, 255, 0.1);
-        }
-
-        .upload-area.dragover {
-            border-color: var(--primary-color);
-            background: rgba(0, 122, 255, 0.05);
-            transform: scale(1.02);
-            box-shadow: 0 20px 60px rgba(0, 122, 255, 0.2);
-        }
-
-        .upload-area.has-image {
-            border-color: var(--success-color);
-            background: rgba(52, 199, 89, 0.05);
-            border-style: solid;
-            box-shadow: 0 20px 40px rgba(52, 199, 89, 0.15);
-        }
-
-        .upload-icon {
-            font-size: 64px;
-            margin-bottom: var(--spacing-lg);
-            opacity: 0.6;
-            transition: var(--transition);
-            position: relative;
-            z-index: 1;
-        }
-
-        .upload-area:hover .upload-icon {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-
-        .upload-text {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-sm);
-            position: relative;
-            z-index: 1;
-        }
-
-        .upload-hint {
-            font-size: 15px;
-            color: var(--text-secondary);
-            position: relative;
-            z-index: 1;
-        }
-
-        .upload-success {
-            display: none;
-            color: var(--success-color);
-            font-weight: 700;
-            font-size: 18px;
-            margin-top: var(--spacing-md);
-            position: relative;
-            z-index: 1;
-            animation: bounceIn 0.5s;
-        }
-
-        @keyframes bounceIn {
-            0% { opacity: 0; transform: scale(0.3); }
-            50% { transform: scale(1.05); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        .upload-area.has-image .upload-success {
-            display: block;
-        }
-
-        /* Demo Button */
-        .demo-btn {
-            display: inline-block;
-            padding: 14px 32px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        .demo-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
-        }
-
-        .demo-btn:active {
-            transform: translateY(0);
-        }
-
-        #fileInput {
-            display: none;
-        }
-
-        /* Section Title */
-        .section-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-lg);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-        }
-
-        /* Customize & Preview Layout */
-        .customize-preview-layout {
-            display: grid;
-            grid-template-columns: 380px 1fr;
-            gap: var(--spacing-3xl);
-            margin-top: var(--spacing-2xl);
-            align-items: start;
-        }
-
-        .customize-panel {
-            position: sticky;
-            top: 100px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-xl);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-        }
-
-        .customize-panel .section-title {
-            font-size: 22px;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .preview-panel {
-            min-width: 0;
-        }
-
-        /* Options Stack */
-        .options-stack {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-lg);
-        }
-
-        /* Options Grid */
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-2xl);
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-sm);
-        }
-
-        .form-label {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-primary);
-            display: block;
-        }
-
-        .form-hint {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: -4px;
-        }
-
-        .form-select {
-            padding: 16px 18px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-md);
-            font-size: 16px;
-            font-family: var(--font-system);
-            background: var(--surface);
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: var(--transition);
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='14' height='9' viewBox='0 0 14 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L7 7.5L13 1.5' stroke='%2386868B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 18px center;
-            padding-right: 50px;
-            font-weight: 600;
-        }
-
-        .form-select:hover {
-            border-color: var(--primary-color);
-            background-color: #FAFBFC;
-        }
-
-        .form-select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.12);
-        }
-
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-2xl);
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: var(--spacing-xl);
-            border-radius: var(--radius-lg);
-            text-align: center;
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
-            transition: var(--transition);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
-        }
-
-        .stat-value {
-            font-size: 42px;
-            font-weight: 800;
-            margin-bottom: var(--spacing-xs);
-            display: block;
-            letter-spacing: -1px;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            opacity: 0.95;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Canvas Section */
-        .canvas-wrapper {
-            background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-2xl);
-            margin-bottom: var(--spacing-2xl);
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        .canvas-label {
-            font-size: 15px;
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-lg);
-            font-weight: 600;
-        }
-
-        .canvas-container {
-            display: inline-block;
-            position: relative;
-            max-width: 100%;
-        }
-
-        canvas {
-            max-width: 100%;
-            height: auto;
-            border-radius: var(--radius-md);
-            box-shadow: 0 12px 40px var(--shadow-lg);
-            background: white;
-            display: block;
-        }
-
-        /* Buttons */
-        .button-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: var(--spacing-md);
-        }
-
-        .btn {
-            padding: 18px 32px;
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: 17px;
-            font-weight: 700;
-            font-family: var(--font-system);
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-sm);
-            text-decoration: none;
-            white-space: nowrap;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%);
-            color: white;
-            box-shadow: 0 4px 16px rgba(0, 122, 255, 0.4);
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 122, 255, 0.5);
-        }
-
-        .btn-primary:active:not(:disabled) {
-            transform: translateY(0);
-        }
-
-        .btn-secondary {
-            background: var(--surface);
-            color: var(--text-primary);
-            border: 2px solid var(--border);
-            box-shadow: 0 2px 8px var(--shadow);
-        }
-
-        .btn-secondary::before {
-            display: none;
-        }
-
-        .btn-secondary:hover:not(:disabled) {
-            background: var(--background);
-            border-color: var(--primary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px var(--shadow-md);
-        }
-
-        /* Preview Section */
-        .preview-section {
-            display: none;
-        }
-
-        .preview-section.active {
-            display: block;
-            animation: fadeInUp 0.5s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Instructions */
-        .instructions {
-            background: var(--surface);
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-2xl);
-            margin-top: var(--spacing-xl);
-            box-shadow: 0 8px 32px var(--shadow-lg);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-
-        .instructions-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-xl);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-
-        .instructions-list {
-            list-style: none;
-            counter-reset: step;
-        }
-
-        .instructions-list li {
-            counter-increment: step;
-            padding: var(--spacing-lg) 0;
-            color: var(--text-secondary);
-            font-size: 16px;
-            display: flex;
-            gap: var(--spacing-lg);
-            line-height: 1.7;
-        }
-
-        .instructions-list li::before {
-            content: counter(step);
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            font-weight: 800;
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
-        }
-
-        /* Footer */
-        .footer {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-2xl);
-            margin-top: var(--spacing-xl);
-            box-shadow: 0 8px 32px var(--shadow-lg);
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        /* Footer styles moved to css/common.css */
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .customize-preview-layout {
-                grid-template-columns: 1fr;
-                gap: var(--spacing-xl);
-            }
-
-            .customize-panel {
-                position: relative;
-                top: 0;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero {
-                min-height: 90vh;
-                padding: var(--spacing-3xl) var(--spacing-md);
-            }
-
-            .hero-icon {
-                width: 90px;
-                height: 90px;
-            }
-
-            .hero-icon svg {
-                width: 45px;
-                height: 45px;
-            }
-
-            .hero-title {
-                font-size: 36px;
-            }
-
-            .hero-subtitle {
-                font-size: 18px;
-            }
-
-            .hero-cta {
-                padding: 16px 28px;
-                font-size: 16px;
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .language-selector {
-                top: 10px;
-                right: 10px;
-            }
-
-            .card {
-                padding: var(--spacing-xl);
-            }
-
-            .header {
-                padding-top: var(--spacing-lg);
-            }
-
-            .stat-value {
-                font-size: 32px;
-            }
-
-            .button-group {
-                grid-template-columns: 1fr;
-            }
-
-            .options-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .upload-section-wrapper {
-                grid-template-columns: 1fr;
-            }
-
-            .upload-actions {
-                margin-top: var(--spacing-lg);
-            }
-
-            .instructions {
-                padding: var(--spacing-xl);
-            }
-
-            .footer {
-                padding: var(--spacing-xl);
-            }
-
-            .main-content {
-                padding: var(--spacing-xl) 0;
-            }
-        }
-
-        /* Accessibility */
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        /* Enhanced Focus Styles */
-        *:focus-visible {
-            outline: 3px solid var(--primary-color);
-            outline-offset: 3px;
-            border-radius: 4px;
-        }
-
-        /* High Contrast Mode Support */
-        @media (prefers-contrast: high) {
-            :root {
-                --border: #000000;
-                --text-secondary: #000000;
-            }
-        }
-
-        /* Reduced Motion Support */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* Loading State */
-        .loading::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 32px;
-            height: 32px;
-            margin: -16px 0 0 -16px;
-            border: 4px solid var(--primary-color);
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Print styles */
-        @media print {
-            body {
-                background: white;
-            }
-            .card, .instructions, .footer {
-                box-shadow: none;
-            }
-            .btn, .upload-area, .info-banner, .footer, .language-selector {
-                display: none;
-            }
-        }
-    </style>
-
     <!-- UX Component Styles -->
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/index-styles.css">
     <link rel="stylesheet" href="css/ux-components.css">
     <link rel="stylesheet" href="css/sticky-scroll.css">
 </head>
 <body>
     <!-- Skip Link for Screen Readers -->
-    <a href="#main-content" class="skip-link" data-i18n="skipToContent">Skip to main content</a>
+    <a href="#main-content"
+       class="c-skip-link"
+       data-testid="skip-link"
+       data-action="skip-to-content"
+       data-i18n="skipToContent">
+        Skip to main content
+    </a>
+
+    <!-- ARIA Live Region for Status Announcements -->
+    <div id="ariaLiveRegion"
+         role="status"
+         aria-live="polite"
+         aria-atomic="true"
+         class="u-visually-hidden visually-hidden"
+         data-testid="aria-live-region">
+        <!-- Dynamic status messages will be announced here -->
+    </div>
+
+    <!-- Keyboard Navigation Hint (Day 8) -->
+    <div id="keyboardHint"
+         class="c-keyboard-hint"
+         role="status"
+         aria-live="polite"
+         data-testid="keyboard-hint">
+        <div class="c-keyboard-hint__text">
+            <span class="c-keyboard-hint__icon" aria-hidden="true">⌨️</span>
+            <span data-i18n="keyboardHint">Press Tab to navigate, Enter to activate, Escape to cancel</span>
+        </div>
+    </div>
 
     <!-- NAVIGATION HEADER -->
-    <nav class="main-nav" role="navigation" aria-label="Main navigation">
-        <div class="nav-container">
+    <nav class="c-nav"
+         role="navigation"
+         aria-label="Main navigation"
+         data-testid="main-nav"
+         data-component="navigation">
+        <div class="c-nav__container l-container">
             <!-- Logo -->
-            <a href="index.html" class="nav-logo" aria-label="Home">
-                <div class="nav-camera-icon">
-                    <div class="nav-camera-body">
-                        <div class="nav-viewfinder"></div>
-                        <div class="nav-flash"></div>
-                        <div class="nav-lens">
-                            <div class="nav-lens-inner">
-                                <div class="nav-lens-glare"></div>
+            <a href="index.html"
+               class="c-nav__logo"
+               aria-label="Home"
+               data-testid="nav-logo"
+               data-action="navigate-home">
+                <div class="c-nav__icon">
+                    <div class="c-nav__icon-body">
+                        <div class="c-nav__icon-viewfinder"></div>
+                        <div class="c-nav__icon-flash"></div>
+                        <div class="c-nav__icon-lens">
+                            <div class="c-nav__icon-lens-inner">
+                                <div class="c-nav__icon-lens-glare"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <span>Photo Sheet Maker</span>
+                <span class="c-nav__logo-text">Photo Sheet Maker</span>
             </a>
 
             <!-- Navigation Links -->
-            <div class="nav-links">
-                <a href="index.html" class="nav-link active" aria-current="page">
+            <div class="c-nav__links">
+                <a href="index.html"
+                   class="c-nav__link c-nav__link--active"
+                   aria-current="page"
+                   data-testid="nav-link-home"
+                   data-state="active">
                     <span data-i18n="photoMaker">Photo Maker</span>
                 </a>
-                <a href="photo-editor.html" class="nav-link featured">
+                <a href="photo-editor.html"
+                   class="c-nav__link c-nav__link--featured"
+                   data-testid="nav-link-editor"
+                   data-variant="featured">
                     ✂️ <span data-i18n="photoEditor">Photo Editor</span>
                 </a>
-                <a href="faq.html" class="nav-link">
+                <a href="public/pages/faq.html"
+                   class="c-nav__link"
+                   data-testid="nav-link-help">
                     <span data-i18n="help">Help</span>
                 </a>
             </div>
 
             <!-- Language Selector -->
-            <select id="languageSelect" class="nav-language" aria-label="Select language">
-                <option value="en">🇺🇸 English</option>
-                <option value="es">🇪🇸 Español</option>
-                <option value="fr">🇫🇷 Français</option>
-                <option value="de">🇩🇪 Deutsch</option>
-                <option value="pt">🇵🇹 Português</option>
-                <option value="it">🇮🇹 Italiano</option>
-                <option value="ja">🇯🇵 日本語</option>
-                <option value="ko">🇰🇷 한국어</option>
-                <option value="zh">🇨🇳 中文</option>
-                <option value="ar">🇸🇦 العربية</option>
-                <option value="hi">🇮🇳 हिन्दी</option>
-                <option value="ru">🇷🇺 Русский</option>
+            <select id="languageSelect"
+                    class="c-nav__language"
+                    aria-label="Select language"
+                    data-testid="language-select"
+                    data-component="select"
+                    data-value="en">
+                <option value="en" data-testid="lang-option-en">🇺🇸 English</option>
+                <option value="es" data-testid="lang-option-es">🇪🇸 Español</option>
+                <option value="fr" data-testid="lang-option-fr">🇫🇷 Français</option>
+                <option value="de" data-testid="lang-option-de">🇩🇪 Deutsch</option>
+                <option value="pt" data-testid="lang-option-pt">🇵🇹 Português</option>
+                <option value="it" data-testid="lang-option-it">🇮🇹 Italiano</option>
+                <option value="ja" data-testid="lang-option-ja">🇯🇵 日本語</option>
+                <option value="ko" data-testid="lang-option-ko">🇰🇷 한국어</option>
+                <option value="zh" data-testid="lang-option-zh">🇨🇳 中文</option>
+                <option value="ar" data-testid="lang-option-ar">🇸🇦 العربية</option>
+                <option value="hi" data-testid="lang-option-hi">🇮🇳 हिन्दी</option>
+                <option value="ru" data-testid="lang-option-ru">🇷🇺 Русский</option>
             </select>
 
             <!-- Mobile Menu Toggle -->
-            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+            <button class="c-nav__toggle"
+                    aria-label="Toggle mobile menu"
+                    aria-expanded="false"
+                    data-testid="nav-toggle"
+                    data-action="toggle-menu"
+                    data-state="collapsed">
                 ☰
             </button>
         </div>
     </nav>
 
     <!-- Container for main content -->
-    <div class="container">
+    <div class="l-container" data-testid="main-container" data-layout="container">
         <!-- WORKFLOW SELECTOR -->
-        <section class="workflow-selector" aria-labelledby="workflow-title">
-            <h2 id="workflow-title" data-i18n="chooseWorkflow">Choose Your Workflow</h2>
+        <section class="c-workflow-selector"
+                 aria-labelledby="workflow-title"
+                 data-testid="workflow-selector"
+                 data-component="workflow-selector">
+            <h2 id="workflow-title"
+                class="c-workflow-selector__title"
+                data-i18n="chooseWorkflow"
+                data-testid="workflow-title">Choose Your Workflow</h2>
 
-            <div class="workflow-options">
+            <div class="c-workflow-selector__options"
+                 data-testid="workflow-options">
                 <!-- Option 1: Upload Ready Photo -->
-                <div class="workflow-card upload-card" tabindex="0" aria-label="I have a ready photo">
+                <div class="c-workflow-card c-workflow-card--upload"
+                     tabindex="0"
+                     aria-label="I have a ready photo"
+                     data-testid="workflow-card-upload"
+                     data-component="workflow-card"
+                     data-variant="upload">
                     <!-- Upload UI will be dynamically generated by photoHandler.js -->
-                    <div id="uploadContainer"></div>
+                    <div id="uploadContainer" data-testid="upload-container"></div>
                 </div>
 
                 <!-- Option 2: Need to Edit Photo (Featured) -->
-                <div class="workflow-card featured" tabindex="0" role="button" aria-label="I need to edit a photo">
-                    <div class="workflow-icon">✂️</div>
-                    <h3 data-i18n="needToEdit">I Need to Edit a Photo</h3>
-                    <p data-i18n="needToEditDesc">Crop, resize, or rotate first</p>
-                    <a href="photo-editor.html" class="btn">
-                        <span data-i18n="openPhotoEditor">Open Photo Editor</span>
+                <div class="c-workflow-card c-workflow-card--featured"
+                     tabindex="0"
+                     role="button"
+                     aria-label="I need to edit a photo"
+                     data-testid="workflow-card-editor"
+                     data-component="workflow-card"
+                     data-variant="featured">
+                    <div class="c-workflow-card__icon" data-testid="workflow-icon">✂️</div>
+                    <h3 class="c-workflow-card__title"
+                        data-i18n="needToEdit"
+                        data-testid="workflow-card-title">I Need to Edit a Photo</h3>
+                    <p class="c-workflow-card__description"
+                       data-i18n="needToEditDesc"
+                       data-testid="workflow-card-description">Crop, resize, or rotate first</p>
+                    <a href="photo-editor.html"
+                       class="c-button c-button--primary"
+                       data-testid="open-editor-button"
+                       data-component="button"
+                       data-variant="primary"
+                       data-action="navigate-editor">
+                        <span class="c-button__text" data-i18n="openPhotoEditor">Open Photo Editor</span>
                     </a>
                 </div>
             </div>
 
             <!-- Demo Button Below Workflow Cards -->
             <div style="text-align: center; margin-top: 20px;">
-                <button type="button" class="demo-btn" id="demoBtn" aria-label="Try with demo photo" style="font-size: 14px; padding: 10px 20px;">
-                    <span data-i18n="tryDemo">🎨 Try Demo Photo</span>
+                <button type="button"
+                        class="c-button c-button--demo"
+                        id="demoBtn"
+                        aria-label="Try with demo photo"
+                        data-testid="demo-button"
+                        data-component="button"
+                        data-variant="demo"
+                        data-action="load-demo"
+                        style="font-size: 14px; padding: 10px 20px;">
+                    <span class="c-button__text" data-i18n="tryDemo">🎨 Try Demo Photo</span>
                 </button>
             </div>
         </section>
@@ -1463,7 +318,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-    <div class="container">
+    <div class="l-container" data-testid="content-container" data-layout="container">
         <header class="header" role="banner">
             <span class="header-icon" aria-hidden="true">📸</span>
             <h1 class="header-title" data-i18n="title">Photo Sheet Maker</h1>
@@ -1471,52 +326,82 @@
         </header>
 
         <!-- Feature Cards Section -->
-        <section class="feature-grid" style="margin-bottom: var(--spacing-4xl);">
-            <div class="feature-card">
-                <div class="feature-icon">
+        <section class="l-feature-grid"
+                 style="margin-bottom: var(--spacing-4xl);"
+                 data-testid="feature-section"
+                 data-layout="feature-grid">
+            <div class="c-feature-card" data-testid="feature-card-upload" data-variant="upload">
+                <div class="c-feature-card__icon" data-testid="feature-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
                 </div>
-                <h3 class="feature-title" data-i18n="feature1Title">Upload Your Photo</h3>
-                <p class="feature-description" data-i18n="feature1Desc">Simply upload your 2×2 inch passport photo. Works with JPG and PNG formats.</p>
+                <h3 class="c-feature-card__title"
+                    data-i18n="feature1Title"
+                    data-testid="feature-title">Upload Your Photo</h3>
+                <p class="c-feature-card__description"
+                   data-i18n="feature1Desc"
+                   data-testid="feature-description">Simply upload your 2×2 inch passport photo. Works with JPG and PNG formats.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">
+            <div class="c-feature-card" data-testid="feature-card-customize" data-variant="customize">
+                <div class="c-feature-card__icon" data-testid="feature-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                     </svg>
                 </div>
-                <h3 class="feature-title" data-i18n="feature2Title">Customize Layout</h3>
-                <p class="feature-description" data-i18n="feature2Desc">Choose from 4×6, 5×7, or 8×10 inch sheets. Fit up to 20 photos on one sheet.</p>
+                <h3 class="c-feature-card__title"
+                    data-i18n="feature2Title"
+                    data-testid="feature-title">Customize Layout</h3>
+                <p class="c-feature-card__description"
+                   data-i18n="feature2Desc"
+                   data-testid="feature-description">Choose from 4×6, 5×7, or 8×10 inch sheets. Fit up to 20 photos on one sheet.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">
+            <div class="c-feature-card" data-testid="feature-card-download" data-variant="download">
+                <div class="c-feature-card__icon" data-testid="feature-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
                 </div>
-                <h3 class="feature-title" data-i18n="feature3Title">Download & Print</h3>
-                <p class="feature-description" data-i18n="feature3Desc">Download high-quality 300 DPI images. Print at any photo service worldwide.</p>
+                <h3 class="c-feature-card__title"
+                    data-i18n="feature3Title"
+                    data-testid="feature-title">Download & Print</h3>
+                <p class="c-feature-card__description"
+                   data-i18n="feature3Desc"
+                   data-testid="feature-description">Download high-quality 300 DPI images. Print at any photo service worldwide.</p>
             </div>
         </section>
 
         <main id="main-content" role="main">
-            <div class="card">
-                <div class="info-banner" role="complementary" aria-label="Quick start guide">
-                    <h2 class="info-banner-title">
+            <div class="c-card"
+                 data-testid="main-content-card"
+                 data-component="card">
+                <div class="c-info-banner"
+                     role="complementary"
+                     aria-label="Quick start guide"
+                     data-testid="info-banner"
+                     data-component="info-banner">
+                    <h2 class="c-info-banner__title"
+                        data-testid="info-banner-title">
                         <span aria-hidden="true">💡</span>
                         <span data-i18n="benefitsTitle">Why Use Photo Sheet Maker?</span>
                     </h2>
-                    <ul class="info-banner-list">
-                        <li data-i18n="benefit1">Upload your 2×2 inch (51×51mm) passport or ID photo</li>
-                        <li data-i18n="benefit2">Arrange multiple copies on one standard print sheet</li>
-                        <li data-i18n="benefit3">Download and print at any photo printing service worldwide</li>
-                        <li data-i18n="benefit4">Save money - print up to 20 photos on a single sheet!</li>
-                        <li data-i18n="benefit5">100% free, no watermarks, no signup required</li>
+                    <ul class="c-info-banner__list"
+                        data-testid="info-banner-list">
+                        <li data-i18n="benefit1"
+                            data-testid="info-banner-item">Upload your 2×2 inch (51×51mm) passport or ID photo</li>
+                        <li data-i18n="benefit2"
+                            data-testid="info-banner-item">Arrange multiple copies on one standard print sheet</li>
+                        <li data-i18n="benefit3"
+                            data-testid="info-banner-item">Download and print at any photo printing service worldwide</li>
+                        <li data-i18n="benefit4"
+                            data-testid="info-banner-item">Save money - print up to 20 photos on a single sheet!</li>
+                        <li data-i18n="benefit5"
+                            data-testid="info-banner-item">100% free, no watermarks, no signup required</li>
                     </ul>
-                    <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0,122,255,0.2); font-size: 13px; color: #666; line-height: 1.5;">
-                        <strong>⚠️ Important Disclaimer:</strong> This tool arranges photos on a sheet for printing. You are responsible for ensuring your original photo meets official passport/ID requirements. We do not guarantee acceptance by any authority. Use at your own discretion. See <a href="terms-of-service.html" style="color: #007AFF;">Terms of Service</a>.
+                    <p class="c-info-banner__disclaimer"
+                       style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0,122,255,0.2); font-size: 13px; color: #666; line-height: 1.5;"
+                       data-testid="info-banner-disclaimer">
+                        <strong>⚠️ Important Disclaimer:</strong> This tool arranges photos on a sheet for printing. You are responsible for ensuring your original photo meets official passport/ID requirements. We do not guarantee acceptance by any authority. Use at your own discretion. See <a href="public/pages/terms-of-service.html" style="color: #007AFF;">Terms of Service</a>.
                     </p>
                 </div>
 
@@ -1543,52 +428,91 @@
                 </div>
 
                 <section class="preview-section" id="previewSection" aria-label="Preview and download your photo sheet">
-                    <div class="customize-preview-layout">
+                    <div class="l-customize-preview"
+                         data-testid="customize-preview-layout"
+                         data-layout="customize-preview">
                         <!-- Left Side: Customization Options -->
-                        <div class="customize-panel" data-sticky data-sticky-offset="80" data-sticky-behavior="fixed">
+                        <div class="customize-panel">
                             <h2 class="section-title">
                                 <span aria-hidden="true">⚙️</span>
                                 <span data-i18n="customizeTitle">Customize Your Sheet</span>
                             </h2>
 
-                            <form class="options-stack" id="optionsForm">
-                                <div class="form-group">
-                                    <label for="paperSize" class="form-label" data-i18n="sheetSizeLabel">Sheet Size</label>
-                                    <select id="paperSize" class="form-select" aria-label="Select print sheet size">
-                                        <option value="4x6" selected data-i18n="size4x6">Standard 4×6" Print (6 photos)</option>
-                                        <option value="5x7" data-i18n="size5x7">Medium 5×7" Print (6 photos)</option>
-                                        <option value="8x10" data-i18n="size8x10">Large 8×10" Print (20 photos) ⭐ Best Value</option>
+                            <form class="c-form c-form--stack"
+                                  id="optionsForm"
+                                  data-testid="customization-form"
+                                  data-component="form"
+                                  data-variant="stack">
+                                <div class="c-form__group" data-testid="form-group-size">
+                                    <label for="paperSize"
+                                           class="c-form__label"
+                                           data-i18n="sheetSizeLabel"
+                                           data-testid="form-label-size">Sheet Size</label>
+                                    <select id="paperSize"
+                                            class="c-form__select"
+                                            aria-label="Select print sheet size"
+                                            data-testid="form-select-size"
+                                            data-component="select"
+                                            data-field="paperSize">
+                                        <option value="4x6" selected data-i18n="size4x6" data-testid="size-option-4x6">Standard 4×6" Print (6 photos)</option>
+                                        <option value="5x7" data-i18n="size5x7" data-testid="size-option-5x7">Medium 5×7" Print (6 photos)</option>
+                                        <option value="8x10" data-i18n="size8x10" data-testid="size-option-8x10">Large 8×10" Print (20 photos) ⭐ Best Value</option>
                                     </select>
-                                    <div class="form-hint" data-i18n="sheetSizeHint">Choose the print size you want to order</div>
+                                    <div class="c-form__hint"
+                                         data-i18n="sheetSizeHint"
+                                         data-testid="form-hint-size">Choose the print size you want to order</div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="quality" class="form-label" data-i18n="qualityLabel">Photo Quality</label>
-                                    <select id="quality" class="form-select" aria-label="Select photo print quality">
-                                        <option value="high" data-i18n="qualityHigh">Professional (300 DPI) ⭐ Recommended</option>
-                                        <option value="medium" data-i18n="qualityMedium">Standard (200 DPI)</option>
+                                <div class="c-form__group" data-testid="form-group-quality">
+                                    <label for="quality"
+                                           class="c-form__label"
+                                           data-i18n="qualityLabel"
+                                           data-testid="form-label-quality">Photo Quality</label>
+                                    <select id="quality"
+                                            class="c-form__select"
+                                            aria-label="Select photo print quality"
+                                            data-testid="form-select-quality"
+                                            data-component="select"
+                                            data-field="quality">
+                                        <option value="high" data-i18n="qualityHigh" data-testid="quality-option-high">Professional (300 DPI) ⭐ Recommended</option>
+                                        <option value="medium" data-i18n="qualityMedium" data-testid="quality-option-medium">Standard (200 DPI)</option>
                                     </select>
-                                    <div class="form-hint" data-i18n="qualityHint">Higher quality for clearer photos</div>
+                                    <div class="c-form__hint"
+                                         data-i18n="qualityHint"
+                                         data-testid="form-hint-quality">Higher quality for clearer photos</div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="cuttingGuide" class="form-label" data-i18n="cuttingGuideLabel">Cutting Guide</label>
-                                    <select id="cuttingGuide" class="form-select" aria-label="Select cutting guide option">
-                                        <option value="none-none" selected data-i18n="guideNoGuides">No Guides (Maximum Photos) ⭐</option>
-                                        <option value="small-none" data-i18n="guideCuttingLines">Cutting Lines Between Photos</option>
-                                        <option value="none-thin" data-i18n="guideBorderGuide">Border Guide Inside Photos</option>
-                                        <option value="small-thin" data-i18n="guideFullGuidance">Full Guidance (Lines + Border)</option>
+                                <div class="c-form__group" data-testid="form-group-cutting">
+                                    <label for="cuttingGuide"
+                                           class="c-form__label"
+                                           data-i18n="cuttingGuideLabel"
+                                           data-testid="form-label-cutting">Cutting Guide</label>
+                                    <select id="cuttingGuide"
+                                            class="c-form__select"
+                                            aria-label="Select cutting guide option"
+                                            data-testid="form-select-cutting"
+                                            data-component="select"
+                                            data-field="cuttingGuide">
+                                        <option value="none-none" selected data-i18n="guideNoGuides" data-testid="cutting-option-none">No Guides (Maximum Photos) ⭐</option>
+                                        <option value="small-none" data-i18n="guideCuttingLines" data-testid="cutting-option-lines">Cutting Lines Between Photos</option>
+                                        <option value="none-thin" data-i18n="guideBorderGuide" data-testid="cutting-option-border">Border Guide Inside Photos</option>
+                                        <option value="small-thin" data-i18n="guideFullGuidance" data-testid="cutting-option-full">Full Guidance (Lines + Border)</option>
                                     </select>
-                                    <div class="form-hint" id="cuttingGuideHint">
+                                    <div class="c-form__hint"
+                                         id="cuttingGuideHint"
+                                         data-testid="form-hint-cutting">
                                         <span data-i18n="cuttingGuideHint">Choose how you want to cut your photos</span>
-                                        <span id="cuttingGuideDisabledHint" style="display: none; color: var(--warning-color);" data-i18n="cuttingGuideDisabledHint">Not available for this sheet size</span>
+                                        <span id="cuttingGuideDisabledHint"
+                                              style="display: none; color: var(--warning-color);"
+                                              data-i18n="cuttingGuideDisabledHint"
+                                              data-testid="cutting-disabled-hint">Not available for this sheet size</span>
                                     </div>
                                 </div>
                             </form>
                         </div>
 
                         <!-- Right Side: Preview -->
-                        <div class="preview-panel" data-sticky data-sticky-offset="80" data-sticky-behavior="fixed">
+                        <div class="preview-panel">
                             <h2 class="section-title">
                                 <span aria-hidden="true">👁️</span>
                                 <span data-i18n="previewTitle">Your Photo Sheet</span>
@@ -1601,25 +525,49 @@
                                 </div>
                             </div>
 
-                            <div class="stats-grid">
-                                <div class="stat-card">
-                                    <span class="stat-value" id="photoCount">20</span>
-                                    <span class="stat-label" data-i18n="statPhotos">Photos Included</span>
+                            <div class="l-stat-grid"
+                                 data-testid="stats-grid"
+                                 data-layout="stat-grid">
+                                <div class="c-stat-card" data-testid="stat-card-count" data-variant="count">
+                                    <span class="c-stat-card__value"
+                                          id="photoCount"
+                                          data-testid="photo-count">20</span>
+                                    <span class="c-stat-card__label"
+                                          data-i18n="statPhotos"
+                                          data-testid="stat-label">Photos Included</span>
                                 </div>
-                                <div class="stat-card">
-                                    <span class="stat-value" id="sheetSize">8×10"</span>
-                                    <span class="stat-label" data-i18n="statSize">Print Size</span>
+                                <div class="c-stat-card" data-testid="stat-card-size" data-variant="size">
+                                    <span class="c-stat-card__value"
+                                          id="sheetSize"
+                                          data-testid="sheet-size">8×10"</span>
+                                    <span class="c-stat-card__label"
+                                          data-i18n="statSize"
+                                          data-testid="stat-label">Print Size</span>
                                 </div>
                             </div>
 
-                            <div class="button-group">
-                                <button type="button" class="btn btn-primary" id="downloadBtn" aria-label="Download your photo sheet">
-                                    <span aria-hidden="true">⬇️</span>
-                                    <span data-i18n="downloadBtn">Download Photo Sheet</span>
+                            <div class="l-button-group">
+                                <button type="button"
+                                        class="c-button c-button--primary"
+                                        id="downloadBtn"
+                                        aria-label="Download your photo sheet"
+                                        data-testid="download-button"
+                                        data-component="button"
+                                        data-variant="primary"
+                                        data-action="download">
+                                    <span class="c-button__icon" aria-hidden="true">⬇️</span>
+                                    <span class="c-button__text" data-i18n="downloadBtn">Download Photo Sheet</span>
                                 </button>
-                                <button type="button" class="btn btn-secondary" id="resetBtn" aria-label="Start over with a new photo">
-                                    <span aria-hidden="true">↻</span>
-                                    <span data-i18n="resetBtn">Start Over</span>
+                                <button type="button"
+                                        class="c-button c-button--secondary"
+                                        id="resetBtn"
+                                        aria-label="Start over with a new photo"
+                                        data-testid="reset-button"
+                                        data-component="button"
+                                        data-variant="secondary"
+                                        data-action="reset">
+                                    <span class="c-button__icon" aria-hidden="true">↻</span>
+                                    <span class="c-button__text" data-i18n="resetBtn">Start Over</span>
                                 </button>
                             </div>
                         </div>
@@ -1650,6 +598,9 @@
         <!-- Footer Container - Loaded from components/footer.html -->
         <div id="footer-container"></div>
     </div>
+
+    <!-- HEIC to JPEG/PNG Converter Library -->
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 
     <!-- Load translations from modular structure -->
     <script type="module" src="translations/index.js"></script>
@@ -1783,13 +734,22 @@
         }
 
         function announceToScreenReader(message) {
-            const announcement = document.createElement('div');
-            announcement.setAttribute('role', 'status');
-            announcement.setAttribute('aria-live', 'polite');
-            announcement.className = 'visually-hidden';
-            announcement.textContent = message;
-            document.body.appendChild(announcement);
-            setTimeout(() => announcement.remove(), 1000);
+            // Use dedicated ARIA live region for announcements
+            const liveRegion = document.getElementById('ariaLiveRegion');
+            if (liveRegion) {
+                // Clear previous message
+                liveRegion.textContent = '';
+
+                // Add new message after a brief delay to ensure it's announced
+                setTimeout(() => {
+                    liveRegion.textContent = message;
+                }, 100);
+
+                // Clear message after 3 seconds to prevent clutter
+                setTimeout(() => {
+                    liveRegion.textContent = '';
+                }, 3000);
+            }
         }
 
         function validateImageFile(file) {
@@ -1799,6 +759,79 @@
             }
 
             return true;
+        }
+
+        // ======================================
+        // Enhanced Focus Management (Day 8)
+        // ======================================
+
+        /**
+         * Move focus to an element and announce it to screen readers
+         * @param {string} selector - CSS selector for the target element
+         * @param {string} announcement - Message to announce to screen readers
+         */
+        function manageFocus(selector, announcement) {
+            const element = document.querySelector(selector);
+            if (element) {
+                // Make element focusable if it isn't already
+                if (!element.hasAttribute('tabindex')) {
+                    element.setAttribute('tabindex', '-1');
+                }
+
+                // Focus the element
+                element.focus();
+
+                // Announce to screen readers
+                if (announcement) {
+                    announceToScreenReader(announcement);
+                }
+
+                // Remove temporary tabindex after focus
+                if (element.getAttribute('tabindex') === '-1') {
+                    element.addEventListener('blur', function removeTabindex() {
+                        element.removeAttribute('tabindex');
+                        element.removeEventListener('blur', removeTabindex);
+                    }, { once: true });
+                }
+            }
+        }
+
+        /**
+         * Trap focus within a container for modal-like interactions
+         * @param {HTMLElement} container - Container element to trap focus within
+         * @returns {Function} - Cleanup function to remove focus trap
+         */
+        function trapFocus(container) {
+            const focusableElements = container.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstFocusable = focusableElements[0];
+            const lastFocusable = focusableElements[focusableElements.length - 1];
+
+            function handleTabKey(e) {
+                if (e.key === 'Tab') {
+                    if (e.shiftKey) {
+                        // Shift + Tab
+                        if (document.activeElement === firstFocusable) {
+                            e.preventDefault();
+                            lastFocusable.focus();
+                        }
+                    } else {
+                        // Tab
+                        if (document.activeElement === lastFocusable) {
+                            e.preventDefault();
+                            firstFocusable.focus();
+                        }
+                    }
+                }
+            }
+
+            container.addEventListener('keydown', handleTabKey);
+
+            // Return cleanup function
+            return () => {
+                container.removeEventListener('keydown', handleTabKey);
+            };
         }
 
         // ======================================
@@ -2252,6 +1285,34 @@
             }
         });
 
+        // Keyboard Navigation Hint (Day 8)
+        // Show hint when user first uses Tab key
+        let keyboardHintShown = localStorage.getItem('keyboardHintShown');
+        if (!keyboardHintShown) {
+            const showKeyboardHint = (e) => {
+                if (e.key === 'Tab') {
+                    const hint = document.getElementById('keyboardHint');
+                    if (hint) {
+                        // Show hint
+                        hint.classList.add('is-visible');
+
+                        // Hide after 5 seconds
+                        setTimeout(() => {
+                            hint.classList.remove('is-visible');
+                        }, 5000);
+
+                        // Mark as shown in localStorage
+                        localStorage.setItem('keyboardHintShown', 'true');
+
+                        // Remove this listener
+                        document.removeEventListener('keydown', showKeyboardHint);
+                    }
+                }
+            };
+
+            document.addEventListener('keydown', showKeyboardHint);
+        }
+
         // Initialize
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
@@ -2288,12 +1349,11 @@
             initEditorBanner,
             initTooltips,
             initStickyNav,
-            ProgressSteps,
-            OnboardingModal
-        } from './js/ux-components.js';
+            ProgressSteps
+        } from './js/components/ux-components.js';
 
         // Import common utilities
-        import { initCommon } from './js/common.js';
+        import { initCommon } from './js/apps/common.js';
 
         // Initialize UX components
         document.addEventListener('DOMContentLoaded', async () => {
@@ -2304,10 +1364,10 @@
                     <footer class="footer" role="contentinfo">
                         <div class="footer-content">
                             <ul class="footer-links">
-                                <li><a href="privacy-policy.html" data-i18n="privacyPolicy">Privacy Policy</a></li>
-                                <li><a href="terms-of-service.html" data-i18n="termsOfService">Terms of Service</a></li>
-                                <li><a href="contact.html" data-i18n="contact">Contact Us</a></li>
-                                <li><a href="faq.html" data-i18n="faq">FAQ</a></li>
+                                <li><a href="public/pages/privacy-policy.html" data-i18n="privacyPolicy">Privacy Policy</a></li>
+                                <li><a href="public/pages/terms-of-service.html" data-i18n="termsOfService">Terms of Service</a></li>
+                                <li><a href="public/pages/contact.html" data-i18n="contact">Contact Us</a></li>
+                                <li><a href="public/pages/faq.html" data-i18n="faq">FAQ</a></li>
                             </ul>
                             <p class="footer-text" data-i18n="footerText">
                                 All processing happens in your browser. Your photos are never uploaded to any server.
@@ -2333,8 +1393,8 @@
             // Load and initialize UX components if available
             if (window.location.protocol !== 'file:') {
                 try {
-                    const { initMobileNav, initWorkflowSelector, initEditorBanner, initTooltips, initStickyNav, ProgressSteps } = await import('./js/ux-components.js');
-                    const { initStickyScroll } = await import('./js/sticky-scroll.js');
+                    const { initMobileNav, initWorkflowSelector, initEditorBanner, initTooltips, initStickyNav, ProgressSteps } = await import('./js/components/ux-components.js');
+                    const { initStickyScroll } = await import('./js/components/sticky-scroll.js');
 
                     initMobileNav();
                     initWorkflowSelector();
@@ -2386,7 +1446,7 @@
     <!-- Photo Handler Module Integration -->
     <!-- ================================================== -->
     <script type="module">
-        import { initIndexPagePhotoUpload, handleStartOver } from './js/photoHandler-index.js';
+        import { initIndexPagePhotoUpload, handleStartOver } from './js/photo/photoHandler-index.js';
 
         // Photo handler instance
         let photoHandler = null;
@@ -2406,6 +1466,19 @@
 
                 // Call existing createComposite function
                 createComposite();
+
+                // Enhanced Focus Management (Day 8)
+                // Move focus to preview section after photo is loaded
+                setTimeout(() => {
+                    const previewSection = document.getElementById('previewSection');
+                    if (previewSection) {
+                        manageFocus(
+                            '#previewSection',
+                            window.translations[currentLang]?.srPreviewReady ||
+                            'Your photo sheet preview is ready. Navigate through the customization options or download your sheet.'
+                        );
+                    }
+                }, 500); // Small delay to ensure preview is rendered
             });
 
             console.log('Photo handler initialized for index page');
@@ -2441,6 +1514,17 @@
                             'event_label': 'Start Over'
                         });
                     }
+
+                    // Enhanced Focus Management (Day 8)
+                    // Return focus to workflow selector after reset
+                    setTimeout(() => {
+                        const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+                        manageFocus(
+                            '.c-workflow-selector',
+                            window.translations[currentLang]?.srResetComplete ||
+                            'Reset complete. You can now upload a new photo or use the demo.'
+                        );
+                    }, 500);
 
                     // Scroll back to upload area
                     const uploadArea = document.getElementById('uploadArea');

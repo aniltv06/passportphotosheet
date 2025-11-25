@@ -3,6 +3,8 @@
  * Helper functions for DOM manipulation and events
  */
 
+import { showError as showErrorNotification, showSuccess, showWarning, showInfo } from './notification-manager.js';
+
 /**
  * Debounce function to limit event handler execution
  * @param {Function} func - Function to debounce
@@ -22,13 +24,35 @@ export function debounce(func, wait) {
 }
 
 /**
- * Show error message to user
+ * Show error message to user using notification system
  * @param {string} message - Error message
+ * @param {Object} options - Notification options
  */
-export function showError(message) {
-    alert(message);
+export function showError(message, options = {}) {
     console.error(message);
+    showErrorNotification(message, options);
 }
+
+/**
+ * Show success message to user
+ * @param {string} message - Success message
+ * @param {Object} options - Notification options
+ */
+export { showSuccess };
+
+/**
+ * Show warning message to user
+ * @param {string} message - Warning message
+ * @param {Object} options - Notification options
+ */
+export { showWarning };
+
+/**
+ * Show info message to user
+ * @param {string} message - Info message
+ * @param {Object} options - Notification options
+ */
+export { showInfo };
 
 /**
  * Announce message to screen readers

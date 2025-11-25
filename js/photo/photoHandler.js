@@ -227,16 +227,19 @@ class PhotoUploadHandler {
         // Drag and drop
         this.uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
-            this.uploadArea.classList.add('dragover');
+            this.uploadArea.classList.add('is-dragover');
+            this.uploadArea.setAttribute('data-state', 'dragover');
         });
 
         this.uploadArea.addEventListener('dragleave', () => {
-            this.uploadArea.classList.remove('dragover');
+            this.uploadArea.classList.remove('is-dragover');
+            this.uploadArea.setAttribute('data-state', 'ready');
         });
 
         this.uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
-            this.uploadArea.classList.remove('dragover');
+            this.uploadArea.classList.remove('is-dragover');
+            this.uploadArea.setAttribute('data-state', 'ready');
             const file = e.dataTransfer.files[0];
             if (file) {
                 this.handleFileUpload(file);
@@ -268,50 +271,179 @@ class PhotoUploadHandler {
      * @throws {Error} If file is not valid
      */
     validateImageFile(file) {
-        if (!file.type.startsWith('image/')) {
-            throw new Error('Please upload an image file (JPG, PNG, etc.)');
+        // Accept image/* types and also check for HEIC/HEIF by extension
+        const isHEIC = file.name.toLowerCase().match(/\.(heic|heif)$/);
+
+        if (!file.type.startsWith('image/') && !isHEIC) {
+            throw new Error('Please upload an image file.');
         }
 
         // No file size restriction - allow images of any size
+        // Accept all image formats (JPG, PNG, GIF, WEBP, BMP, TIFF, SVG, HEIC, etc.)
 
         return true;
+    }
+
+    /**
+     * Check if file is HEIC/HEIF format
+     * @param {File} file - File to check
+     * @returns {boolean}
+     */
+    isHEIC(file) {
+        return file.type === 'image/heic' ||
+               file.type === 'image/heif' ||
+               file.name.toLowerCase().match(/\.(heic|heif)$/);
+    }
+
+    /**
+     * Wait for heic2any library to load
+     * @returns {Promise<void>}
+     */
+    async waitForHeic2any() {
+        // If already loaded, return immediately
+        if (typeof window.heic2any !== 'undefined') {
+            return;
+        }
+
+        // Wait up to 5 seconds for the library to load
+        const maxWaitTime = 5000;
+        const checkInterval = 100;
+        let waited = 0;
+
+        return new Promise((resolve, reject) => {
+            const checkInterval = setInterval(() => {
+                waited += 100;
+
+                if (typeof window.heic2any !== 'undefined') {
+                    clearInterval(checkInterval);
+                    console.log('heic2any library loaded successfully');
+                    resolve();
+                } else if (waited >= maxWaitTime) {
+                    clearInterval(checkInterval);
+                    console.error('heic2any library failed to load after', maxWaitTime, 'ms');
+                    reject(new Error('HEIC converter library failed to load'));
+                }
+            }, 100);
+        });
+    }
+
+    /**
+     * Convert HEIC to JPEG
+     * @param {File} file - HEIC file to convert
+     * @returns {Promise<Blob>} Converted JPEG blob
+     */
+    async convertHEIC(file) {
+        try {
+            console.log('Starting HEIC conversion for:', file.name, 'Size:', file.size, 'Type:', file.type);
+
+            // Wait for heic2any library to load if needed
+            await this.waitForHeic2any();
+
+            console.log('heic2any library found, starting conversion...');
+
+            // Convert HEIC to JPEG
+            const convertedBlob = await window.heic2any({
+                blob: file,
+                toType: 'image/jpeg',
+                quality: 0.95
+            });
+
+            console.log('Conversion successful! Result:', convertedBlob);
+
+            // Handle array result (sometimes heic2any returns array)
+            const blob = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob;
+
+            console.log('Final blob:', blob.size, 'bytes, type:', blob.type);
+
+            return blob;
+        } catch (error) {
+            console.error('HEIC conversion error details:', {
+                message: error.message,
+                stack: error.stack,
+                fileName: file.name,
+                fileSize: file.size,
+                fileType: file.type
+            });
+
+            // Provide more specific error messages
+            if (error.message.includes('not loaded') || error.message.includes('failed to load')) {
+                throw new Error('HEIC converter library not loaded. Please refresh the page and try again.');
+            } else if (error.message.includes('fetch')) {
+                throw new Error('Unable to process HEIC image. The file may be corrupted. Please try a different image.');
+            } else {
+                throw new Error(`Unable to convert HEIC image: ${error.message}. You can try converting it to JPG or PNG first.`);
+            }
+        }
     }
 
     /**
      * Handle file upload
      * @param {File} file - File to upload
      */
-    handleFileUpload(file) {
+    async handleFileUpload(file) {
         try {
+            console.log('handleFileUpload called with file:', file.name, file.type, file.size);
             this.validateImageFile(file);
+
+            let fileToProcess = file;
+
+            // Convert HEIC to JPEG if needed
+            if (this.isHEIC(file)) {
+                console.log('HEIC file detected, starting conversion...');
+                try {
+                    const convertedBlob = await this.convertHEIC(file);
+                    console.log('Conversion successful, blob size:', convertedBlob.size, 'type:', convertedBlob.type);
+
+                    // Create a new File object from the blob
+                    fileToProcess = new File([convertedBlob],
+                        file.name.replace(/\.(heic|heif)$/i, '.jpg'),
+                        { type: 'image/jpeg' }
+                    );
+
+                    console.log('HEIC image converted to JPEG:', fileToProcess.name, fileToProcess.size);
+                } catch (conversionError) {
+                    console.error('HEIC conversion error:', conversionError);
+                    // Show user-friendly error
+                    this.config.onError(conversionError.message);
+                    return;
+                }
+            }
 
             const reader = new FileReader();
 
             reader.onload = (e) => {
-                this.loadImageFromDataURL(e.target.result, {
-                    size: file.size,
-                    type: file.type,
-                    name: file.name
+                const dataURL = e.target.result;
+                console.log('FileReader loaded, dataURL length:', dataURL?.length || 0);
+                console.log('DataURL prefix:', dataURL?.substring(0, 50) || 'empty');
+
+                this.loadImageFromDataURL(dataURL, {
+                    size: fileToProcess.size,
+                    type: fileToProcess.type,
+                    name: fileToProcess.name
                 });
 
                 // Track upload
                 if (this.config.analytics) {
                     this.config.analytics('photo_uploaded', {
-                        file_size: file.size,
-                        file_type: file.type,
-                        source: 'file_upload'
+                        file_size: fileToProcess.size,
+                        file_type: fileToProcess.type,
+                        source: 'file_upload',
+                        was_heic: this.isHEIC(file)
                     });
                 }
             };
 
-            reader.onerror = () => {
+            reader.onerror = (e) => {
+                console.error('FileReader error:', e);
                 const errorMsg = 'Failed to read file. Please try again.';
                 this.config.onError(errorMsg);
             };
 
-            reader.readAsDataURL(file);
+            console.log('Starting FileReader.readAsDataURL...');
+            reader.readAsDataURL(fileToProcess);
 
         } catch (error) {
+            console.error('handleFileUpload error:', error);
             this.config.onError(error.message);
         }
     }
@@ -322,9 +454,14 @@ class PhotoUploadHandler {
      * @param {Object} metadata - Image metadata
      */
     loadImageFromDataURL(dataURL, metadata = {}) {
+        console.log('loadImageFromDataURL called');
+        console.log('DataURL length:', dataURL?.length || 0);
+        console.log('Metadata:', metadata);
+
         const img = new Image();
 
         img.onload = () => {
+            console.log('Image loaded successfully! Dimensions:', img.width, 'x', img.height);
             this.uploadedImage = img;
 
             // Update metadata with image dimensions
@@ -356,9 +493,11 @@ class PhotoUploadHandler {
         };
 
         img.onerror = (e) => {
-            console.error('Image load error:', e);
+            console.error('Image load error event:', e);
+            console.error('Image error details:', e.target?.error);
             console.error('Data URL length:', dataURL?.length || 0);
-            console.error('Data URL preview:', dataURL?.substring(0, 100) || 'empty');
+            console.error('Data URL preview (first 100 chars):', dataURL?.substring(0, 100) || 'empty');
+            console.error('Data URL preview (chars 100-200):', dataURL?.substring(100, 200) || 'none');
 
             let errorMsg = 'Failed to load image. ';
 
@@ -372,6 +511,7 @@ class PhotoUploadHandler {
             this.config.onError(errorMsg);
         };
 
+        console.log('Setting img.src to dataURL...');
         img.src = dataURL;
     }
 
@@ -383,10 +523,10 @@ class PhotoUploadHandler {
         this.config.text = { ...this.config.text, ...newText };
 
         // Update visible elements
-        const iconEl = this.uploadArea?.querySelector('.upload-icon');
-        const textEl = this.uploadArea?.querySelector('.upload-text');
-        const hintEl = this.uploadArea?.querySelector('.upload-hint');
-        const successEl = this.uploadArea?.querySelector('.upload-success');
+        const iconEl = this.uploadArea?.querySelector('.c-upload__icon');
+        const textEl = this.uploadArea?.querySelector('.c-upload__text');
+        const hintEl = this.uploadArea?.querySelector('.c-upload__hint');
+        const successEl = this.uploadArea?.querySelector('.c-upload__success');
 
         if (iconEl && newText.uploadIcon) iconEl.textContent = newText.uploadIcon;
         if (textEl && newText.uploadText) textEl.textContent = newText.uploadText;

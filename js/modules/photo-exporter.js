@@ -59,18 +59,22 @@ export class PhotoExporter {
 
             const dataURL = this.canvasEditor.toDataURL('image/png', 1.0);
 
-            // Store in localStorage
+            // Store in localStorage using the same key as PhotoStorage class
+            // This ensures the photo-editor's adjusted photo is picked up by index.html
             const photoData = {
                 dataURL,
-                timestamp: Date.now(),
-                source: 'photo-editor',
-                size: {
+                metadata: {
                     width: this.canvasSize,
-                    height: this.canvasSize
+                    height: this.canvasSize,
+                    source: 'photo-editor',
+                    timestamp: Date.now(),
+                    type: 'image/png',
+                    uploadedAt: new Date().toISOString()
                 }
             };
 
-            localStorage.setItem('editedPhoto', JSON.stringify(photoData));
+            // Use 'currentPhoto' key to match PhotoStorage in photoHandler.js
+            localStorage.setItem('currentPhoto', JSON.stringify(photoData));
 
             if (this.onExportSuccess) {
                 this.onExportSuccess({ format: 'photomaker' });

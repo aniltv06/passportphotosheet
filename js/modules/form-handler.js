@@ -1,25 +1,66 @@
 /**
  * Form Handler Module
  * Manages form inputs and option changes for photo sheet customization
+ * Refactored with proper dependency injection for better testability
  */
 
 import { getLayout, getDPI } from './layout-config.js';
+import { APP_CONFIG, getElementId } from '../config/app-config.js';
+
+/**
+ * @typedef {Object} FormHandlerConfig
+ * @property {HTMLFormElement} form - Form element
+ * @property {HTMLSelectElement} [paperSizeSelect] - Paper size select element
+ * @property {HTMLSelectElement} [qualitySelect] - Quality select element
+ * @property {HTMLSelectElement} [cuttingGuideSelect] - Cutting guide select element
+ * @property {HTMLElement} [cuttingGuideHint] - Cutting guide hint element
+ * @property {Function} onChange - Change callback function
+ * @property {Object} [defaults] - Default values
+ */
 
 /**
  * Form Handler Class
- * Handles form state and option changes
+ * Handles form state and option changes with dependency injection
  */
 export class FormHandler {
-    constructor(formElement, onChangeCallback) {
-        this.form = formElement;
-        this.onChangeCallback = onChangeCallback;
+    /**
+     * @param {FormHandlerConfig} config - Configuration object
+     */
+    constructor(config) {
+        // Validate required fields
+        if (!config.form) {
+            throw new Error('FormHandler requires a form element');
+        }
 
-        // Get form elements
-        this.paperSizeSelect = document.getElementById('paperSize');
-        this.qualitySelect = document.getElementById('quality');
-        this.cuttingGuideSelect = document.getElementById('cuttingGuide');
+        this.form = config.form;
+        this.onChangeCallback = config.onChange;
+
+        // Get form elements with dependency injection (fall back to document.getElementById)
+        this.elements = {
+            paperSizeSelect: config.paperSizeSelect || document.getElementById(getElementId('PAPER_SIZE_SELECT')),
+            qualitySelect: config.qualitySelect || document.getElementById(getElementId('QUALITY_SELECT')),
+            cuttingGuideSelect: config.cuttingGuideSelect || document.getElementById(getElementId('CUTTING_GUIDE_SELECT')),
+            cuttingGuideHint: config.cuttingGuideHint || document.getElementById(getElementId('CUTTING_GUIDE_HINT'))
+        };
+
+        // Store defaults
+        this.defaults = {
+            paperSize: config.defaults?.paperSize || APP_CONFIG.DEFAULTS.PAPER_SIZE,
+            quality: config.defaults?.quality || APP_CONFIG.DEFAULTS.QUALITY,
+            cuttingGuide: config.defaults?.cuttingGuide || APP_CONFIG.DEFAULTS.CUTTING_GUIDE,
+            gapSize: config.defaults?.gapSize || APP_CONFIG.DEFAULTS.GAP_SIZE
+        };
 
         this.init();
+    }
+
+    /**
+     * Get element reference by name (for easier access)
+     * @param {string} name - Element name
+     * @returns {HTMLElement|null}
+     */
+    getElement(name) {
+        return this.elements[name] || null;
     }
 
     /**
@@ -27,16 +68,18 @@ export class FormHandler {
      */
     init() {
         // Set up event listeners
-        this.paperSizeSelect?.addEventListener('change', () => {
+        const { paperSizeSelect, qualitySelect, cuttingGuideSelect } = this.elements;
+
+        paperSizeSelect?.addEventListener('change', () => {
             this.updateCuttingGuideAvailability();
             this.handleChange();
         });
 
-        this.qualitySelect?.addEventListener('change', () => {
+        qualitySelect?.addEventListener('change', () => {
             this.handleChange();
         });
 
-        this.cuttingGuideSelect?.addEventListener('change', () => {
+        cuttingGuideSelect?.addEventListener('change', () => {
             this.handleChange();
         });
 
@@ -59,9 +102,11 @@ export class FormHandler {
      * @returns {Object} Current form options
      */
     getOptions() {
-        const paperSize = this.paperSizeSelect?.value || '4x6';
-        const quality = this.qualitySelect?.value || 'high';
-        const cuttingGuide = this.cuttingGuideSelect?.value || 'none-none';
+        const { paperSizeSelect, qualitySelect, cuttingGuideSelect } = this.elements;
+
+        const paperSize = paperSizeSelect?.value || this.defaults.paperSize;
+        const quality = qualitySelect?.value || this.defaults.quality;
+        const cuttingGuide = cuttingGuideSelect?.value || this.defaults.cuttingGuide;
 
         const [spacing, border] = cuttingGuide.split('-');
 
@@ -72,7 +117,7 @@ export class FormHandler {
             quality,
             cuttingGuide,
             gapEnabled: spacing === 'small',
-            gapSize: 0.05,
+            gapSize: this.defaults.gapSize,
             borderEnabled: border === 'thin'
         };
     }
@@ -83,16 +128,17 @@ export class FormHandler {
      * Only 5x7 has margins for cutting lines
      */
     updateCuttingGuideAvailability() {
-        const size = this.paperSizeSelect?.value || '4x6';
-        const cuttingGuideDisabledHint = document.getElementById('cuttingGuideDisabledHint');
-        const currentValue = this.cuttingGuideSelect?.value || 'none-none';
+        const { paperSizeSelect, cuttingGuideSelect, cuttingGuideHint } = this.elements;
+
+        const size = paperSizeSelect?.value || this.defaults.paperSize;
+        const currentValue = cuttingGuideSelect?.value || this.defaults.cuttingGuide;
         const [currentSpacing] = currentValue.split('-');
 
         // Only 5x7 has margins for cutting lines
         const disableCuttingLines = (size === '4x6' || size === '8x10');
 
         // Get all options
-        const options = this.cuttingGuideSelect?.querySelectorAll('option') || [];
+        const options = cuttingGuideSelect?.querySelectorAll('option') || [];
         let shouldResetValue = false;
 
         options.forEach(option => {
@@ -113,17 +159,17 @@ export class FormHandler {
             }
         });
 
-        // Reset to "none-none" if current selection was disabled
-        if (shouldResetValue && this.cuttingGuideSelect) {
-            this.cuttingGuideSelect.value = 'none-none';
+        // Reset to default if current selection was disabled
+        if (shouldResetValue && cuttingGuideSelect) {
+            cuttingGuideSelect.value = this.defaults.cuttingGuide;
         }
 
         // Show/hide disabled hint
-        if (cuttingGuideDisabledHint) {
+        if (cuttingGuideHint) {
             if (disableCuttingLines && currentSpacing === 'small') {
-                cuttingGuideDisabledHint.style.display = 'block';
+                cuttingGuideHint.style.display = 'block';
             } else {
-                cuttingGuideDisabledHint.style.display = 'none';
+                cuttingGuideHint.style.display = 'none';
             }
         }
     }
