@@ -8,6 +8,28 @@
  * Each layout defines dimensions and grid arrangement
  */
 export const LAYOUTS = {
+    '4x6-2': {
+        width: 4,
+        height: 6,
+        cols: 1,
+        rows: 2,
+        photos: 2,
+        icon: '🎫',
+        label: '4×6" (2 photos)',
+        customSpacing: true,
+        spacingType: 'vertical-apart' // Place photos apart vertically
+    },
+    '4x6-4': {
+        width: 4,
+        height: 6,
+        cols: 2,
+        rows: 2,
+        photos: 4,
+        icon: '🎴',
+        label: '4×6" (4 photos)',
+        customSpacing: true,
+        spacingType: 'vertical-centered' // Leave gaps at top and bottom
+    },
     '4x6': {
         width: 4,
         height: 6,
@@ -15,7 +37,7 @@ export const LAYOUTS = {
         rows: 3,
         photos: 6,
         icon: '💰',
-        label: 'Standard 4×6"'
+        label: '4×6" (6 photos)'
     },
     '5x7': {
         width: 5,
@@ -24,7 +46,9 @@ export const LAYOUTS = {
         rows: 3,
         photos: 6,
         icon: '💵',
-        label: 'Medium 5×7"'
+        label: 'Medium 5×7"',
+        customSpacing: true,
+        spacingType: 'grid-aligned' // Grid-aligned with 0.25" intervals
     },
     '8x10': {
         width: 8,

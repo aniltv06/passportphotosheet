@@ -454,9 +454,11 @@
                                             data-testid="form-select-size"
                                             data-component="select"
                                             data-field="paperSize">
-                                        <option value="4x6" selected data-i18n="size4x6" data-testid="size-option-4x6">Standard 4×6" Print (6 photos)</option>
-                                        <option value="5x7" data-i18n="size5x7" data-testid="size-option-5x7">Medium 5×7" Print (6 photos)</option>
-                                        <option value="8x10" data-i18n="size8x10" data-testid="size-option-8x10">Large 8×10" Print (20 photos) ⭐ Best Value</option>
+                                        <option value="4x6-2" data-i18n="size4x6_2" data-testid="size-option-4x6-2">🎫 4×6" Print (2 photos)</option>
+                                        <option value="4x6-4" data-i18n="size4x6_4" data-testid="size-option-4x6-4">🎴 4×6" Print (4 photos)</option>
+                                        <option value="4x6" selected data-i18n="size4x6" data-testid="size-option-4x6">💰 4×6" Print (6 photos)</option>
+                                        <option value="5x7" data-i18n="size5x7" data-testid="size-option-5x7">💵 5×7" Print (6 photos)</option>
+                                        <option value="8x10" data-i18n="size8x10" data-testid="size-option-8x10">💎 8×10" Print (20 photos) ⭐ Best Value</option>
                                     </select>
                                     <div class="c-form__hint"
                                          data-i18n="sheetSizeHint"
@@ -708,8 +710,10 @@
 
         // Configuration
         const LAYOUTS = {
+            '4x6-2': { width: 4, height: 6, cols: 1, rows: 2, photos: 2, icon: '🎫', customSpacing: true, spacingType: 'vertical-apart' },
+            '4x6-4': { width: 4, height: 6, cols: 2, rows: 2, photos: 4, icon: '🎴', customSpacing: true, spacingType: 'vertical-centered' },
             '4x6': { width: 4, height: 6, cols: 2, rows: 3, photos: 6, icon: '💰' },
-            '5x7': { width: 5, height: 7, cols: 2, rows: 3, photos: 6, icon: '💵' },
+            '5x7': { width: 5, height: 7, cols: 2, rows: 3, photos: 6, icon: '💵', customSpacing: true, spacingType: 'grid-aligned' },
             '8x10': { width: 8, height: 10, cols: 4, rows: 5, photos: 20, icon: '💎' }
         };
 
@@ -914,6 +918,160 @@
         // Initialize cutting guide availability
         updateCuttingGuideAvailability();
 
+        // Background Grid Drawing Function (for cutting guidance)
+        function drawBackgroundGrid(canvasWidth, canvasHeight, dpi) {
+            const marginSize = 0.25 * dpi; // 0.25 inch margin for measurements
+            const gridInterval = 0.25 * dpi; // 0.25 inch grid (quarter inch)
+
+            // Save context state
+            ctx.save();
+
+            // Draw very thin light gray grid lines in background
+            ctx.strokeStyle = '#E0E0E0';
+            ctx.lineWidth = 0.5;
+            ctx.globalAlpha = 0.5;
+
+            // Vertical grid lines
+            for (let x = 0; x <= canvasWidth; x += gridInterval) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvasHeight);
+                ctx.stroke();
+            }
+
+            // Horizontal grid lines
+            for (let y = 0; y <= canvasHeight; y += gridInterval) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvasWidth, y);
+                ctx.stroke();
+            }
+
+            // Reset alpha for measurement scales
+            ctx.globalAlpha = 1.0;
+
+            // Draw measurement scales on margins
+            ctx.fillStyle = '#666666';
+            ctx.strokeStyle = '#666666';
+            ctx.lineWidth = 1;
+            ctx.font = '10px -apple-system, BlinkMacSystemFont, sans-serif';
+            ctx.textAlign = 'center';
+
+            // Top scale (horizontal measurements)
+            for (let x = 0; x <= canvasWidth; x += dpi) { // Every inch
+                const inches = x / dpi;
+
+                // Draw tick mark
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, marginSize * 0.5);
+                ctx.stroke();
+
+                // Draw label
+                ctx.fillText(`${inches}"`, x, marginSize * 0.8);
+            }
+
+            // Left scale (vertical measurements)
+            ctx.textAlign = 'right';
+            for (let y = 0; y <= canvasHeight; y += dpi) { // Every inch
+                const inches = y / dpi;
+
+                // Draw tick mark
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(marginSize * 0.5, y);
+                ctx.stroke();
+
+                // Draw label
+                ctx.save();
+                ctx.translate(marginSize * 0.9, y);
+                ctx.rotate(-Math.PI / 2);
+                ctx.fillText(`${inches}"`, 0, 0);
+                ctx.restore();
+            }
+
+            // Right scale (vertical measurements)
+            ctx.textAlign = 'left';
+            for (let y = 0; y <= canvasHeight; y += dpi) { // Every inch
+                const inches = y / dpi;
+
+                // Draw tick mark
+                ctx.beginPath();
+                ctx.moveTo(canvasWidth, y);
+                ctx.lineTo(canvasWidth - marginSize * 0.5, y);
+                ctx.stroke();
+
+                // Draw label
+                ctx.save();
+                ctx.translate(canvasWidth - marginSize * 0.9, y);
+                ctx.rotate(-Math.PI / 2);
+                ctx.fillText(`${inches}"`, 0, 0);
+                ctx.restore();
+            }
+
+            // Bottom scale (horizontal measurements)
+            ctx.textAlign = 'center';
+            for (let x = 0; x <= canvasWidth; x += dpi) { // Every inch
+                const inches = x / dpi;
+
+                // Draw tick mark
+                ctx.beginPath();
+                ctx.moveTo(x, canvasHeight);
+                ctx.lineTo(x, canvasHeight - marginSize * 0.5);
+                ctx.stroke();
+
+                // Draw label
+                ctx.fillText(`${inches}"`, x, canvasHeight - marginSize * 0.2);
+            }
+
+            // Draw quarter-inch tick marks (smaller)
+            ctx.lineWidth = 0.5;
+            ctx.globalAlpha = 0.7;
+
+            // Top quarter-inch ticks
+            for (let x = 0; x <= canvasWidth; x += gridInterval) {
+                if (x % dpi !== 0) { // Skip full inch marks
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, marginSize * 0.3);
+                    ctx.stroke();
+                }
+            }
+
+            // Bottom quarter-inch ticks
+            for (let x = 0; x <= canvasWidth; x += gridInterval) {
+                if (x % dpi !== 0) { // Skip full inch marks
+                    ctx.beginPath();
+                    ctx.moveTo(x, canvasHeight);
+                    ctx.lineTo(x, canvasHeight - marginSize * 0.3);
+                    ctx.stroke();
+                }
+            }
+
+            // Left quarter-inch ticks
+            for (let y = 0; y <= canvasHeight; y += gridInterval) {
+                if (y % dpi !== 0) { // Skip full inch marks
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(marginSize * 0.3, y);
+                    ctx.stroke();
+                }
+            }
+
+            // Right quarter-inch ticks
+            for (let y = 0; y <= canvasHeight; y += gridInterval) {
+                if (y % dpi !== 0) { // Skip full inch marks
+                    ctx.beginPath();
+                    ctx.moveTo(canvasWidth, y);
+                    ctx.lineTo(canvasWidth - marginSize * 0.3, y);
+                    ctx.stroke();
+                }
+            }
+
+            // Restore context state
+            ctx.restore();
+        }
+
         // Create Composite Function
         function createComposite() {
             const size = paperSize.value;
@@ -944,43 +1102,152 @@
             ctx.fillStyle = '#FFFFFF';
             ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-            // Calculate grid positioning
-            const totalPhotosWidth = (layout.cols * photoSizePx) + ((layout.cols - 1) * gapSizePx);
-            const totalPhotosHeight = (layout.rows * photoSizePx) + ((layout.rows - 1) * gapSizePx);
-            const startX = (canvasWidth - totalPhotosWidth) / 2;
-            const startY = (canvasHeight - totalPhotosHeight) / 2;
-
             // Enable image smoothing for better quality
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
 
-            // Draw photos in grid
-            for (let row = 0; row < layout.rows; row++) {
-                for (let col = 0; col < layout.cols; col++) {
-                    const x = startX + (col * (photoSizePx + gapSizePx));
-                    const y = startY + (row * (photoSizePx + gapSizePx));
+            // Handle custom spacing layouts
+            if (layout.customSpacing) {
+                if (layout.spacingType === 'vertical-apart') {
+                    // 4x6" with 2 photos - aligned to grid at 0.5" intervals
+                    // Layout: 0.5" top, photo (2"), 1.0" gap, photo (2"), 0.5" bottom = 6"
+                    const topMargin = 0.5 * dpi; // 0.5" top (aligns to grid)
+                    const middleGap = 1.0 * dpi;  // 1.0" between photos (aligns to grid)
+                    const x = (canvasWidth - photoSizePx) / 2; // Center horizontally
 
-                    // Draw the image
-                    ctx.drawImage(uploadedImage, x, y, photoSizePx, photoSizePx);
+                    // Draw background grid and measurement scales for cutting guidance
+                    drawBackgroundGrid(canvasWidth, canvasHeight, dpi);
 
-                    // Draw cutting guides if spacing is enabled
-                    if (gapEnabled) {
-                        ctx.strokeStyle = '#CCCCCC';
-                        ctx.lineWidth = 1;
-                        ctx.strokeRect(x, y, photoSizePx, photoSizePx);
+                    for (let row = 0; row < layout.rows; row++) {
+                        // Photo 1 at 0.5", Photo 2 at 3.5" (0.5" + 2" + 1.0")
+                        const y = topMargin + (row * (photoSizePx + middleGap));
+                        ctx.drawImage(uploadedImage, x, y, photoSizePx, photoSizePx);
+
+                        if (gapEnabled) {
+                            ctx.strokeStyle = '#CCCCCC';
+                            ctx.lineWidth = 1;
+                            ctx.strokeRect(x, y, photoSizePx, photoSizePx);
+                        }
+
+                        if (borderEnabled) {
+                            ctx.strokeStyle = '#CCCCCC';
+                            ctx.lineWidth = Math.max(0.5, dpi / 150);
+                            const borderOffset = ctx.lineWidth / 2;
+                            ctx.strokeRect(
+                                x + borderOffset,
+                                y + borderOffset,
+                                photoSizePx - ctx.lineWidth,
+                                photoSizePx - ctx.lineWidth
+                            );
+                        }
                     }
+                } else if (layout.spacingType === 'vertical-centered') {
+                    // 4x6" with 4 photos - leave gaps at top and bottom, center the 2x2 grid
+                    const totalPhotosWidth = (layout.cols * photoSizePx) + gapSizePx;
+                    const totalPhotosHeight = (layout.rows * photoSizePx) + gapSizePx;
+                    const startX = (canvasWidth - totalPhotosWidth) / 2;
+                    const startY = (canvasHeight - totalPhotosHeight) / 2;
 
-                    // Draw thin border inside photo if enabled
-                    if (borderEnabled) {
-                        ctx.strokeStyle = '#CCCCCC';
-                        ctx.lineWidth = Math.max(0.5, dpi / 150); // Very thin line scaled to DPI
-                        const borderOffset = ctx.lineWidth / 2; // Offset to draw inside
-                        ctx.strokeRect(
-                            x + borderOffset,
-                            y + borderOffset,
-                            photoSizePx - ctx.lineWidth,
-                            photoSizePx - ctx.lineWidth
-                        );
+                    for (let row = 0; row < layout.rows; row++) {
+                        for (let col = 0; col < layout.cols; col++) {
+                            const x = startX + (col * (photoSizePx + gapSizePx));
+                            const y = startY + (row * (photoSizePx + gapSizePx));
+
+                            ctx.drawImage(uploadedImage, x, y, photoSizePx, photoSizePx);
+
+                            if (gapEnabled) {
+                                ctx.strokeStyle = '#CCCCCC';
+                                ctx.lineWidth = 1;
+                                ctx.strokeRect(x, y, photoSizePx, photoSizePx);
+                            }
+
+                            if (borderEnabled) {
+                                ctx.strokeStyle = '#CCCCCC';
+                                ctx.lineWidth = Math.max(0.5, dpi / 150);
+                                const borderOffset = ctx.lineWidth / 2;
+                                ctx.strokeRect(
+                                    x + borderOffset,
+                                    y + borderOffset,
+                                    photoSizePx - ctx.lineWidth,
+                                    photoSizePx - ctx.lineWidth
+                                );
+                            }
+                        }
+                    }
+                } else if (layout.spacingType === 'grid-aligned') {
+                    // 5x7" with 6 photos - aligned to 0.25" grid intervals
+                    // Layout: 0.25" left, 0.5" gap between columns, 0.25" right
+                    //         0.25" top, 0.25" gaps between rows, 0.25" bottom
+                    const leftMargin = 0.25 * dpi;   // 0.25" left margin
+                    const topMargin = 0.25 * dpi;    // 0.25" top margin
+                    const colGap = 0.5 * dpi;        // 0.5" gap between columns
+                    const rowGap = 0.25 * dpi;       // 0.25" gap between rows
+
+                    // Draw background grid and measurement scales for cutting guidance
+                    drawBackgroundGrid(canvasWidth, canvasHeight, dpi);
+
+                    for (let row = 0; row < layout.rows; row++) {
+                        for (let col = 0; col < layout.cols; col++) {
+                            const x = leftMargin + (col * (photoSizePx + colGap)); // 0.5" gap between photos
+                            const y = topMargin + (row * (photoSizePx + rowGap));  // 0.25" gaps between rows
+
+                            ctx.drawImage(uploadedImage, x, y, photoSizePx, photoSizePx);
+
+                            if (gapEnabled) {
+                                ctx.strokeStyle = '#CCCCCC';
+                                ctx.lineWidth = 1;
+                                ctx.strokeRect(x, y, photoSizePx, photoSizePx);
+                            }
+
+                            if (borderEnabled) {
+                                ctx.strokeStyle = '#CCCCCC';
+                                ctx.lineWidth = Math.max(0.5, dpi / 150);
+                                const borderOffset = ctx.lineWidth / 2;
+                                ctx.strokeRect(
+                                    x + borderOffset,
+                                    y + borderOffset,
+                                    photoSizePx - ctx.lineWidth,
+                                    photoSizePx - ctx.lineWidth
+                                );
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Standard grid positioning
+                const totalPhotosWidth = (layout.cols * photoSizePx) + ((layout.cols - 1) * gapSizePx);
+                const totalPhotosHeight = (layout.rows * photoSizePx) + ((layout.rows - 1) * gapSizePx);
+                const startX = (canvasWidth - totalPhotosWidth) / 2;
+                const startY = (canvasHeight - totalPhotosHeight) / 2;
+
+                // Draw photos in grid
+                for (let row = 0; row < layout.rows; row++) {
+                    for (let col = 0; col < layout.cols; col++) {
+                        const x = startX + (col * (photoSizePx + gapSizePx));
+                        const y = startY + (row * (photoSizePx + gapSizePx));
+
+                        // Draw the image
+                        ctx.drawImage(uploadedImage, x, y, photoSizePx, photoSizePx);
+
+                        // Draw cutting guides if spacing is enabled
+                        if (gapEnabled) {
+                            ctx.strokeStyle = '#CCCCCC';
+                            ctx.lineWidth = 1;
+                            ctx.strokeRect(x, y, photoSizePx, photoSizePx);
+                        }
+
+                        // Draw thin border inside photo if enabled
+                        if (borderEnabled) {
+                            ctx.strokeStyle = '#CCCCCC';
+                            ctx.lineWidth = Math.max(0.5, dpi / 150);
+                            const borderOffset = ctx.lineWidth / 2;
+                            ctx.strokeRect(
+                                x + borderOffset,
+                                y + borderOffset,
+                                photoSizePx - ctx.lineWidth,
+                                photoSizePx - ctx.lineWidth
+                            );
+                        }
                     }
                 }
             }

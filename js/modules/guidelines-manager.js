@@ -47,9 +47,12 @@ export class GuidelinesManager {
         // Photo: 2x2 inches
         // Head: 1 to 1.4 inches (50% to 70% of photo) - we'll show 60% (1.2 inches) as ideal
         if (this.faceGuideVisible) {
-            this.ctx.strokeStyle = 'rgba(0, 122, 255, 0.45)';
+            // Enhanced visibility with shadow
+            this.ctx.strokeStyle = 'rgba(0, 122, 255, 0.6)'; // Increased from 0.45
             this.ctx.lineWidth = 3;
             this.ctx.setLineDash([8, 6]);
+            this.ctx.shadowColor = 'rgba(0, 0, 0, 0.6)'; // Add shadow for better visibility
+            this.ctx.shadowBlur = 3;
 
             const centerX = this.canvasSize / 2;
 
@@ -76,8 +79,9 @@ export class GuidelinesManager {
 
             // Add reference markers at top and bottom of face guide
             this.ctx.setLineDash([]);
-            this.ctx.strokeStyle = 'rgba(0, 122, 255, 0.3)';
-            this.ctx.lineWidth = 1;
+            this.ctx.strokeStyle = 'rgba(0, 122, 255, 0.5)'; // Increased from 0.3
+            this.ctx.lineWidth = 1.5; // Thicker
+            this.ctx.shadowBlur = 2;
 
             // Top of head marker (crown)
             const topY = centerY - radiusY;
@@ -86,9 +90,11 @@ export class GuidelinesManager {
             this.ctx.lineTo(centerX + 30, topY);
             this.ctx.stroke();
 
-            // Add label for crown
-            this.ctx.fillStyle = 'rgba(0, 122, 255, 0.6)';
-            this.ctx.font = '11px -apple-system, sans-serif';
+            // Add label for crown with enhanced readability
+            this.ctx.fillStyle = 'rgba(0, 122, 255, 0.85)'; // Increased from 0.6
+            this.ctx.font = 'bold 11px -apple-system, sans-serif'; // Made bold
+            this.ctx.shadowColor = 'rgba(0, 0, 0, 0.8)'; // Text shadow for readability
+            this.ctx.shadowBlur = 3;
             this.ctx.fillText('Crown', centerX + 35, topY + 4);
 
             // Bottom of chin marker
@@ -100,17 +106,72 @@ export class GuidelinesManager {
 
             // Add label for chin
             this.ctx.fillText('Chin', centerX + 35, bottomY + 4);
+
+            // Reset shadow
+            this.ctx.shadowBlur = 0;
+            this.ctx.shadowColor = 'transparent';
         }
 
-        // Grid with scale markings
+        // Grid with scale markings - Enhanced for better visibility
         if (this.gridVisible) {
-            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+            const gridInterval = 75; // 0.25 inch at 300 DPI
+            const majorInterval = gridInterval * 4; // 1 inch intervals for major lines
+
+            // Draw minor grid lines (every 0.25")
+            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)'; // Increased from 0.15
             this.ctx.lineWidth = 1;
             this.ctx.setLineDash([4, 4]);
+            this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // Add shadow for better visibility
+            this.ctx.shadowBlur = 2;
 
-            // Center cross (most important)
-            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-            this.ctx.lineWidth = 2;
+            // Vertical lines
+            for (let x = 0; x <= this.canvasSize; x += gridInterval) {
+                if (x === this.canvasSize / 2 || x % majorInterval === 0) continue; // Skip center and major lines
+                this.ctx.beginPath();
+                this.ctx.moveTo(x, 0);
+                this.ctx.lineTo(x, this.canvasSize);
+                this.ctx.stroke();
+            }
+
+            // Horizontal lines
+            for (let y = 0; y <= this.canvasSize; y += gridInterval) {
+                if (y === this.canvasSize / 2 || y % majorInterval === 0) continue; // Skip center and major lines
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, y);
+                this.ctx.lineTo(this.canvasSize, y);
+                this.ctx.stroke();
+            }
+
+            // Draw major grid lines (every 1 inch)
+            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'; // More visible than minor lines
+            this.ctx.lineWidth = 1.5;
+            this.ctx.setLineDash([6, 3]); // Different dash pattern
+            this.ctx.shadowBlur = 3;
+
+            // Vertical major lines
+            for (let x = 0; x <= this.canvasSize; x += majorInterval) {
+                if (x === this.canvasSize / 2) continue; // Skip center
+                this.ctx.beginPath();
+                this.ctx.moveTo(x, 0);
+                this.ctx.lineTo(x, this.canvasSize);
+                this.ctx.stroke();
+            }
+
+            // Horizontal major lines
+            for (let y = 0; y <= this.canvasSize; y += majorInterval) {
+                if (y === this.canvasSize / 2) continue; // Skip center
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, y);
+                this.ctx.lineTo(this.canvasSize, y);
+                this.ctx.stroke();
+            }
+
+            // Center cross (most important) - Draw last so it's on top
+            this.ctx.strokeStyle = 'rgba(0, 122, 255, 0.7)'; // Use brand blue color
+            this.ctx.lineWidth = 2.5; // Thicker
+            this.ctx.setLineDash([8, 4]); // Longer dashes
+            this.ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+            this.ctx.shadowBlur = 4;
 
             // Vertical center
             this.ctx.beginPath();
@@ -124,59 +185,43 @@ export class GuidelinesManager {
             this.ctx.lineTo(this.canvasSize, this.canvasSize / 2);
             this.ctx.stroke();
 
-            // Grid lines every 0.25 inch (75 pixels at 300 DPI)
-            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-            this.ctx.lineWidth = 1;
-
-            const gridInterval = 75; // 0.25 inch at 300 DPI
-
-            // Vertical lines
-            for (let x = 0; x <= this.canvasSize; x += gridInterval) {
-                if (x !== this.canvasSize / 2) { // Skip center (already drawn)
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(x, 0);
-                    this.ctx.lineTo(x, this.canvasSize);
-                    this.ctx.stroke();
-                }
-            }
-
-            // Horizontal lines
-            for (let y = 0; y <= this.canvasSize; y += gridInterval) {
-                if (y !== this.canvasSize / 2) { // Skip center (already drawn)
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(0, y);
-                    this.ctx.lineTo(this.canvasSize, y);
-                    this.ctx.stroke();
-                }
-            }
-
-            // Add measurement labels (inches)
+            // Add measurement labels (inches) with better visibility
             this.ctx.setLineDash([]);
-            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-            this.ctx.font = '10px -apple-system, BlinkMacSystemFont, sans-serif';
+            this.ctx.shadowBlur = 0;
+            this.ctx.font = '11px -apple-system, BlinkMacSystemFont, sans-serif';
             this.ctx.textAlign = 'left';
 
-            // Top labels
-            for (let x = 0; x <= this.canvasSize; x += gridInterval) {
-                const inches = (x / 300).toFixed(2); // Convert pixels to inches
-                this.ctx.fillText(inches + '"', x + 5, 12);
+            // Add text shadow for better readability
+            this.ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+            this.ctx.shadowBlur = 3;
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.95)'; // Increased from 0.7
+
+            // Top labels - only major intervals (every inch)
+            for (let x = 0; x <= this.canvasSize; x += majorInterval) {
+                const inches = (x / 300).toFixed(1);
+                this.ctx.fillText(`${inches}"`, x + 5, 15);
             }
 
-            // Left labels
-            for (let y = 0; y <= this.canvasSize; y += gridInterval) {
-                const inches = (y / 300).toFixed(2); // Convert pixels to inches
+            // Left labels - only major intervals (every inch)
+            for (let y = 0; y <= this.canvasSize; y += majorInterval) {
+                const inches = (y / 300).toFixed(1);
                 this.ctx.save();
-                this.ctx.translate(5, y - 5);
+                this.ctx.translate(8, y - 5);
                 this.ctx.rotate(-Math.PI / 2);
-                this.ctx.fillText(inches + '"', 0, 0);
+                this.ctx.fillText(`${inches}"`, 0, 0);
                 this.ctx.restore();
             }
 
-            // Grid title
+            // Grid title with enhanced visibility
             this.ctx.textAlign = 'center';
-            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            this.ctx.font = 'bold 11px -apple-system, BlinkMacSystemFont, sans-serif';
-            this.ctx.fillText('Grid with Scale (0.25" intervals)', this.canvasSize / 2, this.canvasSize - 10);
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.95)'; // Increased from 0.8
+            this.ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, sans-serif'; // Slightly larger
+            this.ctx.shadowBlur = 4;
+            this.ctx.fillText('Grid with Scale (¼" intervals, 1" major lines)', this.canvasSize / 2, this.canvasSize - 12);
+
+            // Reset context state
+            this.ctx.shadowBlur = 0;
+            this.ctx.shadowColor = 'transparent';
         }
     }
 

@@ -60,9 +60,11 @@ export default {
     customizeTitle: "Customize Your Sheet",
 
     sheetSizeLabel: "Sheet Size",
-    size4x6: "Standard 4×6\" Print (6 photos)",
-    size5x7: "Medium 5×7\" Print (6 photos)",
-    size8x10: "Large 8×10\" Print (20 photos) ⭐ Best Value",
+    size4x6_2: "🎫 4×6\" Print (2 photos)",
+    size4x6_4: "🎴 4×6\" Print (4 photos)",
+    size4x6: "💰 4×6\" Print (6 photos)",
+    size5x7: "💵 5×7\" Print (6 photos)",
+    size8x10: "💎 8×10\" Print (20 photos) ⭐ Best Value",
     sheetSizeHint: "Choose the print size you want to order",
 
     qualityLabel: "Photo Quality",
