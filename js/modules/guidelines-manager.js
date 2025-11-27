@@ -45,67 +45,141 @@ export class GuidelinesManager {
 
         // Face guide (oval) - US passport spec:
         // Photo: 2x2 inches
-        // Head: 1 to 1.4 inches (50% to 70% of photo) - we'll show 60% (1.2 inches) as ideal
+        // Head height requirements: 1" to 1⅜" (25-35mm) from chin to crown
+        // This is 50% to 68.75% of photo height
         if (this.faceGuideVisible) {
-            // Enhanced visibility with shadow
-            this.ctx.strokeStyle = 'rgba(0, 122, 255, 0.6)'; // Increased from 0.45
-            this.ctx.lineWidth = 3;
-            this.ctx.setLineDash([8, 6]);
-            this.ctx.shadowColor = 'rgba(0, 0, 0, 0.6)'; // Add shadow for better visibility
-            this.ctx.shadowBlur = 3;
-
             const centerX = this.canvasSize / 2;
 
-            // Head height: 60% of photo (1.2" ideal)
-            const headHeightPercent = 0.60;
-            const radiusY = this.canvasSize * (headHeightPercent / 2); // 30% radius = 60% height
+            // Define three head heights (in percentage of canvas)
+            const minHeadHeight = 0.50;    // 1.0" minimum
+            const idealHeadHeight = 0.60;  // 1.2" ideal (middle of range)
+            const maxHeadHeight = 0.6875;  // 1.375" (1⅜") maximum
 
-            // Eyes are typically 1/3 down from crown of head
-            // If eyes should be at ~37.5% from top (middle of 31-44% range)
-            // And eyes are 1/3 down from crown, then crown is at:
-            const eyePositionPercent = 0.375;
-            const eyesToCrownPercent = headHeightPercent / 3; // ~20%
-            const crownPercent = eyePositionPercent - eyesToCrownPercent; // ~17.5%
+            // Calculate vertical center position
+            // Eyes should be at ~37.5% from top (1.25" from bottom on 2" photo)
+            const eyePositionFromTop = 0.375;
+            const eyesY = this.canvasSize * eyePositionFromTop;
 
-            // Face center is halfway between crown and chin
-            const centerY = this.canvasSize * (crownPercent + (headHeightPercent / 2)); // ~47.5%
+            // For ideal head: eyes are roughly 1/3 down from crown
+            const eyesToCrownPercent = idealHeadHeight / 3;
+            const idealCrownY = eyesY - (this.canvasSize * eyesToCrownPercent);
+            const idealCenterY = idealCrownY + (this.canvasSize * idealHeadHeight / 2);
 
-            // Face width: typically 70-75% of face height for realistic oval
-            const radiusX = radiusY * 0.72; // More realistic face proportions
+            // Face width: 72% of face height for realistic proportions
+            const minRadiusY = this.canvasSize * (minHeadHeight / 2);
+            const idealRadiusY = this.canvasSize * (idealHeadHeight / 2);
+            const maxRadiusY = this.canvasSize * (maxHeadHeight / 2);
 
+            const minRadiusX = minRadiusY * 0.72;
+            const idealRadiusX = idealRadiusY * 0.72;
+            const maxRadiusX = maxRadiusY * 0.72;
+
+            // Draw shaded acceptable zone between min and max
+            this.ctx.save();
+            this.ctx.globalAlpha = 0.15;
+            this.ctx.fillStyle = '#00FF00'; // Green tint
             this.ctx.beginPath();
-            this.ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
-            this.ctx.stroke();
+            this.ctx.ellipse(idealCenterY, idealCenterY, maxRadiusX, maxRadiusY, 0, 0, Math.PI * 2);
+            this.ctx.fill();
+            this.ctx.restore();
 
-            // Add reference markers at top and bottom of face guide
-            this.ctx.setLineDash([]);
-            this.ctx.strokeStyle = 'rgba(0, 122, 255, 0.5)'; // Increased from 0.3
-            this.ctx.lineWidth = 1.5; // Thicker
+            // Draw MAXIMUM oval (outer boundary - warning)
+            this.ctx.strokeStyle = 'rgba(255, 149, 0, 0.7)'; // Orange for limit
+            this.ctx.lineWidth = 2;
+            this.ctx.setLineDash([8, 8]); // Dashed for boundary
+            this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
             this.ctx.shadowBlur = 2;
-
-            // Top of head marker (crown)
-            const topY = centerY - radiusY;
             this.ctx.beginPath();
-            this.ctx.moveTo(centerX - 30, topY);
-            this.ctx.lineTo(centerX + 30, topY);
+            this.ctx.ellipse(idealCenterY, idealCenterY, maxRadiusX, maxRadiusY, 0, 0, Math.PI * 2);
             this.ctx.stroke();
 
-            // Add label for crown with enhanced readability
-            this.ctx.fillStyle = 'rgba(0, 122, 255, 0.85)'; // Increased from 0.6
-            this.ctx.font = 'bold 11px -apple-system, sans-serif'; // Made bold
-            this.ctx.shadowColor = 'rgba(0, 0, 0, 0.8)'; // Text shadow for readability
+            // Draw MINIMUM oval (inner boundary - warning)
+            this.ctx.strokeStyle = 'rgba(255, 149, 0, 0.7)'; // Orange for limit
+            this.ctx.lineWidth = 2;
+            this.ctx.setLineDash([8, 8]); // Dashed for boundary
+            this.ctx.beginPath();
+            this.ctx.ellipse(idealCenterY, idealCenterY, minRadiusX, minRadiusY, 0, 0, Math.PI * 2);
+            this.ctx.stroke();
+
+            // Draw IDEAL oval (target - prominent)
+            this.ctx.strokeStyle = 'rgba(0, 122, 255, 0.8)'; // Bright blue
+            this.ctx.lineWidth = 3;
+            this.ctx.setLineDash([12, 4]); // Distinctive dash pattern
+            this.ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
             this.ctx.shadowBlur = 3;
-            this.ctx.fillText('Crown', centerX + 35, topY + 4);
-
-            // Bottom of chin marker
-            const bottomY = centerY + radiusY;
             this.ctx.beginPath();
-            this.ctx.moveTo(centerX - 30, bottomY);
-            this.ctx.lineTo(centerX + 30, bottomY);
+            this.ctx.ellipse(idealCenterY, idealCenterY, idealRadiusX, idealRadiusY, 0, 0, Math.PI * 2);
             this.ctx.stroke();
 
-            // Add label for chin
-            this.ctx.fillText('Chin', centerX + 35, bottomY + 4);
+            // Draw eye line (horizontal guideline)
+            this.ctx.setLineDash([4, 4]);
+            this.ctx.strokeStyle = 'rgba(0, 255, 255, 0.6)'; // Cyan
+            this.ctx.lineWidth = 1.5;
+            this.ctx.shadowBlur = 2;
+            this.ctx.beginPath();
+            this.ctx.moveTo(centerX - maxRadiusX - 40, eyesY);
+            this.ctx.lineTo(centerX + maxRadiusX + 40, eyesY);
+            this.ctx.stroke();
+
+            // Add measurement labels
+            this.ctx.setLineDash([]);
+            this.ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+            this.ctx.shadowBlur = 3;
+            this.ctx.font = 'bold 11px -apple-system, sans-serif';
+
+            // Top crown line (max)
+            const maxTopY = idealCenterY - maxRadiusY;
+            this.ctx.strokeStyle = 'rgba(255, 149, 0, 0.6)';
+            this.ctx.lineWidth = 1;
+            this.ctx.beginPath();
+            this.ctx.moveTo(centerX - 35, maxTopY);
+            this.ctx.lineTo(centerX + 35, maxTopY);
+            this.ctx.stroke();
+            this.ctx.fillStyle = 'rgba(255, 149, 0, 0.9)';
+            this.ctx.fillText('Max 1⅜"', centerX + 40, maxTopY + 4);
+
+            // Ideal crown line
+            const idealTopY = idealCenterY - idealRadiusY;
+            this.ctx.strokeStyle = 'rgba(0, 122, 255, 0.6)';
+            this.ctx.beginPath();
+            this.ctx.moveTo(centerX - 35, idealTopY);
+            this.ctx.lineTo(centerX + 35, idealTopY);
+            this.ctx.stroke();
+            this.ctx.fillStyle = 'rgba(0, 122, 255, 0.9)';
+            this.ctx.fillText('Ideal 1.2"', centerX + 40, idealTopY + 4);
+
+            // Min crown line
+            const minTopY = idealCenterY - minRadiusY;
+            this.ctx.strokeStyle = 'rgba(255, 149, 0, 0.6)';
+            this.ctx.beginPath();
+            this.ctx.moveTo(centerX - 35, minTopY);
+            this.ctx.lineTo(centerX + 35, minTopY);
+            this.ctx.stroke();
+            this.ctx.fillStyle = 'rgba(255, 149, 0, 0.9)';
+            this.ctx.fillText('Min 1.0"', centerX + 40, minTopY + 4);
+
+            // Eye line label
+            this.ctx.fillStyle = 'rgba(0, 255, 255, 0.9)';
+            this.ctx.fillText('Eye Line', centerX - maxRadiusX - 60, eyesY + 4);
+
+            // Bottom chin line (same for all - at ideal center)
+            const chinY = idealCenterY + idealRadiusY;
+            this.ctx.strokeStyle = 'rgba(0, 122, 255, 0.6)';
+            this.ctx.beginPath();
+            this.ctx.moveTo(centerX - 35, chinY);
+            this.ctx.lineTo(centerX + 35, chinY);
+            this.ctx.stroke();
+            this.ctx.fillStyle = 'rgba(0, 122, 255, 0.9)';
+            this.ctx.fillText('Chin', centerX + 40, chinY + 4);
+
+            // Add range indicator at bottom
+            this.ctx.font = 'bold 12px -apple-system, sans-serif';
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            this.ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+            this.ctx.shadowBlur = 4;
+            const rangeText = 'Acceptable Range: 1.0" - 1.375"';
+            const textWidth = this.ctx.measureText(rangeText).width;
+            this.ctx.fillText(rangeText, (this.canvasSize - textWidth) / 2, this.canvasSize - 20);
 
             // Reset shadow
             this.ctx.shadowBlur = 0;
