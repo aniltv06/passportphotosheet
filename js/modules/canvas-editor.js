@@ -26,14 +26,15 @@ export class CanvasEditor {
         this.dragStartY = 0;
         this.backgroundRemoved = false;
 
-        // Canvas size (2x2 inch photo at 300 DPI)
-        this.canvasSize = options.canvasSize || 600;
+        // Canvas dimensions - support multiple sizes
+        this.canvasWidth = options.canvasWidth || 600;
+        this.canvasHeight = options.canvasHeight || 600;
 
         // Set canvas sizes
-        this.editCanvas.width = this.canvasSize;
-        this.editCanvas.height = this.canvasSize;
-        this.overlayCanvas.width = this.canvasSize;
-        this.overlayCanvas.height = this.canvasSize;
+        this.editCanvas.width = this.canvasWidth;
+        this.editCanvas.height = this.canvasHeight;
+        this.overlayCanvas.width = this.canvasWidth;
+        this.overlayCanvas.height = this.canvasHeight;
 
         // Callbacks
         this.onChange = options.onChange || null;
@@ -192,13 +193,13 @@ export class CanvasEditor {
         if (!this.currentImage) return;
 
         // Clear canvas
-        this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
+        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
         // Save context
         this.ctx.save();
 
         // Move to center
-        this.ctx.translate(this.canvasSize / 2, this.canvasSize / 2);
+        this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
 
         // Apply rotation
         this.ctx.rotate((this.rotation * Math.PI) / 180);
@@ -277,8 +278,8 @@ export class CanvasEditor {
      * Clear canvas
      */
     clear() {
-        this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
-        this.overlayCtx.clearRect(0, 0, this.canvasSize, this.canvasSize);
+        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        this.overlayCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
         this.originalImage = null;
         this.currentImage = null;
         this.resetTransform();

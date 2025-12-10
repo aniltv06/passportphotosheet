@@ -16,8 +16,12 @@ import { trackEvent, trackPageView, trackPhotoUpload, trackError } from '../util
  */
 export class PhotoEditorApp {
     constructor() {
-        // Canvas size
-        this.canvasSize = 600;
+        // Canvas dimensions - support both 2x2 and 630x810
+        this.dimensions = {
+            '2x2': { width: 600, height: 600, label: '2×2 inches (51×51 mm)', info: '<strong>Size:</strong> 2×2 inches (51×51 mm) • <strong>Resolution:</strong> 600×600 pixels @ 300 DPI' },
+            '630x810': { width: 630, height: 810, label: '630×810 pixels', info: '<strong>Resolution:</strong> 630×810 pixels (Digital Format)' }
+        };
+        this.currentDimension = '2x2'; // Default dimension
 
         // Get DOM elements
         this.editCanvas = getElement('editCanvas');
@@ -38,33 +42,51 @@ export class PhotoEditorApp {
         this.loadingIndicator = getElement('loadingIndicator');
         this.validationResults = getElement('validationResults');
         this.photoInfo = getElement('photoInfo');
+        this.photoInfoText = getElement('photoInfoText');
+        this.dimensionSelect = getElement('dimensionSelect');
+        this.qualitySelect = getElement('qualitySelect');
 
-        // Initialize modules
+        // Initialize modules with default dimension
+        this.initializeModules();
+
+        this.init();
+    }
+
+    /**
+     * Initialize or re-initialize modules with current dimension
+     */
+    initializeModules() {
+        const dim = this.dimensions[this.currentDimension];
+
+        // Initialize canvas editor
         this.canvasEditor = new CanvasEditor(this.editCanvas, this.overlayCanvas, {
-            canvasSize: this.canvasSize,
+            canvasWidth: dim.width,
+            canvasHeight: dim.height,
             onChange: (changes) => this.handleCanvasChange(changes),
             onReady: (img) => this.handlePhotoReady(img)
         });
 
+        // Initialize guidelines manager
         this.guidelines = new GuidelinesManager(this.overlayCanvas, {
-            canvasSize: this.canvasSize
+            canvasWidth: dim.width,
+            canvasHeight: dim.height
         });
 
+        // Initialize crop manager
         this.cropManager = new CropManager(this.overlayCanvas, {
-            canvasSize: this.canvasSize,
+            canvasSize: Math.max(dim.width, dim.height), // Use larger dimension for crop
             onCropStart: () => this.handleCropStart(),
             onCropEnd: (rect) => this.handleCropEnd(rect),
             onCropCancel: () => this.handleCropCancel()
         });
 
+        // Initialize exporter
         this.exporter = new PhotoExporter(this.canvasEditor, {
-            canvasSize: this.canvasSize,
+            canvasSize: Math.max(dim.width, dim.height),
             onExportStart: (data) => this.handleExportStart(data),
             onExportSuccess: (data) => this.handleExportSuccess(data),
             onExportError: (error) => this.handleExportError(error)
         });
-
-        this.init();
     }
 
     /**
@@ -74,6 +96,7 @@ export class PhotoEditorApp {
         this.setupEventListeners();
         this.setupKeyboardShortcuts();
         this.guidelines.render();
+        this.updatePhotoInfoDisplay(); // Set initial photo info display
 
         // Track page view
         trackPageView();
@@ -85,6 +108,16 @@ export class PhotoEditorApp {
      * Setup event listeners
      */
     setupEventListeners() {
+        // Dimension selector
+        this.dimensionSelect?.addEventListener('change', (e) => {
+            this.handleDimensionChange(e.target.value);
+        });
+
+        // Quality selector
+        this.qualitySelect?.addEventListener('change', (e) => {
+            this.handleQualityChange(e.target.value);
+        });
+
         // Zoom slider
         this.zoomSlider?.addEventListener('input', debounce((e) => {
             const value = parseFloat(e.target.value);
@@ -125,6 +158,68 @@ export class PhotoEditorApp {
             this.guidelines.toggleGrid(e.target.checked);
             trackEvent('toggle_grid', { enabled: e.target.checked });
         });
+    }
+
+    /**
+     * Handle quality change
+     */
+    handleQualityChange(quality) {
+        console.log('Quality changed to:', quality);
+
+        // Update exporter quality setting
+        this.exporter.setQuality(quality);
+
+        // Track event
+        trackEvent('quality_changed', { quality });
+
+        // Announce to screen reader
+        const preset = this.exporter.qualityPresets[quality];
+        announceToScreenReader(`Export quality changed to ${preset.label}`);
+    }
+
+    /**
+     * Handle dimension change
+     */
+    handleDimensionChange(dimension) {
+        console.log('Dimension changed to:', dimension);
+
+        // Store current photo if loaded
+        const currentImage = this.canvasEditor.currentImage;
+        const currentDataURL = currentImage ? this.canvasEditor.toDataURL() : null;
+
+        // Update current dimension
+        this.currentDimension = dimension;
+
+        // Re-initialize modules with new dimension
+        this.initializeModules();
+
+        // Reload photo if one was loaded
+        if (currentDataURL) {
+            this.canvasEditor.loadImage(currentDataURL);
+        }
+
+        // Render guidelines
+        this.guidelines.render();
+
+        // Update photo info display
+        this.updatePhotoInfoDisplay();
+
+        // Track event
+        trackEvent('dimension_changed', { dimension });
+
+        // Announce to screen reader
+        const dim = this.dimensions[dimension];
+        announceToScreenReader(`Canvas dimension changed to ${dim.label}`);
+    }
+
+    /**
+     * Update photo info display based on current dimension
+     */
+    updatePhotoInfoDisplay() {
+        if (!this.photoInfoText) return;
+
+        const dim = this.dimensions[this.currentDimension];
+        this.photoInfoText.innerHTML = dim.info;
     }
 
     /**

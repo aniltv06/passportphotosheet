@@ -104,6 +104,12 @@ export class CanvasRenderer {
             // Draw background grid and measurement scales for cutting guidance
             this.drawBackgroundGrid(canvasWidth, canvasHeight, dpi);
 
+            // Reset context properties for photo drawing
+            this.ctx.globalAlpha = 1.0;
+            this.ctx.globalCompositeOperation = 'source-over';
+            this.ctx.imageSmoothingEnabled = true;
+            this.ctx.imageSmoothingQuality = 'high';
+
             for (let row = 0; row < layout.rows; row++) {
                 // Photo 1 at 0.5", Photo 2 at 3.5" (0.5" + 2" + 1.0")
                 const y = topMargin + (row * (photoSizePx + middleGap));
@@ -158,6 +164,12 @@ export class CanvasRenderer {
 
             // Draw background grid and measurement scales for cutting guidance
             this.drawBackgroundGrid(canvasWidth, canvasHeight, dpi);
+
+            // Reset context properties for photo drawing
+            this.ctx.globalAlpha = 1.0;
+            this.ctx.globalCompositeOperation = 'source-over';
+            this.ctx.imageSmoothingEnabled = true;
+            this.ctx.imageSmoothingQuality = 'high';
 
             for (let row = 0; row < layout.rows; row++) {
                 for (let col = 0; col < layout.cols; col++) {

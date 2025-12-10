@@ -332,6 +332,18 @@
                     <div id="uploadContainer"></div>
                 </div>
 
+                <!-- Photo Dimension Selector -->
+                <div class="panel" style="margin-top: 20px;">
+                    <h3>Photo Dimensions</h3>
+                    <div class="control-group">
+                        <label class="control-label" for="dimensionSelect">Select Photo Size</label>
+                        <select id="dimensionSelect" class="form-select" aria-label="Select photo dimension">
+                            <option value="2x2" selected>2×2 inches (600×600 px @ 300 DPI)</option>
+                            <option value="630x810">630×810 pixels (Digital Format)</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="panel" style="margin-top: 20px;">
                     <h3 data-i18n="guidelines_title">Guidelines</h3>
                     <div class="toggle-group">
@@ -396,7 +408,7 @@
                     </div>
                     <div id="photoInfo" style="display: none; text-align: center; margin-top: 16px; padding: 12px; background: rgba(0, 122, 255, 0.05); border-radius: 8px; font-size: 13px; color: var(--text-secondary);">
                         <strong style="color: var(--text-primary);">Photo Specifications</strong><br>
-                        <span style="display: inline-block; margin-top: 6px;">
+                        <span id="photoInfoText" style="display: inline-block; margin-top: 6px;">
                             <strong>Size:</strong> 2×2 inches (51×51 mm) •
                             <strong>Resolution:</strong> 600×600 pixels @ 300 DPI
                         </span>
@@ -406,6 +418,21 @@
                 <!-- Export Panel - Separate panel below canvas -->
                 <div class="panel" style="margin-top: 20px;">
                     <h3>Export</h3>
+
+                    <!-- File Size/Quality Selector -->
+                    <div class="control-group" style="margin-bottom: 16px;">
+                        <label class="control-label" for="qualitySelect">Export Quality</label>
+                        <select id="qualitySelect" class="form-select" aria-label="Select export quality">
+                            <option value="maximum">Maximum Quality (Original Size)</option>
+                            <option value="high">High Quality (&lt;500KB)</option>
+                            <option value="optimized" selected>Optimized (&lt;250KB) ⭐ Recommended</option>
+                            <option value="small">Small Size (&lt;100KB)</option>
+                        </select>
+                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">
+                            Smaller files are faster to upload and share
+                        </div>
+                    </div>
+
                     <button class="btn btn-success" id="exportBtn" disabled
                             aria-label="Use this photo to create a photo sheet - returns to the main photo maker page">
                         ✓ Create Photo Sheet

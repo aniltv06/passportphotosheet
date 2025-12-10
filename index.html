@@ -1118,6 +1118,12 @@
                     // Draw background grid and measurement scales for cutting guidance
                     drawBackgroundGrid(canvasWidth, canvasHeight, dpi);
 
+                    // Reset context properties for photo drawing
+                    ctx.globalAlpha = 1.0;
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+
                     for (let row = 0; row < layout.rows; row++) {
                         // Photo 1 at 0.5", Photo 2 at 3.5" (0.5" + 2" + 1.0")
                         const y = topMargin + (row * (photoSizePx + middleGap));
@@ -1185,6 +1191,12 @@
 
                     // Draw background grid and measurement scales for cutting guidance
                     drawBackgroundGrid(canvasWidth, canvasHeight, dpi);
+
+                    // Reset context properties for photo drawing
+                    ctx.globalAlpha = 1.0;
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
 
                     for (let row = 0; row < layout.rows; row++) {
                         for (let col = 0; col < layout.cols; col++) {
