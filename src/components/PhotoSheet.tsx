@@ -1,4 +1,4 @@
-import { ArrowLeft, Maximize2, Download, Grid3x3, FileCheck, Ruler } from 'lucide-react';
+import { ArrowLeft, Maximize2, Download, Grid3x3, FileCheck } from 'lucide-react';
 import { Button } from './ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Slider } from './ui/slider';
@@ -14,7 +14,6 @@ import { getIntelligentPaperSizes, getOptimalLayout } from '../utils/paperSizeCa
 interface PhotoSheetProps {
   uploadedImage: string | null;
   passportSize: string;
-  setPassportSize: (size: string) => void;
   zoom: number;
   rotation: number;
   backgroundColor: string;
@@ -34,7 +33,6 @@ interface PhotoSheetProps {
 export function PhotoSheet({
   uploadedImage,
   passportSize,
-  setPassportSize,
   zoom,
   rotation,
   backgroundColor,
@@ -223,35 +221,6 @@ export function PhotoSheet({
                           )}
                         </div>
                         <div className="text-xs text-white/60">{size.description}</div>
-                      </div>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </GlassCard>
-
-        {/* Photo Size */}
-        <GlassCard delay={0.125}>
-          <div className="p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
-                <Ruler className="w-5 h-5 text-white" />
-              </div>
-              <h2 className="text-white">Photo Size</h2>
-            </div>
-            <Select value={passportSize} onValueChange={setPassportSize}>
-              <SelectTrigger className="w-full h-14 bg-white/10 border-white/30 text-white rounded-xl backdrop-blur-sm hover:bg-white/20 transition-all text-left">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-gray-900/95 backdrop-blur-xl border-white/20">
-                {PHOTO_SIZE_OPTIONS.map((size) => (
-                  <SelectItem key={size.value} value={size.value} className="text-white hover:bg-white/10">
-                    <div className="flex items-center gap-3">
-                      <div>
-                        <div>{size.label}</div>
-                        <div className="text-xs text-white/60">{size.description} • {size.pixelsAt300DPI}</div>
                       </div>
                     </div>
                   </SelectItem>

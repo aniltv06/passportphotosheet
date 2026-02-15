@@ -72,6 +72,17 @@ export interface Layout {
 }
 
 export const LAYOUTS: Record<string, Layout> = {
+  '3.5x5': {
+    width: 3.5,
+    height: 5,
+    cols: 1,
+    rows: 1,
+    photos: 1,
+    icon: '🎯',
+    customSpacing: true,
+    spacingType: 'single-centered-with-guides',
+    forceGrid: false,
+  },
   '4x6-2-grid': {
     width: 4,
     height: 6,
@@ -141,6 +152,12 @@ export const LAYOUTS: Record<string, Layout> = {
 };
 
 export const PAPER_SIZE_OPTIONS = [
+  {
+    value: '3.5x5',
+    label: '3.5×5" Print (1 photo)',
+    icon: '🎯',
+    description: 'Single centered photo with guides • 1050×1500px @ 300 DPI',
+  },
   {
     value: '4x6-2-grid',
     label: '4×6" Print (2 photos - Grid Background)',

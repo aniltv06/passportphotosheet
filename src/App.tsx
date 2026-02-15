@@ -250,7 +250,6 @@ function AppContent() {
               <PhotoSheet
                 uploadedImage={uploadedImage}
                 passportSize={passportSize}
-                setPassportSize={setPassportSize}
                 zoom={zoom}
                 rotation={rotation}
                 backgroundColor={backgroundColor}

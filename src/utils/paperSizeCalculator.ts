@@ -113,6 +113,7 @@ export function getOptimalLayout(
   photos: number;
   useCustomSpacing: boolean;
   spacingType?: string;
+  useLandscapeOrientation?: boolean;
 } {
   const selectedPhoto = PHOTO_SIZE_OPTIONS.find(ps => ps.value === photoSizeValue);
   const layout = LAYOUTS[paperSizeValue];
@@ -130,14 +131,34 @@ export function getOptimalLayout(
   const photoHeight = selectedPhoto.height;
   const fit = calculatePhotoFit(layout.width, layout.height, photoWidth, photoHeight);
 
-  // For 2-photo layouts, always use custom spacing
+  // For 3.5×5" paper - single centered photo with guides (printer safe margins)
+  if (paperSizeValue === '3.5x5') {
+    return {
+      cols: 1,
+      rows: 1,
+      photos: 1,
+      useCustomSpacing: true,
+      spacingType: 'single-centered-with-guides',
+    };
+  }
+
+  // For 2-photo layouts, check if landscape orientation is better
   if (fit.photos === 2 || paperSizeValue.includes('-2-')) {
+    // Special case: 2.1×2.7" photos on 4×6" paper - use landscape for better fit
+    const useLandscape = photoSizeValue === '2.1x2.7' && layout.width === 4 && layout.height === 6;
+
+    // If using landscape, calculate fit with swapped dimensions
+    const landscapeFit = useLandscape
+      ? calculatePhotoFit(layout.width, layout.height, photoHeight, photoWidth)
+      : fit;
+
     return {
       cols: 1,
       rows: 2,
       photos: 2,
       useCustomSpacing: true,
       spacingType: paperSizeValue.includes('grid') ? 'vertical-apart-grid' : 'vertical-apart-plain',
+      useLandscapeOrientation: useLandscape,
     };
   }
 

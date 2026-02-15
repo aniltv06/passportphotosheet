@@ -31,6 +31,7 @@ export interface RenderOptions {
     photos: number;
     useCustomSpacing: boolean;
     spacingType?: string;
+    useLandscapeOrientation?: boolean;
   };
 }
 
@@ -49,11 +50,19 @@ function createEditedImage(
   sourceImage: HTMLImageElement,
   options: RenderOptions,
   photoWidthPx: number,
-  photoHeightPx: number
+  photoHeightPx: number,
+  applyLandscapeRotation: boolean = false
 ): HTMLCanvasElement {
   const editCanvas = document.createElement('canvas');
-  editCanvas.width = photoWidthPx;
-  editCanvas.height = photoHeightPx;
+
+  // If applying landscape rotation, swap canvas dimensions
+  if (applyLandscapeRotation) {
+    editCanvas.width = photoHeightPx;
+    editCanvas.height = photoWidthPx;
+  } else {
+    editCanvas.width = photoWidthPx;
+    editCanvas.height = photoHeightPx;
+  }
 
   const ctx = editCanvas.getContext('2d', { alpha: false });
   if (!ctx) {
@@ -69,7 +78,7 @@ function createEditedImage(
     original: '#ffffff'
   };
   ctx.fillStyle = bgColors[options.backgroundColor || 'original'] || '#ffffff';
-  ctx.fillRect(0, 0, photoWidthPx, photoHeightPx);
+  ctx.fillRect(0, 0, editCanvas.width, editCanvas.height);
 
   // Apply filters
   const brightness = options.brightness || 100;
@@ -80,11 +89,18 @@ function createEditedImage(
   ctx.save();
 
   // Move to center for rotation and zoom
-  ctx.translate(photoWidthPx / 2, photoHeightPx / 2);
+  ctx.translate(editCanvas.width / 2, editCanvas.height / 2);
 
-  // Apply rotation
+  // Apply user rotation
   const rotation = options.rotation || 0;
-  ctx.rotate((rotation * Math.PI) / 180);
+  let totalRotation = rotation;
+
+  // Add 90 degree rotation if landscape orientation
+  if (applyLandscapeRotation) {
+    totalRotation += 90;
+  }
+
+  ctx.rotate((totalRotation * Math.PI) / 180);
 
   // Apply zoom
   const zoom = options.zoom || 100;
@@ -95,17 +111,21 @@ function createEditedImage(
   const panY = options.panY || 0;
 
   // Calculate image dimensions to cover the canvas
+  // Use original canvas dimensions before rotation for aspect ratio calculation
+  const targetWidth = applyLandscapeRotation ? photoHeightPx : photoWidthPx;
+  const targetHeight = applyLandscapeRotation ? photoWidthPx : photoHeightPx;
+
   const imageAspect = sourceImage.width / sourceImage.height;
-  const canvasAspect = photoWidthPx / photoHeightPx;
+  const canvasAspect = targetWidth / targetHeight;
   let drawWidth, drawHeight;
 
   if (imageAspect > canvasAspect) {
     // Image is wider than canvas
-    drawHeight = photoHeightPx * scale;
+    drawHeight = targetHeight * scale;
     drawWidth = drawHeight * imageAspect;
   } else {
     // Image is taller or same aspect as canvas
-    drawWidth = photoWidthPx * scale;
+    drawWidth = targetWidth * scale;
     drawHeight = drawWidth / imageAspect;
   }
 
@@ -142,6 +162,7 @@ export function createPhotoSheet(
   const gapSize = options.gapEnabled ? 0.05 : 0; // 0.05 inches gap
 
   // Use provided photo dimensions or default to 2x2
+  // Keep original dimensions - rotation will be handled in createEditedImage
   const photoWidth = options.photoWidth || 2;
   const photoHeight = options.photoHeight || 2;
 
@@ -153,7 +174,14 @@ export function createPhotoSheet(
   const gapSizePx = gapSize * dpi;
 
   // Create edited version of the image with all transformations applied
-  const editedImage = createEditedImage(image, options, photoWidthPx, photoHeightPx);
+  // Pass landscape rotation flag to createEditedImage
+  const editedImage = createEditedImage(
+    image,
+    options,
+    photoWidthPx,
+    photoHeightPx,
+    activeLayout.useLandscapeOrientation || false
+  );
 
   // Debug logging
   console.log('=== Photo Sheet Dimensions ===');
@@ -164,6 +192,8 @@ export function createPhotoSheet(
   console.log(`Photo size in pixels: ${photoWidthPx}px × ${photoHeightPx}px`);
   console.log(`Active Layout: ${activeLayout.cols}×${activeLayout.rows} = ${activeLayout.photos} photos`);
   console.log(`Custom spacing: ${activeLayout.useCustomSpacing}, Type: ${activeLayout.spacingType || 'N/A'}`);
+  console.log(`Landscape orientation: ${activeLayout.useLandscapeOrientation || false}`);
+  console.log(`Edited image dimensions: ${editedImage.width}px × ${editedImage.height}px`);
   console.log(`Edits applied: zoom=${options.zoom}, rotation=${options.rotation}, brightness=${options.brightness}, contrast=${options.contrast}`);
   console.log('============================');
 
@@ -187,11 +217,18 @@ export function createPhotoSheet(
 
   // Handle custom spacing layouts - now passing editedImage instead of original image
   if (activeLayout.useCustomSpacing) {
-    if (
+    if (activeLayout.spacingType === 'single-centered-with-guides') {
+      renderSingleCenteredWithGuides(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, options);
+    } else if (
       activeLayout.spacingType === 'vertical-apart-grid' ||
       activeLayout.spacingType === 'vertical-apart-plain'
     ) {
       renderVerticalApartLayout(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, gapSizePx, options, layout.forceGrid);
+    } else if (
+      activeLayout.spacingType === 'horizontal-apart-grid' ||
+      activeLayout.spacingType === 'horizontal-apart-plain'
+    ) {
+      renderHorizontalApartLayout(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, gapSizePx, options, layout.forceGrid);
     } else if (activeLayout.spacingType === 'vertical-centered') {
       renderVerticalCenteredLayout(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, gapSizePx, canvasWidth, canvasHeight, options);
     } else if (activeLayout.spacingType === 'grid-aligned') {
@@ -211,7 +248,135 @@ export function createPhotoSheet(
 }
 
 /**
- * Render 4x6 2-photo layout with grid or plain background
+ * Render single centered photo with guides and printer safe margins (3.5×5" paper)
+ * Uses 0.25" printer safe margins on all sides
+ */
+function renderSingleCenteredWithGuides(
+  ctx: CanvasRenderingContext2D,
+  image: HTMLImageElement | HTMLCanvasElement,
+  layout: Layout | { cols: number; rows: number; photos: number; useCustomSpacing: boolean; spacingType?: string },
+  photoWidthPx: number,
+  photoHeightPx: number,
+  canvasWidth: number,
+  canvasHeight: number,
+  dpi: number,
+  options: RenderOptions
+): void {
+  // Use actual image dimensions
+  const actualPhotoWidth = image.width;
+  const actualPhotoHeight = image.height;
+
+  // Printer safe margins (0.25" on all sides)
+  const safeMargin = 0.25 * dpi;
+
+  // Calculate center position
+  const x = (canvasWidth - actualPhotoWidth) / 2;
+  const y = (canvasHeight - actualPhotoHeight) / 2;
+
+  console.log('=== Single Centered Layout ===');
+  console.log(`Paper: ${canvasWidth / dpi}" × ${canvasHeight / dpi}"`);
+  console.log(`Photo dimensions: ${actualPhotoWidth}px × ${actualPhotoHeight}px`);
+  console.log(`Safe margins: ${safeMargin / dpi}"`);
+  console.log(`Centered position: (${x}px, ${y}px)`);
+  console.log('================================');
+
+  // Reset context properties
+  ctx.globalAlpha = 1.0;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+
+  // Draw the photo centered
+  ctx.drawImage(image, x, y, actualPhotoWidth, actualPhotoHeight);
+
+  // Draw cutting guides around the photo
+  if (options.gapEnabled) {
+    ctx.strokeStyle = '#CCCCCC';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x, y, actualPhotoWidth, actualPhotoHeight);
+  }
+
+  // Draw photo border if enabled
+  if (options.borderEnabled) {
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = Math.max(2, dpi / 150);
+    const borderOffset = ctx.lineWidth / 2;
+    ctx.strokeRect(
+      x + borderOffset,
+      y + borderOffset,
+      actualPhotoWidth - ctx.lineWidth,
+      actualPhotoHeight - ctx.lineWidth
+    );
+  }
+
+  // Draw corner guides for cutting (L-shaped marks at corners)
+  ctx.strokeStyle = '#999999';
+  ctx.lineWidth = 1;
+  const guideLength = 0.25 * dpi; // 0.25" guide marks
+
+  // Top-left corner
+  ctx.beginPath();
+  ctx.moveTo(x - guideLength, y);
+  ctx.lineTo(x, y);
+  ctx.lineTo(x, y - guideLength);
+  ctx.stroke();
+
+  // Top-right corner
+  ctx.beginPath();
+  ctx.moveTo(x + actualPhotoWidth + guideLength, y);
+  ctx.lineTo(x + actualPhotoWidth, y);
+  ctx.lineTo(x + actualPhotoWidth, y - guideLength);
+  ctx.stroke();
+
+  // Bottom-left corner
+  ctx.beginPath();
+  ctx.moveTo(x - guideLength, y + actualPhotoHeight);
+  ctx.lineTo(x, y + actualPhotoHeight);
+  ctx.lineTo(x, y + actualPhotoHeight + guideLength);
+  ctx.stroke();
+
+  // Bottom-right corner
+  ctx.beginPath();
+  ctx.moveTo(x + actualPhotoWidth + guideLength, y + actualPhotoHeight);
+  ctx.lineTo(x + actualPhotoWidth, y + actualPhotoHeight);
+  ctx.lineTo(x + actualPhotoWidth, y + actualPhotoHeight + guideLength);
+  ctx.stroke();
+
+  // Draw printer safe margin guides (dashed lines)
+  ctx.strokeStyle = '#DDDDDD';
+  ctx.lineWidth = 0.5;
+  ctx.setLineDash([5, 5]);
+
+  // Top safe margin line
+  ctx.beginPath();
+  ctx.moveTo(safeMargin, safeMargin);
+  ctx.lineTo(canvasWidth - safeMargin, safeMargin);
+  ctx.stroke();
+
+  // Bottom safe margin line
+  ctx.beginPath();
+  ctx.moveTo(safeMargin, canvasHeight - safeMargin);
+  ctx.lineTo(canvasWidth - safeMargin, canvasHeight - safeMargin);
+  ctx.stroke();
+
+  // Left safe margin line
+  ctx.beginPath();
+  ctx.moveTo(safeMargin, safeMargin);
+  ctx.lineTo(safeMargin, canvasHeight - safeMargin);
+  ctx.stroke();
+
+  // Right safe margin line
+  ctx.beginPath();
+  ctx.moveTo(canvasWidth - safeMargin, safeMargin);
+  ctx.lineTo(canvasWidth - safeMargin, canvasHeight - safeMargin);
+  ctx.stroke();
+
+  // Reset line dash
+  ctx.setLineDash([]);
+}
+
+/**
+ * Render 4x6 2-photo layout with grid or plain background (vertical)
  */
 function renderVerticalApartLayout(
   ctx: CanvasRenderingContext2D,
@@ -226,9 +391,38 @@ function renderVerticalApartLayout(
   options: RenderOptions,
   forceGrid?: boolean
 ): void {
-  const topMargin = 0.5 * dpi; // 0.5" top
-  const middleGap = 1.0 * dpi; // 1.0" between photos
-  const x = (canvasWidth - photoWidthPx) / 2; // Center horizontally
+  // Use actual image dimensions (which are rotated if landscape)
+  const actualPhotoWidth = image.width;
+  const actualPhotoHeight = image.height;
+
+  // Custom placement calculations based on photo size
+  const paperWidthInches = canvasWidth / dpi;
+  const paperHeightInches = canvasHeight / dpi;
+  const photoWidthInches = actualPhotoWidth / dpi;
+  const photoHeightInches = actualPhotoHeight / dpi;
+
+  // Calculate optimal placement
+  // Available space: paper height - 2 photos - margins
+  const totalPhotosHeight = 2 * photoHeightInches;
+  const availableSpace = paperHeightInches - totalPhotosHeight;
+
+  // Use custom margins for better centering
+  // Distribute remaining space: top margin + gap + bottom margin
+  const topMargin = availableSpace * 0.25 * dpi; // 25% on top
+  const middleGap = availableSpace * 0.5 * dpi; // 50% in middle
+  // Bottom margin is automatic (remaining 25%)
+
+  // Center horizontally
+  const x = (canvasWidth - actualPhotoWidth) / 2;
+
+  console.log('=== Vertical Layout Placement ===');
+  console.log(`Paper: ${paperWidthInches}" × ${paperHeightInches}"`);
+  console.log(`Rotated photo: ${photoWidthInches}" × ${photoHeightInches}"`);
+  console.log(`Photo dimensions (px): ${actualPhotoWidth}px × ${actualPhotoHeight}px`);
+  console.log(`Top margin: ${(topMargin / dpi).toFixed(3)}"`);
+  console.log(`Middle gap: ${(middleGap / dpi).toFixed(3)}"`);
+  console.log(`X position (centered): ${x}px`);
+  console.log('====================================');
 
   // Draw background grid if grid variant
   if (forceGrid) {
@@ -242,13 +436,13 @@ function renderVerticalApartLayout(
   ctx.imageSmoothingQuality = 'high';
 
   for (let row = 0; row < layout.rows; row++) {
-    const y = topMargin + row * (photoHeightPx + middleGap);
-    ctx.drawImage(image, x, y, photoWidthPx, photoHeightPx);
+    const y = topMargin + row * (actualPhotoHeight + middleGap);
+    ctx.drawImage(image, x, y, actualPhotoWidth, actualPhotoHeight);
 
     if (options.gapEnabled) {
       ctx.strokeStyle = '#CCCCCC';
       ctx.lineWidth = 1;
-      ctx.strokeRect(x, y, photoWidthPx, photoHeightPx);
+      ctx.strokeRect(x, y, actualPhotoWidth, actualPhotoHeight);
     }
 
     if (options.borderEnabled) {
@@ -258,8 +452,93 @@ function renderVerticalApartLayout(
       ctx.strokeRect(
         x + borderOffset,
         y + borderOffset,
-        photoWidthPx - ctx.lineWidth,
-        photoHeightPx - ctx.lineWidth
+        actualPhotoWidth - ctx.lineWidth,
+        actualPhotoHeight - ctx.lineWidth
+      );
+    }
+  }
+}
+
+/**
+ * Render 4x6 2-photo layout with grid or plain background (horizontal/landscape)
+ */
+function renderHorizontalApartLayout(
+  ctx: CanvasRenderingContext2D,
+  image: HTMLImageElement | HTMLCanvasElement,
+  layout: Layout | { cols: number; rows: number; photos: number; useCustomSpacing: boolean; spacingType?: string },
+  photoWidthPx: number,
+  photoHeightPx: number,
+  canvasWidth: number,
+  canvasHeight: number,
+  dpi: number,
+  gapSizePx: number,
+  options: RenderOptions,
+  forceGrid?: boolean
+): void {
+  // Use actual image dimensions (which are rotated if landscape)
+  const actualPhotoWidth = image.width;
+  const actualPhotoHeight = image.height;
+
+  // Custom placement calculations based on photo size
+  // For 2.1×2.7" (630×810) photos rotated to landscape on 4×6" paper
+  const paperWidthInches = canvasWidth / dpi;
+  const paperHeightInches = canvasHeight / dpi;
+  const photoWidthInches = actualPhotoWidth / dpi;
+  const photoHeightInches = actualPhotoHeight / dpi;
+
+  // Calculate optimal placement
+  // Available space: paper width - 2 photos - margins
+  const totalPhotosWidth = 2 * photoWidthInches;
+  const availableSpace = paperWidthInches - totalPhotosWidth;
+
+  // Use custom margins for better centering
+  // Distribute remaining space: left margin + gap + right margin
+  const leftMargin = availableSpace * 0.25 * dpi; // 25% on left
+  const middleGap = availableSpace * 0.5 * dpi; // 50% in middle
+  // Right margin is automatic (remaining space)
+
+  // Center vertically
+  const y = (canvasHeight - actualPhotoHeight) / 2;
+
+  console.log('=== Horizontal Layout Placement ===');
+  console.log(`Paper: ${paperWidthInches}" × ${paperHeightInches}"`);
+  console.log(`Rotated photo: ${photoWidthInches}" × ${photoHeightInches}"`);
+  console.log(`Photo dimensions (px): ${actualPhotoWidth}px × ${actualPhotoHeight}px`);
+  console.log(`Left margin: ${(leftMargin / dpi).toFixed(3)}"`);
+  console.log(`Middle gap: ${(middleGap / dpi).toFixed(3)}"`);
+  console.log(`Y position (centered): ${y}px`);
+  console.log('====================================');
+
+  // Draw background grid if grid variant
+  if (forceGrid) {
+    drawBackgroundGrid(ctx, canvasWidth, canvasHeight, dpi);
+  }
+
+  // Reset context properties for photo drawing
+  ctx.globalAlpha = 1.0;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+
+  for (let col = 0; col < layout.cols; col++) {
+    const x = leftMargin + col * (actualPhotoWidth + middleGap);
+    ctx.drawImage(image, x, y, actualPhotoWidth, actualPhotoHeight);
+
+    if (options.gapEnabled) {
+      ctx.strokeStyle = '#CCCCCC';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x, y, actualPhotoWidth, actualPhotoHeight);
+    }
+
+    if (options.borderEnabled) {
+      ctx.strokeStyle = '#CCCCCC';
+      ctx.lineWidth = Math.max(0.5, dpi / 150);
+      const borderOffset = ctx.lineWidth / 2;
+      ctx.strokeRect(
+        x + borderOffset,
+        y + borderOffset,
+        actualPhotoWidth - ctx.lineWidth,
+        actualPhotoHeight - ctx.lineWidth
       );
     }
   }
