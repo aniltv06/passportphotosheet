@@ -24,6 +24,14 @@ export interface RenderOptions {
   brightness?: number;
   contrast?: number;
   backgroundColor?: string;
+  // Optimal layout configuration
+  optimalLayout?: {
+    cols: number;
+    rows: number;
+    photos: number;
+    useCustomSpacing: boolean;
+    spacingType?: string;
+  };
 }
 
 export interface RenderResult {
@@ -127,6 +135,9 @@ export function createPhotoSheet(
     throw new Error(`Unknown paper size: ${options.paperSize}`);
   }
 
+  // Use optimal layout if provided, otherwise use static layout
+  const activeLayout = options.optimalLayout || layout;
+
   const dpi = options.quality === 'high' ? 300 : 200;
   const gapSize = options.gapEnabled ? 0.05 : 0; // 0.05 inches gap
 
@@ -151,6 +162,8 @@ export function createPhotoSheet(
   console.log(`Canvas: ${canvasWidth}px × ${canvasHeight}px`);
   console.log(`Photo size: ${photoWidth}" × ${photoHeight}"`);
   console.log(`Photo size in pixels: ${photoWidthPx}px × ${photoHeightPx}px`);
+  console.log(`Active Layout: ${activeLayout.cols}×${activeLayout.rows} = ${activeLayout.photos} photos`);
+  console.log(`Custom spacing: ${activeLayout.useCustomSpacing}, Type: ${activeLayout.spacingType || 'N/A'}`);
   console.log(`Edits applied: zoom=${options.zoom}, rotation=${options.rotation}, brightness=${options.brightness}, contrast=${options.contrast}`);
   console.log('============================');
 
@@ -173,26 +186,26 @@ export function createPhotoSheet(
   ctx.imageSmoothingQuality = 'high';
 
   // Handle custom spacing layouts - now passing editedImage instead of original image
-  if (layout.customSpacing) {
+  if (activeLayout.useCustomSpacing) {
     if (
-      layout.spacingType === 'vertical-apart-grid' ||
-      layout.spacingType === 'vertical-apart-plain'
+      activeLayout.spacingType === 'vertical-apart-grid' ||
+      activeLayout.spacingType === 'vertical-apart-plain'
     ) {
-      renderVerticalApartLayout(ctx, editedImage, layout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, gapSizePx, options);
-    } else if (layout.spacingType === 'vertical-centered') {
-      renderVerticalCenteredLayout(ctx, editedImage, layout, photoWidthPx, photoHeightPx, gapSizePx, canvasWidth, canvasHeight, options);
-    } else if (layout.spacingType === 'grid-aligned') {
-      renderGridAlignedLayout(ctx, editedImage, layout, photoWidthPx, photoHeightPx, dpi, canvasWidth, canvasHeight, options);
+      renderVerticalApartLayout(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, gapSizePx, options, layout.forceGrid);
+    } else if (activeLayout.spacingType === 'vertical-centered') {
+      renderVerticalCenteredLayout(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, gapSizePx, canvasWidth, canvasHeight, options);
+    } else if (activeLayout.spacingType === 'grid-aligned') {
+      renderGridAlignedLayout(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, dpi, canvasWidth, canvasHeight, options);
     }
   } else {
-    renderStandardGrid(ctx, editedImage, layout, photoWidthPx, photoHeightPx, gapSizePx, canvasWidth, canvasHeight, options);
+    renderStandardGrid(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, gapSizePx, canvasWidth, canvasHeight, options);
   }
 
   return {
     canvas,
     canvasWidth,
     canvasHeight,
-    photoCount: layout.photos,
+    photoCount: activeLayout.photos,
     dpi,
   };
 }
@@ -203,21 +216,22 @@ export function createPhotoSheet(
 function renderVerticalApartLayout(
   ctx: CanvasRenderingContext2D,
   image: HTMLImageElement | HTMLCanvasElement,
-  layout: Layout,
+  layout: Layout | { cols: number; rows: number; photos: number; useCustomSpacing: boolean; spacingType?: string },
   photoWidthPx: number,
   photoHeightPx: number,
   canvasWidth: number,
   canvasHeight: number,
   dpi: number,
   gapSizePx: number,
-  options: RenderOptions
+  options: RenderOptions,
+  forceGrid?: boolean
 ): void {
   const topMargin = 0.5 * dpi; // 0.5" top
   const middleGap = 1.0 * dpi; // 1.0" between photos
   const x = (canvasWidth - photoWidthPx) / 2; // Center horizontally
 
   // Draw background grid if grid variant
-  if (layout.forceGrid) {
+  if (forceGrid) {
     drawBackgroundGrid(ctx, canvasWidth, canvasHeight, dpi);
   }
 
@@ -257,7 +271,7 @@ function renderVerticalApartLayout(
 function renderVerticalCenteredLayout(
   ctx: CanvasRenderingContext2D,
   image: HTMLImageElement | HTMLCanvasElement,
-  layout: Layout,
+  layout: Layout | { cols: number; rows: number; photos: number; useCustomSpacing: boolean; spacingType?: string },
   photoWidthPx: number,
   photoHeightPx: number,
   gapSizePx: number,
@@ -304,7 +318,7 @@ function renderVerticalCenteredLayout(
 function renderGridAlignedLayout(
   ctx: CanvasRenderingContext2D,
   image: HTMLImageElement | HTMLCanvasElement,
-  layout: Layout,
+  layout: Layout | { cols: number; rows: number; photos: number; useCustomSpacing: boolean; spacingType?: string },
   photoWidthPx: number,
   photoHeightPx: number,
   dpi: number,
@@ -360,7 +374,7 @@ function renderGridAlignedLayout(
 function renderStandardGrid(
   ctx: CanvasRenderingContext2D,
   image: HTMLImageElement | HTMLCanvasElement,
-  layout: Layout,
+  layout: Layout | { cols: number; rows: number; photos: number; useCustomSpacing: boolean; spacingType?: string },
   photoWidthPx: number,
   photoHeightPx: number,
   gapSizePx: number,

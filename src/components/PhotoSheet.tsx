@@ -4,11 +4,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Slider } from './ui/slider';
 import { Switch } from './ui/switch';
 import { motion } from 'motion/react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { GlassCard } from './GlassCard';
 import { Badge } from './ui/badge';
 import { PAPER_SIZE_OPTIONS, LAYOUTS, PHOTO_SIZE_OPTIONS, PhotoSize } from '../utils/layoutConfig';
 import { createPhotoSheet, downloadPhotoSheet } from '../utils/canvasRenderer';
+import { getIntelligentPaperSizes, getOptimalLayout } from '../utils/paperSizeCalculator';
 
 interface PhotoSheetProps {
   uploadedImage: string | null;
@@ -60,6 +61,16 @@ export function PhotoSheet({
   const photoWidth = selectedPhotoSize.width;
   const photoHeight = selectedPhotoSize.height;
 
+  // Get intelligent paper size options based on selected photo size
+  const intelligentPaperSizes = useMemo(() => {
+    return getIntelligentPaperSizes(passportSize);
+  }, [passportSize]);
+
+  // Get optimal layout for current selection
+  const optimalLayout = useMemo(() => {
+    return getOptimalLayout(passportSize, paperSize);
+  }, [passportSize, paperSize]);
+
   const borderColors = [
     { value: '#ffffff', label: 'White', gradient: 'from-gray-100 to-gray-200' },
     { value: '#000000', label: 'Black', gradient: 'from-gray-800 to-gray-900' },
@@ -101,6 +112,8 @@ export function PhotoSheet({
           brightness,
           contrast,
           backgroundColor,
+          // Pass optimal layout
+          optimalLayout,
         });
 
         // Scale down canvas for preview
@@ -140,7 +153,7 @@ export function PhotoSheet({
       }
     };
     img.src = uploadedImage;
-  }, [uploadedImage, paperSize, quality, gapEnabled, borderEnabled, photoWidth, photoHeight, zoom, rotation, panX, panY, brightness, contrast, backgroundColor]);
+  }, [uploadedImage, paperSize, quality, gapEnabled, borderEnabled, photoWidth, photoHeight, zoom, rotation, panX, panY, brightness, contrast, backgroundColor, optimalLayout]);
 
   const handleDownloadSheet = () => {
     if (!uploadedImage) return;
@@ -164,6 +177,8 @@ export function PhotoSheet({
           brightness,
           contrast,
           backgroundColor,
+          // Pass optimal layout
+          optimalLayout,
         });
 
         downloadPhotoSheet(result.canvas, paperSize, result.dpi);
@@ -193,17 +208,22 @@ export function PhotoSheet({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-gray-900/95 backdrop-blur-xl border-white/20">
-                {PAPER_SIZE_OPTIONS.map((size) => (
+                {intelligentPaperSizes.map((size) => (
                   <SelectItem key={size.value} value={size.value} className="text-white hover:bg-white/10">
                     <div className="flex items-center gap-3">
                       <span className="text-xl">{size.icon}</span>
                       <div>
-                        <div>{size.label}</div>
+                        <div className="flex items-center gap-2">
+                          {size.label}
+                          {size.recommendationLevel === 'best' && (
+                            <Badge className="ml-1 bg-emerald-500/90 text-white text-[10px]">Best</Badge>
+                          )}
+                          {size.recommendationLevel === 'good' && (
+                            <Badge className="ml-1 bg-blue-500/90 text-white text-[10px]">Good</Badge>
+                          )}
+                        </div>
                         <div className="text-xs text-white/60">{size.description}</div>
                       </div>
-                      {size.badge && (
-                        <Badge className="ml-2 bg-emerald-500/80">{size.badge}</Badge>
-                      )}
                     </div>
                   </SelectItem>
                 ))}
@@ -297,8 +317,12 @@ export function PhotoSheet({
             <div className="flex justify-between text-white/90">
               <span className="text-sm">Total Photos:</span>
               <Badge className="bg-white/30 text-white border-white/30 font-semibold">
-                {currentLayout.photos}
+                {optimalLayout.photos}
               </Badge>
+            </div>
+            <div className="flex justify-between text-white/90">
+              <span className="text-sm">Layout:</span>
+              <span className="font-semibold">{optimalLayout.cols}×{optimalLayout.rows}</span>
             </div>
             <div className="flex justify-between text-white/90">
               <span className="text-sm">Photo Size:</span>
