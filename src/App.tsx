@@ -24,7 +24,7 @@ function AppContent() {
   const [passportSize, setPassportSize] = useState('2x2');
   const [zoom, setZoom] = useState(100);
   const [rotation, setRotation] = useState(0);
-  const [paperSize, setPaperSize] = useState('4x6');
+  const [paperSize, setPaperSize] = useState('4x6-2-grid');
   const [borderWidth, setBorderWidth] = useState(2);
   const [borderColor, setBorderColor] = useState('#ffffff');
   const [backgroundColor, setBackgroundColor] = useState('original');
@@ -46,10 +46,6 @@ function AppContent() {
 
   const handleBack = () => {
     setCurrentStep(1);
-  };
-
-  const handlePrint = () => {
-    window.print();
   };
 
   return (
@@ -254,6 +250,7 @@ function AppContent() {
               <PhotoSheet
                 uploadedImage={uploadedImage}
                 passportSize={passportSize}
+                setPassportSize={setPassportSize}
                 zoom={zoom}
                 rotation={rotation}
                 backgroundColor={backgroundColor}
@@ -268,7 +265,6 @@ function AppContent() {
                 borderColor={borderColor}
                 setBorderColor={setBorderColor}
                 onBack={handleBack}
-                onPrint={handlePrint}
               />
             </motion.div>
           )}

@@ -2,10 +2,10 @@
  * Canvas Renderer for Passport Photo Sheets
  * Ported from oldWebsite/index.html:1087-1289
  *
- * This renderer ensures photos are EXACTLY 2x2 inches when printed at the specified DPI
+ * This renderer ensures photos are at the exact specified dimensions when printed at the specified DPI
  */
 
-import { LAYOUTS, PHOTO_SIZE_INCHES, Layout } from './layoutConfig';
+import { LAYOUTS, Layout } from './layoutConfig';
 import { drawBackgroundGrid } from './gridDrawing';
 
 export interface RenderOptions {
@@ -13,6 +13,9 @@ export interface RenderOptions {
   quality: 'high' | 'medium';
   gapEnabled: boolean;
   borderEnabled: boolean;
+  // Photo size (in inches)
+  photoWidth?: number;
+  photoHeight?: number;
   // Photo transformations
   zoom?: number;
   rotation?: number;
@@ -37,11 +40,12 @@ export interface RenderResult {
 function createEditedImage(
   sourceImage: HTMLImageElement,
   options: RenderOptions,
-  photoSizePx: number
+  photoWidthPx: number,
+  photoHeightPx: number
 ): HTMLCanvasElement {
   const editCanvas = document.createElement('canvas');
-  editCanvas.width = photoSizePx;
-  editCanvas.height = photoSizePx;
+  editCanvas.width = photoWidthPx;
+  editCanvas.height = photoHeightPx;
 
   const ctx = editCanvas.getContext('2d', { alpha: false });
   if (!ctx) {
@@ -57,7 +61,7 @@ function createEditedImage(
     original: '#ffffff'
   };
   ctx.fillStyle = bgColors[options.backgroundColor || 'original'] || '#ffffff';
-  ctx.fillRect(0, 0, photoSizePx, photoSizePx);
+  ctx.fillRect(0, 0, photoWidthPx, photoHeightPx);
 
   // Apply filters
   const brightness = options.brightness || 100;
@@ -68,7 +72,7 @@ function createEditedImage(
   ctx.save();
 
   // Move to center for rotation and zoom
-  ctx.translate(photoSizePx / 2, photoSizePx / 2);
+  ctx.translate(photoWidthPx / 2, photoHeightPx / 2);
 
   // Apply rotation
   const rotation = options.rotation || 0;
@@ -84,15 +88,16 @@ function createEditedImage(
 
   // Calculate image dimensions to cover the canvas
   const imageAspect = sourceImage.width / sourceImage.height;
+  const canvasAspect = photoWidthPx / photoHeightPx;
   let drawWidth, drawHeight;
 
-  if (imageAspect > 1) {
-    // Landscape
-    drawHeight = photoSizePx * scale;
+  if (imageAspect > canvasAspect) {
+    // Image is wider than canvas
+    drawHeight = photoHeightPx * scale;
     drawWidth = drawHeight * imageAspect;
   } else {
-    // Portrait or square
-    drawWidth = photoSizePx * scale;
+    // Image is taller or same aspect as canvas
+    drawWidth = photoWidthPx * scale;
     drawHeight = drawWidth / imageAspect;
   }
 
@@ -111,7 +116,7 @@ function createEditedImage(
 }
 
 /**
- * Creates a photo sheet canvas with proper 2x2 inch photo sizing
+ * Creates a photo sheet canvas with the specified photo dimensions
  */
 export function createPhotoSheet(
   image: HTMLImageElement,
@@ -125,23 +130,27 @@ export function createPhotoSheet(
   const dpi = options.quality === 'high' ? 300 : 200;
   const gapSize = options.gapEnabled ? 0.05 : 0; // 0.05 inches gap
 
+  // Use provided photo dimensions or default to 2x2
+  const photoWidth = options.photoWidth || 2;
+  const photoHeight = options.photoHeight || 2;
+
   // Calculate dimensions
   const canvasWidth = layout.width * dpi;
   const canvasHeight = layout.height * dpi;
-  const photoSizePx = PHOTO_SIZE_INCHES * dpi;
+  const photoWidthPx = photoWidth * dpi;
+  const photoHeightPx = photoHeight * dpi;
   const gapSizePx = gapSize * dpi;
 
   // Create edited version of the image with all transformations applied
-  const editedImage = createEditedImage(image, options, photoSizePx);
+  const editedImage = createEditedImage(image, options, photoWidthPx, photoHeightPx);
 
   // Debug logging
   console.log('=== Photo Sheet Dimensions ===');
   console.log(`Layout: ${options.paperSize} (${layout.width}" × ${layout.height}")`);
   console.log(`DPI: ${dpi}`);
   console.log(`Canvas: ${canvasWidth}px × ${canvasHeight}px`);
-  console.log(`Photo size constant: ${PHOTO_SIZE_INCHES} inches`);
-  console.log(`Photo size in pixels: ${photoSizePx}px × ${photoSizePx}px`);
-  console.log(`Photo size in inches: ${photoSizePx / dpi}" × ${photoSizePx / dpi}"`);
+  console.log(`Photo size: ${photoWidth}" × ${photoHeight}"`);
+  console.log(`Photo size in pixels: ${photoWidthPx}px × ${photoHeightPx}px`);
   console.log(`Edits applied: zoom=${options.zoom}, rotation=${options.rotation}, brightness=${options.brightness}, contrast=${options.contrast}`);
   console.log('============================');
 
@@ -169,14 +178,14 @@ export function createPhotoSheet(
       layout.spacingType === 'vertical-apart-grid' ||
       layout.spacingType === 'vertical-apart-plain'
     ) {
-      renderVerticalApartLayout(ctx, editedImage, layout, photoSizePx, canvasWidth, canvasHeight, dpi, gapSizePx, options);
+      renderVerticalApartLayout(ctx, editedImage, layout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, gapSizePx, options);
     } else if (layout.spacingType === 'vertical-centered') {
-      renderVerticalCenteredLayout(ctx, editedImage, layout, photoSizePx, gapSizePx, canvasWidth, canvasHeight, options);
+      renderVerticalCenteredLayout(ctx, editedImage, layout, photoWidthPx, photoHeightPx, gapSizePx, canvasWidth, canvasHeight, options);
     } else if (layout.spacingType === 'grid-aligned') {
-      renderGridAlignedLayout(ctx, editedImage, layout, photoSizePx, dpi, canvasWidth, canvasHeight, options);
+      renderGridAlignedLayout(ctx, editedImage, layout, photoWidthPx, photoHeightPx, dpi, canvasWidth, canvasHeight, options);
     }
   } else {
-    renderStandardGrid(ctx, editedImage, layout, photoSizePx, gapSizePx, canvasWidth, canvasHeight, options);
+    renderStandardGrid(ctx, editedImage, layout, photoWidthPx, photoHeightPx, gapSizePx, canvasWidth, canvasHeight, options);
   }
 
   return {
@@ -195,7 +204,8 @@ function renderVerticalApartLayout(
   ctx: CanvasRenderingContext2D,
   image: HTMLImageElement | HTMLCanvasElement,
   layout: Layout,
-  photoSizePx: number,
+  photoWidthPx: number,
+  photoHeightPx: number,
   canvasWidth: number,
   canvasHeight: number,
   dpi: number,
@@ -204,7 +214,7 @@ function renderVerticalApartLayout(
 ): void {
   const topMargin = 0.5 * dpi; // 0.5" top
   const middleGap = 1.0 * dpi; // 1.0" between photos
-  const x = (canvasWidth - photoSizePx) / 2; // Center horizontally
+  const x = (canvasWidth - photoWidthPx) / 2; // Center horizontally
 
   // Draw background grid if grid variant
   if (layout.forceGrid) {
@@ -218,13 +228,13 @@ function renderVerticalApartLayout(
   ctx.imageSmoothingQuality = 'high';
 
   for (let row = 0; row < layout.rows; row++) {
-    const y = topMargin + row * (photoSizePx + middleGap);
-    ctx.drawImage(image, x, y, photoSizePx, photoSizePx);
+    const y = topMargin + row * (photoHeightPx + middleGap);
+    ctx.drawImage(image, x, y, photoWidthPx, photoHeightPx);
 
     if (options.gapEnabled) {
       ctx.strokeStyle = '#CCCCCC';
       ctx.lineWidth = 1;
-      ctx.strokeRect(x, y, photoSizePx, photoSizePx);
+      ctx.strokeRect(x, y, photoWidthPx, photoHeightPx);
     }
 
     if (options.borderEnabled) {
@@ -234,8 +244,8 @@ function renderVerticalApartLayout(
       ctx.strokeRect(
         x + borderOffset,
         y + borderOffset,
-        photoSizePx - ctx.lineWidth,
-        photoSizePx - ctx.lineWidth
+        photoWidthPx - ctx.lineWidth,
+        photoHeightPx - ctx.lineWidth
       );
     }
   }
@@ -248,28 +258,29 @@ function renderVerticalCenteredLayout(
   ctx: CanvasRenderingContext2D,
   image: HTMLImageElement | HTMLCanvasElement,
   layout: Layout,
-  photoSizePx: number,
+  photoWidthPx: number,
+  photoHeightPx: number,
   gapSizePx: number,
   canvasWidth: number,
   canvasHeight: number,
   options: RenderOptions
 ): void {
-  const totalPhotosWidth = layout.cols * photoSizePx + gapSizePx;
-  const totalPhotosHeight = layout.rows * photoSizePx + gapSizePx;
+  const totalPhotosWidth = layout.cols * photoWidthPx + gapSizePx;
+  const totalPhotosHeight = layout.rows * photoHeightPx + gapSizePx;
   const startX = (canvasWidth - totalPhotosWidth) / 2;
   const startY = (canvasHeight - totalPhotosHeight) / 2;
 
   for (let row = 0; row < layout.rows; row++) {
     for (let col = 0; col < layout.cols; col++) {
-      const x = startX + col * (photoSizePx + gapSizePx);
-      const y = startY + row * (photoSizePx + gapSizePx);
+      const x = startX + col * (photoWidthPx + gapSizePx);
+      const y = startY + row * (photoHeightPx + gapSizePx);
 
-      ctx.drawImage(image, x, y, photoSizePx, photoSizePx);
+      ctx.drawImage(image, x, y, photoWidthPx, photoHeightPx);
 
       if (options.gapEnabled) {
         ctx.strokeStyle = '#CCCCCC';
         ctx.lineWidth = 1;
-        ctx.strokeRect(x, y, photoSizePx, photoSizePx);
+        ctx.strokeRect(x, y, photoWidthPx, photoHeightPx);
       }
 
       if (options.borderEnabled) {
@@ -279,8 +290,8 @@ function renderVerticalCenteredLayout(
         ctx.strokeRect(
           x + borderOffset,
           y + borderOffset,
-          photoSizePx - ctx.lineWidth,
-          photoSizePx - ctx.lineWidth
+          photoWidthPx - ctx.lineWidth,
+          photoHeightPx - ctx.lineWidth
         );
       }
     }
@@ -294,7 +305,8 @@ function renderGridAlignedLayout(
   ctx: CanvasRenderingContext2D,
   image: HTMLImageElement | HTMLCanvasElement,
   layout: Layout,
-  photoSizePx: number,
+  photoWidthPx: number,
+  photoHeightPx: number,
   dpi: number,
   canvasWidth: number,
   canvasHeight: number,
@@ -316,15 +328,15 @@ function renderGridAlignedLayout(
 
   for (let row = 0; row < layout.rows; row++) {
     for (let col = 0; col < layout.cols; col++) {
-      const x = leftMargin + col * (photoSizePx + colGap);
-      const y = topMargin + row * (photoSizePx + rowGap);
+      const x = leftMargin + col * (photoWidthPx + colGap);
+      const y = topMargin + row * (photoHeightPx + rowGap);
 
-      ctx.drawImage(image, x, y, photoSizePx, photoSizePx);
+      ctx.drawImage(image, x, y, photoWidthPx, photoHeightPx);
 
       if (options.gapEnabled) {
         ctx.strokeStyle = '#CCCCCC';
         ctx.lineWidth = 1;
-        ctx.strokeRect(x, y, photoSizePx, photoSizePx);
+        ctx.strokeRect(x, y, photoWidthPx, photoHeightPx);
       }
 
       if (options.borderEnabled) {
@@ -334,8 +346,8 @@ function renderGridAlignedLayout(
         ctx.strokeRect(
           x + borderOffset,
           y + borderOffset,
-          photoSizePx - ctx.lineWidth,
-          photoSizePx - ctx.lineWidth
+          photoWidthPx - ctx.lineWidth,
+          photoHeightPx - ctx.lineWidth
         );
       }
     }
@@ -349,28 +361,29 @@ function renderStandardGrid(
   ctx: CanvasRenderingContext2D,
   image: HTMLImageElement | HTMLCanvasElement,
   layout: Layout,
-  photoSizePx: number,
+  photoWidthPx: number,
+  photoHeightPx: number,
   gapSizePx: number,
   canvasWidth: number,
   canvasHeight: number,
   options: RenderOptions
 ): void {
-  const totalPhotosWidth = layout.cols * photoSizePx + (layout.cols - 1) * gapSizePx;
-  const totalPhotosHeight = layout.rows * photoSizePx + (layout.rows - 1) * gapSizePx;
+  const totalPhotosWidth = layout.cols * photoWidthPx + (layout.cols - 1) * gapSizePx;
+  const totalPhotosHeight = layout.rows * photoHeightPx + (layout.rows - 1) * gapSizePx;
   const startX = (canvasWidth - totalPhotosWidth) / 2;
   const startY = (canvasHeight - totalPhotosHeight) / 2;
 
   for (let row = 0; row < layout.rows; row++) {
     for (let col = 0; col < layout.cols; col++) {
-      const x = startX + col * (photoSizePx + gapSizePx);
-      const y = startY + row * (photoSizePx + gapSizePx);
+      const x = startX + col * (photoWidthPx + gapSizePx);
+      const y = startY + row * (photoHeightPx + gapSizePx);
 
-      ctx.drawImage(image, x, y, photoSizePx, photoSizePx);
+      ctx.drawImage(image, x, y, photoWidthPx, photoHeightPx);
 
       if (options.gapEnabled) {
         ctx.strokeStyle = '#CCCCCC';
         ctx.lineWidth = 1;
-        ctx.strokeRect(x, y, photoSizePx, photoSizePx);
+        ctx.strokeRect(x, y, photoWidthPx, photoHeightPx);
       }
 
       if (options.borderEnabled) {
@@ -380,8 +393,8 @@ function renderStandardGrid(
         ctx.strokeRect(
           x + borderOffset,
           y + borderOffset,
-          photoSizePx - ctx.lineWidth,
-          photoSizePx - ctx.lineWidth
+          photoWidthPx - ctx.lineWidth,
+          photoHeightPx - ctx.lineWidth
         );
       }
     }

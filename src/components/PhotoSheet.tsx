@@ -1,4 +1,4 @@
-import { Printer, ArrowLeft, Maximize2, Download, Grid3x3, FileCheck } from 'lucide-react';
+import { ArrowLeft, Maximize2, Download, Grid3x3, FileCheck, Ruler } from 'lucide-react';
 import { Button } from './ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Slider } from './ui/slider';
@@ -7,12 +7,13 @@ import { motion } from 'motion/react';
 import { useState, useEffect, useRef } from 'react';
 import { GlassCard } from './GlassCard';
 import { Badge } from './ui/badge';
-import { PAPER_SIZE_OPTIONS, LAYOUTS } from '../utils/layoutConfig';
+import { PAPER_SIZE_OPTIONS, LAYOUTS, PHOTO_SIZE_OPTIONS, PhotoSize } from '../utils/layoutConfig';
 import { createPhotoSheet, downloadPhotoSheet } from '../utils/canvasRenderer';
 
 interface PhotoSheetProps {
   uploadedImage: string | null;
   passportSize: string;
+  setPassportSize: (size: string) => void;
   zoom: number;
   rotation: number;
   backgroundColor: string;
@@ -27,12 +28,12 @@ interface PhotoSheetProps {
   borderColor: string;
   setBorderColor: (color: string) => void;
   onBack: () => void;
-  onPrint: () => void;
 }
 
 export function PhotoSheet({
   uploadedImage,
   passportSize,
+  setPassportSize,
   zoom,
   rotation,
   backgroundColor,
@@ -47,13 +48,17 @@ export function PhotoSheet({
   borderColor,
   setBorderColor,
   onBack,
-  onPrint,
 }: PhotoSheetProps) {
   const [quality, setQuality] = useState<'high' | 'medium'>('high');
   const [gapEnabled, setGapEnabled] = useState(false);
   const [borderEnabled, setBorderEnabled] = useState(false);
   const [previewCanvas, setPreviewCanvas] = useState<HTMLCanvasElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Get photo dimensions from selected photo size
+  const selectedPhotoSize = PHOTO_SIZE_OPTIONS.find(ps => ps.value === passportSize) || PHOTO_SIZE_OPTIONS[0];
+  const photoWidth = selectedPhotoSize.width;
+  const photoHeight = selectedPhotoSize.height;
 
   const borderColors = [
     { value: '#ffffff', label: 'White', gradient: 'from-gray-100 to-gray-200' },
@@ -85,6 +90,9 @@ export function PhotoSheet({
           quality,
           gapEnabled,
           borderEnabled,
+          // Photo dimensions
+          photoWidth,
+          photoHeight,
           // Pass all transformations
           zoom,
           rotation,
@@ -132,7 +140,7 @@ export function PhotoSheet({
       }
     };
     img.src = uploadedImage;
-  }, [uploadedImage, paperSize, quality, gapEnabled, borderEnabled, zoom, rotation, panX, panY, brightness, contrast, backgroundColor]);
+  }, [uploadedImage, paperSize, quality, gapEnabled, borderEnabled, photoWidth, photoHeight, zoom, rotation, panX, panY, brightness, contrast, backgroundColor]);
 
   const handleDownloadSheet = () => {
     if (!uploadedImage) return;
@@ -145,6 +153,9 @@ export function PhotoSheet({
           quality,
           gapEnabled,
           borderEnabled,
+          // Photo dimensions
+          photoWidth,
+          photoHeight,
           // Pass all transformations
           zoom,
           rotation,
@@ -178,7 +189,7 @@ export function PhotoSheet({
               <h2 className="text-white">Paper Size</h2>
             </div>
             <Select value={paperSize} onValueChange={setPaperSize}>
-              <SelectTrigger className="w-full h-14 bg-white/10 border-white/30 text-white rounded-xl backdrop-blur-sm hover:bg-white/20 transition-all">
+              <SelectTrigger className="w-full h-14 bg-white/10 border-white/30 text-white rounded-xl backdrop-blur-sm hover:bg-white/20 transition-all text-left">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-gray-900/95 backdrop-blur-xl border-white/20">
@@ -201,8 +212,37 @@ export function PhotoSheet({
           </div>
         </GlassCard>
 
+        {/* Photo Size */}
+        <GlassCard delay={0.125}>
+          <div className="p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
+                <Ruler className="w-5 h-5 text-white" />
+              </div>
+              <h2 className="text-white">Photo Size</h2>
+            </div>
+            <Select value={passportSize} onValueChange={setPassportSize}>
+              <SelectTrigger className="w-full h-14 bg-white/10 border-white/30 text-white rounded-xl backdrop-blur-sm hover:bg-white/20 transition-all text-left">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-gray-900/95 backdrop-blur-xl border-white/20">
+                {PHOTO_SIZE_OPTIONS.map((size) => (
+                  <SelectItem key={size.value} value={size.value} className="text-white hover:bg-white/10">
+                    <div className="flex items-center gap-3">
+                      <div>
+                        <div>{size.label}</div>
+                        <div className="text-xs text-white/60">{size.description} • {size.pixelsAt300DPI}</div>
+                      </div>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </GlassCard>
+
         {/* Quality & Guides */}
-        <GlassCard delay={0.15}>
+        <GlassCard delay={0.175}>
           <div className="p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
@@ -215,7 +255,7 @@ export function PhotoSheet({
               <div>
                 <label className="text-sm text-white/80 mb-2 block">Quality</label>
                 <Select value={quality} onValueChange={(val) => setQuality(val as 'high' | 'medium')}>
-                  <SelectTrigger className="w-full bg-white/10 border-white/30 text-white rounded-xl">
+                  <SelectTrigger className="w-full bg-white/10 border-white/30 text-white rounded-xl text-left">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-gray-900/95 backdrop-blur-xl border-white/20">
@@ -246,7 +286,7 @@ export function PhotoSheet({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
+          transition={{ delay: 0.225 }}
           className="backdrop-blur-xl bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-3xl border border-white/30 p-6 relative overflow-hidden shadow-2xl"
         >
           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-400/20 rounded-full blur-3xl" />
@@ -262,7 +302,7 @@ export function PhotoSheet({
             </div>
             <div className="flex justify-between text-white/90">
               <span className="text-sm">Photo Size:</span>
-              <span className="font-semibold">2×2"</span>
+              <span className="font-semibold">{selectedPhotoSize.label.split(' ')[0]}</span>
             </div>
             <div className="flex justify-between text-white/90">
               <span className="text-sm">Paper:</span>
@@ -341,12 +381,12 @@ export function PhotoSheet({
                 whileTap={{ scale: 0.95 }}
               >
                 <Button
-                  onClick={onPrint}
+                  onClick={handleDownloadSheet}
                   size="lg"
                   className="px-10 py-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-2xl shadow-2xl shadow-indigo-500/50 text-lg font-semibold"
                 >
-                  <Printer className="w-5 h-5 mr-2" />
-                  Print Sheet
+                  <Download className="w-5 h-5 mr-2" />
+                  Download Sheet
                 </Button>
               </motion.div>
             </div>

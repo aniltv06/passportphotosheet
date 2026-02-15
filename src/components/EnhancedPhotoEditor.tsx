@@ -16,6 +16,8 @@ import { BeforeAfterComparison } from './BeforeAfterComparison';
 import { CameraCapture } from './CameraCapture';
 import { PhotoSession } from '../utils/history';
 import { PhotoPreset } from '../utils/presets';
+import { PHOTO_SIZE_OPTIONS } from '../utils/layoutConfig';
+import heic2any from 'heic2any';
 
 interface EnhancedPhotoEditorProps {
   uploadedImage: string | null;
@@ -73,7 +75,7 @@ export function EnhancedPhotoEditor({
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [gridType, setGridType] = useState<GridType>('thirds');
+  const [gridType, setGridType] = useState<GridType>('center');
   const [showGrid, setShowGrid] = useState(true);
   const [saturation, setSaturation] = useState(100);
   const [showQRCode, setShowQRCode] = useState(false);
@@ -82,6 +84,7 @@ export function EnhancedPhotoEditor({
   const [showComparison, setShowComparison] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const [originalImage, setOriginalImage] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -153,15 +156,54 @@ export function EnhancedPhotoEditor({
     setIsDragging(false);
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
+    if (!file) return;
+
+    setIsUploading(true);
+
+    try {
+      // Check if file is HEIC/HEIF format
+      const isHEIC = file.type === 'image/heic' ||
+                     file.type === 'image/heif' ||
+                     file.name.toLowerCase().endsWith('.heic') ||
+                     file.name.toLowerCase().endsWith('.heif');
+
+      let processedFile = file;
+
+      if (isHEIC) {
+        // Convert HEIC to JPEG
+        const convertedBlob = await heic2any({
+          blob: file,
+          toType: 'image/jpeg',
+          quality: 0.95
+        });
+
+        // heic2any might return an array of blobs, handle both cases
+        processedFile = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob;
+      }
+
+      // Read the file (original or converted)
       const reader = new FileReader();
       reader.onload = (event) => {
         setUploadedImage(event.target?.result as string);
         setOriginalImage(event.target?.result as string);
+        setIsUploading(false);
       };
-      reader.readAsDataURL(file);
+      reader.onerror = () => {
+        setIsUploading(false);
+        alert('Failed to read image file. Please try again.');
+      };
+      reader.readAsDataURL(processedFile as Blob);
+    } catch (error) {
+      console.error('Error processing image:', error);
+      setIsUploading(false);
+      alert('Failed to process image. Please try a different file.');
+    } finally {
+      // Reset the input so the same file can be selected again
+      if (e.target) {
+        e.target.value = '';
+      }
     }
   };
 
@@ -279,10 +321,95 @@ export function EnhancedPhotoEditor({
 
   const handleDownloadSingle = () => {
     if (!uploadedImage) return;
-    const link = document.createElement('a');
-    link.href = uploadedImage;
-    link.download = 'passport-photo.png';
-    link.click();
+
+    // Get selected photo size dimensions
+    const selectedPhotoSize = PHOTO_SIZE_OPTIONS.find(ps => ps.value === passportSize) || PHOTO_SIZE_OPTIONS[0];
+    const photoWidthInches = selectedPhotoSize.width;
+    const photoHeightInches = selectedPhotoSize.height;
+
+    // Create a canvas to render the edited image at 300 DPI
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas size based on selected photo size at 300 DPI
+    const dpi = 300;
+    const canvasWidth = Math.round(photoWidthInches * dpi);
+    const canvasHeight = Math.round(photoHeightInches * dpi);
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+
+    // Calculate scale factor between preview and download canvas
+    // panX and panY are in preview pixel coordinates, need to scale them
+    const scaleFactorX = canvasWidth / previewDimensions.width;
+    const scaleFactorY = canvasHeight / previewDimensions.height;
+
+    // Fill background color
+    const bgColors: Record<string, string> = {
+      white: '#ffffff',
+      lightgray: '#f3f4f6',
+      lightblue: '#dbeafe',
+      cream: '#fef3c7',
+      original: 'transparent'
+    };
+    ctx.fillStyle = bgColors[backgroundColor] || '#ffffff';
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+    // Load and draw the image with transformations
+    const img = new Image();
+    img.onload = () => {
+      ctx.save();
+
+      // Apply filters
+      ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`;
+
+      // Move to center for rotation and zoom
+      ctx.translate(canvasWidth / 2, canvasHeight / 2);
+
+      // Apply rotation
+      ctx.rotate((rotation * Math.PI) / 180);
+
+      // Apply zoom
+      const scale = zoom / 100;
+
+      // Calculate image dimensions to cover the canvas
+      const imageAspect = img.width / img.height;
+      const canvasAspect = canvasWidth / canvasHeight;
+      let drawWidth, drawHeight;
+
+      if (imageAspect > canvasAspect) {
+        drawHeight = canvasHeight * scale;
+        drawWidth = drawHeight * imageAspect;
+      } else {
+        drawWidth = canvasWidth * scale;
+        drawHeight = drawWidth / imageAspect;
+      }
+
+      // Draw image with pan offset
+      // Scale panX and panY from preview coordinates to download canvas coordinates
+      ctx.drawImage(
+        img,
+        -drawWidth / 2 + (panX * scaleFactorX),
+        -drawHeight / 2 + (panY * scaleFactorY),
+        drawWidth,
+        drawHeight
+      );
+
+      ctx.restore();
+
+      // Download the canvas
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+        link.download = `edited-photo-${selectedPhotoSize.value}-${timestamp}.png`;
+        link.href = url;
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 100);
+      }, 'image/png', 0.95);
+    };
+    img.src = uploadedImage;
   };
 
   const handleReset = () => {
@@ -295,15 +422,6 @@ export function EnhancedPhotoEditor({
     setPanY(0);
   };
 
-  const passportSizes = [
-    { value: '2x2', label: '2×2 inches (US)', dimensions: '51×51mm', flag: '🇺🇸' },
-    { value: '35x45', label: '35×45 mm (EU)', dimensions: '35×45mm', flag: '🇪🇺' },
-    { value: '33x48', label: '33×48 mm (India)', dimensions: '33×48mm', flag: '🇮🇳' },
-    { value: '35x35', label: '35×35 mm (ID)', dimensions: '35×35mm', flag: '🆔' },
-    { value: '51x51', label: '51×51 mm (China)', dimensions: '51×51mm', flag: '🇨🇳' },
-    { value: '45x35', label: '45×35 mm (Japan)', dimensions: '45×35mm', flag: '🇯🇵' },
-  ];
-
   const backgroundColors = [
     { value: 'original', label: t.original, color: 'transparent', gradient: 'from-gray-400 to-gray-600' },
     { value: 'white', label: t.white, color: '#ffffff', gradient: 'from-gray-100 to-gray-200' },
@@ -311,6 +429,39 @@ export function EnhancedPhotoEditor({
     { value: 'lightblue', label: t.lightBlue, color: '#dbeafe', gradient: 'from-blue-200 to-blue-300' },
     { value: 'cream', label: t.cream, color: '#fef3c7', gradient: 'from-amber-100 to-amber-200' },
   ];
+
+  // Calculate preview dimensions based on selected passport size
+  const getPreviewDimensions = () => {
+    const selectedPhotoSize = PHOTO_SIZE_OPTIONS.find(ps => ps.value === passportSize) || PHOTO_SIZE_OPTIONS[0];
+    const aspectRatio = selectedPhotoSize.width / selectedPhotoSize.height;
+
+    // Base height for preview
+    const baseHeight = 480;
+    const width = Math.round(baseHeight * aspectRatio);
+
+    return { width, height: baseHeight };
+  };
+
+  const previewDimensions = getPreviewDimensions();
+
+  // Update SVG viewBox based on preview dimensions
+  const svgViewBox = `0 0 ${previewDimensions.width} ${previewDimensions.height}`;
+
+  // Calculate face oval position based on aspect ratio
+  const getFaceOvalParams = () => {
+    const { width, height } = previewDimensions;
+    const centerX = width / 2;
+    const centerY = height * 0.46; // Slightly above center for face positioning
+
+    // Face oval should always be taller than wide (portrait oval)
+    // Base the dimensions on height to maintain proper face proportions
+    const radiusX = height * 0.18; // Width of oval (narrower)
+    const radiusY = height * 0.23; // Height of oval (taller)
+
+    return { centerX, centerY, radiusX, radiusY, width, height };
+  };
+
+  const faceOvalParams = getFaceOvalParams();
 
   const renderGrid = () => {
     if (!showGrid || gridType === 'none') return null;
@@ -343,6 +494,166 @@ export function EnhancedPhotoEditor({
           {/* Face guidelines */}
           <div className="absolute top-[15%] left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
           <div className="absolute top-[60%] left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
+
+          {/* Face Oval Guide */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox={svgViewBox}>
+            <defs>
+              <linearGradient id="faceOvalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.4" />
+                <stop offset="50%" stopColor="#a78bfa" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#ec4899" stopOpacity="0.4" />
+              </linearGradient>
+              <linearGradient id="rangeZoneGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#34d399" stopOpacity="0.15" />
+                <stop offset="50%" stopColor="#34d399" stopOpacity="0.25" />
+                <stop offset="100%" stopColor="#34d399" stopOpacity="0.15" />
+              </linearGradient>
+            </defs>
+
+            {/* Main face oval - positioned for passport photo standards */}
+            <ellipse
+              cx={faceOvalParams.centerX}
+              cy={faceOvalParams.centerY}
+              rx={faceOvalParams.radiusX}
+              ry={faceOvalParams.radiusY}
+              fill="none"
+              stroke="url(#faceOvalGradient)"
+              strokeWidth="3"
+              strokeDasharray="8 6"
+              opacity="0.8"
+            />
+            {/* Inner guide oval for face area */}
+            <ellipse
+              cx={faceOvalParams.centerX}
+              cy={faceOvalParams.centerY}
+              rx={faceOvalParams.radiusX * 0.88}
+              ry={faceOvalParams.radiusY * 0.91}
+              fill="none"
+              stroke="#60a5fa"
+              strokeWidth="1.5"
+              strokeDasharray="4 4"
+              opacity="0.5"
+            />
+
+            {/* Head Height Range Indicator - Different for US vs Indian Passport */}
+
+            {/* Calculate range positions based on passport type */}
+            {(() => {
+              const isIndianPassport = passportSize === '2x2-india';
+
+              // Head height requirements
+              // US: 50-69% of image height
+              // India: 1" to 1 3/8" on 2" photo = 50% to 68.75%
+              const minHeadPercent = 0.50;
+              const maxHeadPercent = isIndianPassport ? 0.6875 : 0.69;
+
+              const minHeadHeight = faceOvalParams.height * minHeadPercent;
+              const maxHeadHeight = faceOvalParams.height * maxHeadPercent;
+
+              // Center the range zone vertically
+              const rangeCenter = faceOvalParams.height * 0.50;
+              const minY = rangeCenter - maxHeadHeight / 2;
+              const maxY = rangeCenter + maxHeadHeight / 2;
+              const minHeightY = rangeCenter - minHeadHeight / 2;
+              const maxHeightY = rangeCenter + minHeadHeight / 2;
+
+              return (
+                <>
+                  {/* Head Height Range Zone */}
+                  <rect
+                    x={faceOvalParams.centerX - faceOvalParams.radiusX * 1.5}
+                    y={minY}
+                    width={faceOvalParams.radiusX * 3}
+                    height={maxY - minY}
+                    fill="url(#rangeZoneGradient)"
+                    opacity="0.3"
+                  />
+
+                  {/* Top boundary line (max head height) */}
+                  <line
+                    x1={faceOvalParams.centerX - faceOvalParams.radiusX * 1.3}
+                    y1={minY}
+                    x2={faceOvalParams.centerX + faceOvalParams.radiusX * 1.3}
+                    y2={minY}
+                    stroke="#10b981"
+                    strokeWidth="2"
+                    strokeDasharray="6 3"
+                    opacity="0.7"
+                  />
+
+                  {/* Bottom boundary line (max head height) */}
+                  <line
+                    x1={faceOvalParams.centerX - faceOvalParams.radiusX * 1.3}
+                    y1={maxY}
+                    x2={faceOvalParams.centerX + faceOvalParams.radiusX * 1.3}
+                    y2={maxY}
+                    stroke="#10b981"
+                    strokeWidth="2"
+                    strokeDasharray="6 3"
+                    opacity="0.7"
+                  />
+
+                  {/* Inner range lines (min head height) */}
+                  <line
+                    x1={faceOvalParams.centerX - faceOvalParams.radiusX * 1.1}
+                    y1={minHeightY}
+                    x2={faceOvalParams.centerX + faceOvalParams.radiusX * 1.1}
+                    y2={minHeightY}
+                    stroke="#34d399"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 4"
+                    opacity="0.6"
+                  />
+                  <line
+                    x1={faceOvalParams.centerX - faceOvalParams.radiusX * 1.1}
+                    y1={maxHeightY}
+                    x2={faceOvalParams.centerX + faceOvalParams.radiusX * 1.1}
+                    y2={maxHeightY}
+                    stroke="#34d399"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 4"
+                    opacity="0.6"
+                  />
+
+                  {/* Side brackets for head height */}
+                  <path
+                    d={`M ${faceOvalParams.centerX - faceOvalParams.radiusX * 1.5} ${minY}
+                        L ${faceOvalParams.centerX - faceOvalParams.radiusX * 1.6} ${minY}
+                        L ${faceOvalParams.centerX - faceOvalParams.radiusX * 1.6} ${maxY}
+                        L ${faceOvalParams.centerX - faceOvalParams.radiusX * 1.5} ${maxY}`}
+                    stroke="#10b981"
+                    strokeWidth="2.5"
+                    fill="none"
+                    opacity="0.8"
+                  />
+                  <path
+                    d={`M ${faceOvalParams.centerX + faceOvalParams.radiusX * 1.5} ${minY}
+                        L ${faceOvalParams.centerX + faceOvalParams.radiusX * 1.6} ${minY}
+                        L ${faceOvalParams.centerX + faceOvalParams.radiusX * 1.6} ${maxY}
+                        L ${faceOvalParams.centerX + faceOvalParams.radiusX * 1.5} ${maxY}`}
+                    stroke="#10b981"
+                    strokeWidth="2.5"
+                    fill="none"
+                    opacity="0.8"
+                  />
+
+                  {/* Head height label */}
+                  <text
+                    x={faceOvalParams.centerX}
+                    y={minY - 10}
+                    fill="#10b981"
+                    fontSize="11"
+                    fontWeight="600"
+                    textAnchor="middle"
+                    opacity="0.9"
+                  >
+                    {isIndianPassport ? 'Head: 1"-1⅜" (50-69%)' : 'Head Height: 50-69%'}
+                  </text>
+                </>
+              );
+            })()}
+
+          </svg>
         </>
       ),
     };
@@ -449,27 +760,40 @@ export function EnhancedPhotoEditor({
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              accept="image/*,.heic,.heif"
               onChange={handleFileUpload}
               className="hidden"
             />
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button
                 onClick={handleUploadClick}
-                className="w-full h-32 border-2 border-dashed border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-2xl transition-all group text-white"
+                disabled={isUploading}
+                className="w-full h-32 border-2 border-dashed border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-2xl transition-all group text-white disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="flex flex-col items-center gap-3">
                   <motion.div
-                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    animate={isUploading ? { rotate: 360 } : {}}
+                    transition={isUploading ? { duration: 1, repeat: Infinity, ease: "linear" } : {}}
+                    whileHover={!isUploading ? { scale: 1.1, rotate: 5 } : {}}
                     className="w-14 h-14 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-2xl flex items-center justify-center shadow-xl"
                   >
-                    <Upload className="w-7 h-7 text-white" />
+                    {isUploading ? (
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        className="w-7 h-7 border-3 border-white border-t-transparent rounded-full"
+                      />
+                    ) : (
+                      <Upload className="w-7 h-7 text-white" />
+                    )}
                   </motion.div>
                   <div>
                     <span className="text-white font-semibold block">
-                      {uploadedImage ? t.changePhoto : t.choosePhoto}
+                      {isUploading ? 'Processing...' : (uploadedImage ? t.changePhoto : t.choosePhoto)}
                     </span>
-                    <span className="text-xs text-white/60">{t.fileSize}</span>
+                    <span className="text-xs text-white/60">
+                      {isUploading ? 'Please wait' : t.fileSize}
+                    </span>
                   </div>
                 </div>
               </Button>
@@ -486,7 +810,8 @@ export function EnhancedPhotoEditor({
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button
                     onClick={handleLoadDemoPhoto}
-                    className="w-full h-16 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border-2 border-emerald-400/30 hover:border-emerald-400/60 text-white rounded-xl backdrop-blur-sm transition-all group"
+                    disabled={isUploading}
+                    className="w-full h-16 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border-2 border-emerald-400/30 hover:border-emerald-400/60 text-white rounded-xl backdrop-blur-sm transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <div className="flex items-center gap-3">
                       <motion.div
@@ -515,17 +840,16 @@ export function EnhancedPhotoEditor({
               📏 {t.passportSize}
             </h2>
             <Select value={passportSize} onValueChange={setPassportSize}>
-              <SelectTrigger className="w-full h-14 bg-white/10 border-white/30 text-white rounded-xl backdrop-blur-sm hover:bg-white/20 transition-all">
+              <SelectTrigger className="w-full h-14 bg-white/10 border-white/30 text-white rounded-xl backdrop-blur-sm hover:bg-white/20 transition-all text-left">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-gray-900/95 backdrop-blur-xl border-white/20">
-                {passportSizes.map((size) => (
+                {PHOTO_SIZE_OPTIONS.map((size) => (
                   <SelectItem key={size.value} value={size.value} className="text-white hover:bg-white/10">
                     <div className="flex items-center gap-3">
-                      <span className="text-xl">{size.flag}</span>
                       <div className="flex flex-col">
                         <span>{size.label}</span>
-                        <span className="text-xs text-white/60">{size.dimensions}</span>
+                        <span className="text-xs text-white/60">{size.description} • {size.pixelsAt300DPI}</span>
                       </div>
                     </div>
                   </SelectItem>
@@ -593,7 +917,7 @@ export function EnhancedPhotoEditor({
                 {[
                   { value: 'thirds', label: 'Rule of Thirds', icon: '⊞' },
                   { value: 'golden', label: 'Golden Ratio', icon: 'φ' },
-                  { value: 'center', label: 'Center Guide', icon: '✛' },
+                  { value: 'center', label: 'Face Guide', icon: '👤' },
                   { value: 'none', label: 'No Grid', icon: '○' },
                 ].map((grid) => (
                   <motion.button
@@ -893,8 +1217,8 @@ export function EnhancedPhotoEditor({
                     ref={canvasRef}
                     className={`relative rounded-2xl overflow-hidden shadow-2xl ${isDragging ? 'cursor-grabbing scale-105' : 'cursor-grab'} transition-transform`}
                     style={{
-                      width: '360px',
-                      height: '480px',
+                      width: `${previewDimensions.width}px`,
+                      height: `${previewDimensions.height}px`,
                       backgroundColor: backgroundColors.find(bg => bg.value === backgroundColor)?.color || 'white',
                     }}
                     onMouseDown={handleMouseDown}
@@ -952,22 +1276,41 @@ export function EnhancedPhotoEditor({
               )}
             </div>
 
-            {/* Next Button */}
-            <motion.div 
-              className="flex justify-end mt-8"
+            {/* Action Buttons */}
+            <motion.div
+              className="flex justify-between items-center gap-4 mt-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7 }}
             >
+              {/* Download Edited Photo Button */}
+              {uploadedImage && (
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    onClick={handleDownloadSingle}
+                    size="lg"
+                    className="px-8 py-6 bg-white/10 hover:bg-white/20 text-white border-2 border-white/30 rounded-2xl backdrop-blur-sm"
+                  >
+                    <Download className="w-5 h-5 mr-2" />
+                    Download Edited Photo
+                  </Button>
+                </motion.div>
+              )}
+
+              {/* Next Button */}
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                className={uploadedImage ? '' : 'w-full'}
               >
                 <Button
                   onClick={onNext}
                   disabled={!uploadedImage}
                   size="lg"
-                  className="px-10 py-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-2xl shadow-2xl shadow-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed text-lg font-semibold"
+                  className={`${uploadedImage ? 'px-10' : 'w-full'} py-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-2xl shadow-2xl shadow-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed text-lg font-semibold`}
                 >
                   {t.nextStep}
                   <motion.span
