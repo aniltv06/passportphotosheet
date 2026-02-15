@@ -85,6 +85,14 @@ export function PhotoSheet({
           quality,
           gapEnabled,
           borderEnabled,
+          // Pass all transformations
+          zoom,
+          rotation,
+          panX,
+          panY,
+          brightness,
+          contrast,
+          backgroundColor,
         });
 
         // Scale down canvas for preview
@@ -124,7 +132,7 @@ export function PhotoSheet({
       }
     };
     img.src = uploadedImage;
-  }, [uploadedImage, paperSize, quality, gapEnabled, borderEnabled]);
+  }, [uploadedImage, paperSize, quality, gapEnabled, borderEnabled, zoom, rotation, panX, panY, brightness, contrast, backgroundColor]);
 
   const handleDownloadSheet = () => {
     if (!uploadedImage) return;
@@ -137,6 +145,14 @@ export function PhotoSheet({
           quality,
           gapEnabled,
           borderEnabled,
+          // Pass all transformations
+          zoom,
+          rotation,
+          panX,
+          panY,
+          brightness,
+          contrast,
+          backgroundColor,
         });
 
         downloadPhotoSheet(result.canvas, paperSize, result.dpi);

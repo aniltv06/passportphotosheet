@@ -13,6 +13,14 @@ export interface RenderOptions {
   quality: 'high' | 'medium';
   gapEnabled: boolean;
   borderEnabled: boolean;
+  // Photo transformations
+  zoom?: number;
+  rotation?: number;
+  panX?: number;
+  panY?: number;
+  brightness?: number;
+  contrast?: number;
+  backgroundColor?: string;
 }
 
 export interface RenderResult {
@@ -21,6 +29,85 @@ export interface RenderResult {
   canvasHeight: number;
   photoCount: number;
   dpi: number;
+}
+
+/**
+ * Apply transformations to the uploaded image to create an edited version
+ */
+function createEditedImage(
+  sourceImage: HTMLImageElement,
+  options: RenderOptions,
+  photoSizePx: number
+): HTMLCanvasElement {
+  const editCanvas = document.createElement('canvas');
+  editCanvas.width = photoSizePx;
+  editCanvas.height = photoSizePx;
+
+  const ctx = editCanvas.getContext('2d', { alpha: false });
+  if (!ctx) {
+    throw new Error('Could not get canvas context');
+  }
+
+  // Fill background color
+  const bgColors: Record<string, string> = {
+    white: '#ffffff',
+    lightgray: '#f3f4f6',
+    lightblue: '#dbeafe',
+    cream: '#fef3c7',
+    original: '#ffffff'
+  };
+  ctx.fillStyle = bgColors[options.backgroundColor || 'original'] || '#ffffff';
+  ctx.fillRect(0, 0, photoSizePx, photoSizePx);
+
+  // Apply filters
+  const brightness = options.brightness || 100;
+  const contrast = options.contrast || 100;
+  ctx.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
+
+  // Save context for transformations
+  ctx.save();
+
+  // Move to center for rotation and zoom
+  ctx.translate(photoSizePx / 2, photoSizePx / 2);
+
+  // Apply rotation
+  const rotation = options.rotation || 0;
+  ctx.rotate((rotation * Math.PI) / 180);
+
+  // Apply zoom
+  const zoom = options.zoom || 100;
+  const scale = zoom / 100;
+
+  // Apply pan
+  const panX = options.panX || 0;
+  const panY = options.panY || 0;
+
+  // Calculate image dimensions to cover the canvas
+  const imageAspect = sourceImage.width / sourceImage.height;
+  let drawWidth, drawHeight;
+
+  if (imageAspect > 1) {
+    // Landscape
+    drawHeight = photoSizePx * scale;
+    drawWidth = drawHeight * imageAspect;
+  } else {
+    // Portrait or square
+    drawWidth = photoSizePx * scale;
+    drawHeight = drawWidth / imageAspect;
+  }
+
+  // Draw image centered with transformations applied
+  ctx.drawImage(
+    sourceImage,
+    -drawWidth / 2 + panX,
+    -drawHeight / 2 + panY,
+    drawWidth,
+    drawHeight
+  );
+
+  ctx.restore();
+
+  return editCanvas;
 }
 
 /**
@@ -44,6 +131,9 @@ export function createPhotoSheet(
   const photoSizePx = PHOTO_SIZE_INCHES * dpi;
   const gapSizePx = gapSize * dpi;
 
+  // Create edited version of the image with all transformations applied
+  const editedImage = createEditedImage(image, options, photoSizePx);
+
   // Debug logging
   console.log('=== Photo Sheet Dimensions ===');
   console.log(`Layout: ${options.paperSize} (${layout.width}" × ${layout.height}")`);
@@ -52,6 +142,7 @@ export function createPhotoSheet(
   console.log(`Photo size constant: ${PHOTO_SIZE_INCHES} inches`);
   console.log(`Photo size in pixels: ${photoSizePx}px × ${photoSizePx}px`);
   console.log(`Photo size in inches: ${photoSizePx / dpi}" × ${photoSizePx / dpi}"`);
+  console.log(`Edits applied: zoom=${options.zoom}, rotation=${options.rotation}, brightness=${options.brightness}, contrast=${options.contrast}`);
   console.log('============================');
 
   // Create canvas
@@ -72,20 +163,20 @@ export function createPhotoSheet(
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
 
-  // Handle custom spacing layouts
+  // Handle custom spacing layouts - now passing editedImage instead of original image
   if (layout.customSpacing) {
     if (
       layout.spacingType === 'vertical-apart-grid' ||
       layout.spacingType === 'vertical-apart-plain'
     ) {
-      renderVerticalApartLayout(ctx, image, layout, photoSizePx, canvasWidth, canvasHeight, dpi, gapSizePx, options);
+      renderVerticalApartLayout(ctx, editedImage, layout, photoSizePx, canvasWidth, canvasHeight, dpi, gapSizePx, options);
     } else if (layout.spacingType === 'vertical-centered') {
-      renderVerticalCenteredLayout(ctx, image, layout, photoSizePx, gapSizePx, canvasWidth, canvasHeight, options);
+      renderVerticalCenteredLayout(ctx, editedImage, layout, photoSizePx, gapSizePx, canvasWidth, canvasHeight, options);
     } else if (layout.spacingType === 'grid-aligned') {
-      renderGridAlignedLayout(ctx, image, layout, photoSizePx, dpi, canvasWidth, canvasHeight, options);
+      renderGridAlignedLayout(ctx, editedImage, layout, photoSizePx, dpi, canvasWidth, canvasHeight, options);
     }
   } else {
-    renderStandardGrid(ctx, image, layout, photoSizePx, gapSizePx, canvasWidth, canvasHeight, options);
+    renderStandardGrid(ctx, editedImage, layout, photoSizePx, gapSizePx, canvasWidth, canvasHeight, options);
   }
 
   return {
@@ -102,7 +193,7 @@ export function createPhotoSheet(
  */
 function renderVerticalApartLayout(
   ctx: CanvasRenderingContext2D,
-  image: HTMLImageElement,
+  image: HTMLImageElement | HTMLCanvasElement,
   layout: Layout,
   photoSizePx: number,
   canvasWidth: number,
@@ -155,7 +246,7 @@ function renderVerticalApartLayout(
  */
 function renderVerticalCenteredLayout(
   ctx: CanvasRenderingContext2D,
-  image: HTMLImageElement,
+  image: HTMLImageElement | HTMLCanvasElement,
   layout: Layout,
   photoSizePx: number,
   gapSizePx: number,
@@ -201,7 +292,7 @@ function renderVerticalCenteredLayout(
  */
 function renderGridAlignedLayout(
   ctx: CanvasRenderingContext2D,
-  image: HTMLImageElement,
+  image: HTMLImageElement | HTMLCanvasElement,
   layout: Layout,
   photoSizePx: number,
   dpi: number,
@@ -256,7 +347,7 @@ function renderGridAlignedLayout(
  */
 function renderStandardGrid(
   ctx: CanvasRenderingContext2D,
-  image: HTMLImageElement,
+  image: HTMLImageElement | HTMLCanvasElement,
   layout: Layout,
   photoSizePx: number,
   gapSizePx: number,
