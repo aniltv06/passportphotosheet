@@ -24,6 +24,9 @@ export interface RenderOptions {
   brightness?: number;
   contrast?: number;
   backgroundColor?: string;
+  // Border options
+  borderWidth?: number;
+  borderColor?: string;
   // Optimal layout configuration
   optimalLayout?: {
     cols: number;
@@ -220,19 +223,30 @@ export function createPhotoSheet(
     if (activeLayout.spacingType === 'single-centered-with-guides') {
       renderSingleCenteredWithGuides(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, options);
     } else if (
+      activeLayout.spacingType === '4x6-2photos-safe-margins-grid' ||
+      activeLayout.spacingType === '4x6-2photos-safe-margins-plain' ||
       activeLayout.spacingType === 'vertical-apart-grid' ||
       activeLayout.spacingType === 'vertical-apart-plain'
     ) {
-      renderVerticalApartLayout(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, gapSizePx, options, layout.forceGrid);
+      render4x6TwoPhotosLayout(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, options, layout.forceGrid);
     } else if (
       activeLayout.spacingType === 'horizontal-apart-grid' ||
       activeLayout.spacingType === 'horizontal-apart-plain'
     ) {
       renderHorizontalApartLayout(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, gapSizePx, options, layout.forceGrid);
-    } else if (activeLayout.spacingType === 'vertical-centered') {
-      renderVerticalCenteredLayout(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, gapSizePx, canvasWidth, canvasHeight, options);
+    } else if (
+      activeLayout.spacingType === '4x6-4photos-safe-margins' ||
+      activeLayout.spacingType === 'vertical-centered'
+    ) {
+      render4x6FourPhotosLayout(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, options);
+    } else if (activeLayout.spacingType === '4x6-6photos-safe-margins') {
+      render4x6SixPhotosLayout(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, options);
     } else if (activeLayout.spacingType === 'grid-aligned') {
       renderGridAlignedLayout(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, dpi, canvasWidth, canvasHeight, options);
+    } else if (activeLayout.spacingType === '6x8-grid-compact') {
+      render6x8CompactGrid(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, options);
+    } else if (activeLayout.spacingType === '8x10-grid-compact') {
+      render8x10CompactGrid(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, canvasWidth, canvasHeight, dpi, options);
     }
   } else {
     renderStandardGrid(ctx, editedImage, activeLayout, photoWidthPx, photoHeightPx, gapSizePx, canvasWidth, canvasHeight, options);
@@ -298,8 +312,8 @@ function renderSingleCenteredWithGuides(
 
   // Draw photo border if enabled
   if (options.borderEnabled) {
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = Math.max(2, dpi / 150);
+    ctx.strokeStyle = options.borderColor || '#000000';
+    ctx.lineWidth = options.borderWidth || 2;
     const borderOffset = ctx.lineWidth / 2;
     ctx.strokeRect(
       x + borderOffset,
@@ -376,9 +390,10 @@ function renderSingleCenteredWithGuides(
 }
 
 /**
- * Render 4x6 2-photo layout with grid or plain background (vertical)
+ * Render 4x6 2-photo layout with printer safe margins (0.25")
+ * Used for both grid and plain backgrounds
  */
-function renderVerticalApartLayout(
+function render4x6TwoPhotosLayout(
   ctx: CanvasRenderingContext2D,
   image: HTMLImageElement | HTMLCanvasElement,
   layout: Layout | { cols: number; rows: number; photos: number; useCustomSpacing: boolean; spacingType?: string },
@@ -387,7 +402,6 @@ function renderVerticalApartLayout(
   canvasWidth: number,
   canvasHeight: number,
   dpi: number,
-  gapSizePx: number,
   options: RenderOptions,
   forceGrid?: boolean
 ): void {
@@ -395,34 +409,37 @@ function renderVerticalApartLayout(
   const actualPhotoWidth = image.width;
   const actualPhotoHeight = image.height;
 
+  // Printer safe margins (0.25" on all sides)
+  const safeMargin = 0.25 * dpi;
+
   // Custom placement calculations based on photo size
   const paperWidthInches = canvasWidth / dpi;
   const paperHeightInches = canvasHeight / dpi;
   const photoWidthInches = actualPhotoWidth / dpi;
   const photoHeightInches = actualPhotoHeight / dpi;
 
-  // Calculate optimal placement
-  // Available space: paper height - 2 photos - margins
+  // Calculate optimal placement with safe margins
+  // Available space: paper height - 2 photos - safe margins (top and bottom)
   const totalPhotosHeight = 2 * photoHeightInches;
-  const availableSpace = paperHeightInches - totalPhotosHeight;
+  const availableSpace = paperHeightInches - totalPhotosHeight - (2 * 0.25); // Subtract top and bottom margins
 
-  // Use custom margins for better centering
-  // Distribute remaining space: top margin + gap + bottom margin
-  const topMargin = availableSpace * 0.25 * dpi; // 25% on top
-  const middleGap = availableSpace * 0.5 * dpi; // 50% in middle
-  // Bottom margin is automatic (remaining 25%)
+  // Distribute remaining space: safe margin + gap between photos
+  const topMargin = safeMargin;
+  const middleGap = Math.max(0.5 * dpi, availableSpace * dpi - safeMargin); // At least 0.5" gap
+  // Bottom margin is automatic (safe margin)
 
   // Center horizontally
   const x = (canvasWidth - actualPhotoWidth) / 2;
 
-  console.log('=== Vertical Layout Placement ===');
+  console.log('=== 4x6 2-Photo Layout ===');
   console.log(`Paper: ${paperWidthInches}" × ${paperHeightInches}"`);
-  console.log(`Rotated photo: ${photoWidthInches}" × ${photoHeightInches}"`);
+  console.log(`Photo: ${photoWidthInches}" × ${photoHeightInches}"`);
   console.log(`Photo dimensions (px): ${actualPhotoWidth}px × ${actualPhotoHeight}px`);
+  console.log(`Safe margin: ${(safeMargin / dpi).toFixed(3)}"`);
   console.log(`Top margin: ${(topMargin / dpi).toFixed(3)}"`);
   console.log(`Middle gap: ${(middleGap / dpi).toFixed(3)}"`);
   console.log(`X position (centered): ${x}px`);
-  console.log('====================================');
+  console.log('==========================');
 
   // Draw background grid if grid variant
   if (forceGrid) {
@@ -446,8 +463,8 @@ function renderVerticalApartLayout(
     }
 
     if (options.borderEnabled) {
-      ctx.strokeStyle = '#CCCCCC';
-      ctx.lineWidth = Math.max(0.5, dpi / 150);
+      ctx.strokeStyle = options.borderColor || '#000000';
+      ctx.lineWidth = options.borderWidth || 2;
       const borderOffset = ctx.lineWidth / 2;
       ctx.strokeRect(
         x + borderOffset,
@@ -531,8 +548,8 @@ function renderHorizontalApartLayout(
     }
 
     if (options.borderEnabled) {
-      ctx.strokeStyle = '#CCCCCC';
-      ctx.lineWidth = Math.max(0.5, dpi / 150);
+      ctx.strokeStyle = options.borderColor || '#000000';
+      ctx.lineWidth = options.borderWidth || 2;
       const borderOffset = ctx.lineWidth / 2;
       ctx.strokeRect(
         x + borderOffset,
@@ -545,46 +562,159 @@ function renderHorizontalApartLayout(
 }
 
 /**
- * Render 4x6 4-photo centered layout
+ * Render 4x6 4-photo layout with printer safe margins (0.25")
+ * 2 columns × 2 rows grid layout
  */
-function renderVerticalCenteredLayout(
+function render4x6FourPhotosLayout(
   ctx: CanvasRenderingContext2D,
   image: HTMLImageElement | HTMLCanvasElement,
   layout: Layout | { cols: number; rows: number; photos: number; useCustomSpacing: boolean; spacingType?: string },
   photoWidthPx: number,
   photoHeightPx: number,
-  gapSizePx: number,
   canvasWidth: number,
   canvasHeight: number,
+  dpi: number,
   options: RenderOptions
 ): void {
-  const totalPhotosWidth = layout.cols * photoWidthPx + gapSizePx;
-  const totalPhotosHeight = layout.rows * photoHeightPx + gapSizePx;
+  // Use actual image dimensions
+  const actualPhotoWidth = image.width;
+  const actualPhotoHeight = image.height;
+
+  // Printer safe margins (0.25" on all sides)
+  const safeMargin = 0.25 * dpi;
+
+  // Calculate available space
+  const availableWidth = canvasWidth - (2 * safeMargin);
+  const availableHeight = canvasHeight - (2 * safeMargin);
+
+  // For 4-photo layout: NO horizontal gap, only vertical gap
+  const gapX = 0;
+  const gapY = Math.max(0.125 * dpi, (availableHeight - (2 * actualPhotoHeight)) / 3);
+
+  // Calculate total grid size
+  const totalPhotosWidth = 2 * actualPhotoWidth;
+  const totalPhotosHeight = 2 * actualPhotoHeight + gapY;
+
+  // Center the grid
   const startX = (canvasWidth - totalPhotosWidth) / 2;
   const startY = (canvasHeight - totalPhotosHeight) / 2;
 
-  for (let row = 0; row < layout.rows; row++) {
-    for (let col = 0; col < layout.cols; col++) {
-      const x = startX + col * (photoWidthPx + gapSizePx);
-      const y = startY + row * (photoHeightPx + gapSizePx);
+  console.log('=== 4x6 4-Photo Layout ===');
+  console.log(`Paper: ${canvasWidth / dpi}" × ${canvasHeight / dpi}"`);
+  console.log(`Photo: ${actualPhotoWidth / dpi}" × ${actualPhotoHeight / dpi}"`);
+  console.log(`Safe margin: ${(safeMargin / dpi).toFixed(3)}"`);
+  console.log(`Gap X: 0" (no horizontal gap), Gap Y: ${(gapY / dpi).toFixed(3)}"`);
+  console.log(`Start: (${startX}px, ${startY}px)`);
+  console.log('==========================');
 
-      ctx.drawImage(image, x, y, photoWidthPx, photoHeightPx);
+  // Reset context properties
+  ctx.globalAlpha = 1.0;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+
+  for (let row = 0; row < 2; row++) {
+    for (let col = 0; col < 2; col++) {
+      const x = startX + col * (actualPhotoWidth + gapX);
+      const y = startY + row * (actualPhotoHeight + gapY);
+
+      ctx.drawImage(image, x, y, actualPhotoWidth, actualPhotoHeight);
 
       if (options.gapEnabled) {
         ctx.strokeStyle = '#CCCCCC';
         ctx.lineWidth = 1;
-        ctx.strokeRect(x, y, photoWidthPx, photoHeightPx);
+        ctx.strokeRect(x, y, actualPhotoWidth, actualPhotoHeight);
       }
 
       if (options.borderEnabled) {
-        ctx.strokeStyle = '#CCCCCC';
-        ctx.lineWidth = Math.max(0.5, 300 / 150);
+        ctx.strokeStyle = options.borderColor || '#000000';
+        ctx.lineWidth = options.borderWidth || 2;
         const borderOffset = ctx.lineWidth / 2;
         ctx.strokeRect(
           x + borderOffset,
           y + borderOffset,
-          photoWidthPx - ctx.lineWidth,
-          photoHeightPx - ctx.lineWidth
+          actualPhotoWidth - ctx.lineWidth,
+          actualPhotoHeight - ctx.lineWidth
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Render 4x6 6-photo layout with printer safe margins (0.25")
+ * 2 columns × 3 rows grid layout
+ */
+function render4x6SixPhotosLayout(
+  ctx: CanvasRenderingContext2D,
+  image: HTMLImageElement | HTMLCanvasElement,
+  layout: Layout | { cols: number; rows: number; photos: number; useCustomSpacing: boolean; spacingType?: string },
+  photoWidthPx: number,
+  photoHeightPx: number,
+  canvasWidth: number,
+  canvasHeight: number,
+  dpi: number,
+  options: RenderOptions
+): void {
+  // Use actual image dimensions
+  const actualPhotoWidth = image.width;
+  const actualPhotoHeight = image.height;
+
+  // Printer safe margins (0.25" on all sides)
+  const safeMargin = 0.25 * dpi;
+
+  // Calculate available space
+  const availableWidth = canvasWidth - (2 * safeMargin);
+  const availableHeight = canvasHeight - (2 * safeMargin);
+
+  // For 6-photo layout: NO gaps at all
+  const gapX = 0;
+  const gapY = 0;
+
+  // Calculate total grid size
+  const totalPhotosWidth = 2 * actualPhotoWidth;
+  const totalPhotosHeight = 3 * actualPhotoHeight;
+
+  // Center the grid
+  const startX = (canvasWidth - totalPhotosWidth) / 2;
+  const startY = (canvasHeight - totalPhotosHeight) / 2;
+
+  console.log('=== 4x6 6-Photo Layout ===');
+  console.log(`Paper: ${canvasWidth / dpi}" × ${canvasHeight / dpi}"`);
+  console.log(`Photo: ${actualPhotoWidth / dpi}" × ${actualPhotoHeight / dpi}"`);
+  console.log(`Safe margin: ${(safeMargin / dpi).toFixed(3)}"`);
+  console.log(`No gaps between photos`);
+  console.log(`Start: (${startX}px, ${startY}px)`);
+  console.log('==========================');
+
+  // Reset context properties
+  ctx.globalAlpha = 1.0;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+
+  for (let row = 0; row < 3; row++) {
+    for (let col = 0; col < 2; col++) {
+      const x = startX + col * (actualPhotoWidth + gapX);
+      const y = startY + row * (actualPhotoHeight + gapY);
+
+      ctx.drawImage(image, x, y, actualPhotoWidth, actualPhotoHeight);
+
+      if (options.gapEnabled) {
+        ctx.strokeStyle = '#CCCCCC';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x, y, actualPhotoWidth, actualPhotoHeight);
+      }
+
+      if (options.borderEnabled) {
+        ctx.strokeStyle = options.borderColor || '#000000';
+        ctx.lineWidth = options.borderWidth || 2;
+        const borderOffset = ctx.lineWidth / 2;
+        ctx.strokeRect(
+          x + borderOffset,
+          y + borderOffset,
+          actualPhotoWidth - ctx.lineWidth,
+          actualPhotoHeight - ctx.lineWidth
         );
       }
     }
@@ -633,14 +763,177 @@ function renderGridAlignedLayout(
       }
 
       if (options.borderEnabled) {
-        ctx.strokeStyle = '#CCCCCC';
-        ctx.lineWidth = Math.max(0.5, dpi / 150);
+        ctx.strokeStyle = options.borderColor || '#000000';
+        ctx.lineWidth = options.borderWidth || 2;
         const borderOffset = ctx.lineWidth / 2;
         ctx.strokeRect(
           x + borderOffset,
           y + borderOffset,
           photoWidthPx - ctx.lineWidth,
           photoHeightPx - ctx.lineWidth
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Render 6x8 compact grid layout (3 cols × 4 rows = 12 photos)
+ * Uses minimal margins and no gaps for maximum photo count
+ */
+function render6x8CompactGrid(
+  ctx: CanvasRenderingContext2D,
+  image: HTMLImageElement | HTMLCanvasElement,
+  layout: Layout | { cols: number; rows: number; photos: number; useCustomSpacing: boolean; spacingType?: string },
+  photoWidthPx: number,
+  photoHeightPx: number,
+  canvasWidth: number,
+  canvasHeight: number,
+  dpi: number,
+  options: RenderOptions
+): void {
+  // Use actual image dimensions
+  const actualPhotoWidth = image.width;
+  const actualPhotoHeight = image.height;
+
+  // Use minimal margins (0.05" on all sides) for compact fit
+  const minimalMargin = 0.05 * dpi;
+
+  // Calculate available space
+  const availableWidth = canvasWidth - (2 * minimalMargin);
+  const availableHeight = canvasHeight - (2 * minimalMargin);
+
+  // For 6×8" with 2×2" photos: 3 cols × 4 rows with minimal gaps
+  const cols = 3;
+  const rows = 4;
+
+  // Calculate minimal gaps to fit photos evenly
+  const gapX = (availableWidth - (cols * actualPhotoWidth)) / (cols - 1);
+  const gapY = (availableHeight - (rows * actualPhotoHeight)) / (rows - 1);
+
+  // Calculate total grid size
+  const totalPhotosWidth = cols * actualPhotoWidth + (cols - 1) * gapX;
+  const totalPhotosHeight = rows * actualPhotoHeight + (rows - 1) * gapY;
+
+  // Center the grid
+  const startX = (canvasWidth - totalPhotosWidth) / 2;
+  const startY = (canvasHeight - totalPhotosHeight) / 2;
+
+  console.log('=== 6×8 Compact Grid Layout ===');
+  console.log(`Paper: ${canvasWidth / dpi}\" × ${canvasHeight / dpi}\"`);
+  console.log(`Photo: ${actualPhotoWidth / dpi}\" × ${actualPhotoHeight / dpi}\"`);
+  console.log(`Minimal margin: ${(minimalMargin / dpi).toFixed(3)}\"`);
+  console.log(`Gap X: ${(gapX / dpi).toFixed(3)}\", Gap Y: ${(gapY / dpi).toFixed(3)}\"`);
+  console.log(`Grid: ${cols}×${rows} = ${cols * rows} photos`);
+  console.log(`Start: (${startX}px, ${startY}px)`);
+  console.log('================================');
+
+  // Reset context properties
+  ctx.globalAlpha = 1.0;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const x = startX + col * (actualPhotoWidth + gapX);
+      const y = startY + row * (actualPhotoHeight + gapY);
+
+      ctx.drawImage(image, x, y, actualPhotoWidth, actualPhotoHeight);
+
+      if (options.gapEnabled) {
+        ctx.strokeStyle = '#CCCCCC';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x, y, actualPhotoWidth, actualPhotoHeight);
+      }
+
+      if (options.borderEnabled) {
+        ctx.strokeStyle = options.borderColor || '#000000';
+        ctx.lineWidth = options.borderWidth || 2;
+        const borderOffset = ctx.lineWidth / 2;
+        ctx.strokeRect(
+          x + borderOffset,
+          y + borderOffset,
+          actualPhotoWidth - ctx.lineWidth,
+          actualPhotoHeight - ctx.lineWidth
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Render 8x10 compact grid layout (4 cols × 5 rows = 20 photos)
+ * Perfect fit for 2×2" photos with no gaps - photos fill the entire paper
+ */
+function render8x10CompactGrid(
+  ctx: CanvasRenderingContext2D,
+  image: HTMLImageElement | HTMLCanvasElement,
+  layout: Layout | { cols: number; rows: number; photos: number; useCustomSpacing: boolean; spacingType?: string },
+  photoWidthPx: number,
+  photoHeightPx: number,
+  canvasWidth: number,
+  canvasHeight: number,
+  dpi: number,
+  options: RenderOptions
+): void {
+  // Use actual image dimensions
+  const actualPhotoWidth = image.width;
+  const actualPhotoHeight = image.height;
+
+  // For 8×10" with 2×2" photos: perfect fit without gaps
+  // 4 cols × 2" = 8", 5 rows × 2" = 10"
+  const cols = 4;
+  const rows = 5;
+
+  // No gaps needed - photos fill the paper exactly
+  const gapX = 0;
+  const gapY = 0;
+
+  // Calculate total grid size
+  const totalPhotosWidth = cols * actualPhotoWidth;
+  const totalPhotosHeight = rows * actualPhotoHeight;
+
+  // Center the grid (should be perfectly centered for 2×2" photos)
+  const startX = (canvasWidth - totalPhotosWidth) / 2;
+  const startY = (canvasHeight - totalPhotosHeight) / 2;
+
+  console.log('=== 8×10 Compact Grid Layout ===');
+  console.log(`Paper: ${canvasWidth / dpi}\" × ${canvasHeight / dpi}\"`);
+  console.log(`Photo: ${actualPhotoWidth / dpi}\" × ${actualPhotoHeight / dpi}\"`);
+  console.log(`Perfect fit - no gaps needed`);
+  console.log(`Grid: ${cols}×${rows} = ${cols * rows} photos`);
+  console.log(`Start: (${startX}px, ${startY}px)`);
+  console.log('================================');
+
+  // Reset context properties
+  ctx.globalAlpha = 1.0;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const x = startX + col * actualPhotoWidth;
+      const y = startY + row * actualPhotoHeight;
+
+      ctx.drawImage(image, x, y, actualPhotoWidth, actualPhotoHeight);
+
+      if (options.gapEnabled) {
+        ctx.strokeStyle = '#CCCCCC';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x, y, actualPhotoWidth, actualPhotoHeight);
+      }
+
+      if (options.borderEnabled) {
+        ctx.strokeStyle = options.borderColor || '#000000';
+        ctx.lineWidth = options.borderWidth || 2;
+        const borderOffset = ctx.lineWidth / 2;
+        ctx.strokeRect(
+          x + borderOffset,
+          y + borderOffset,
+          actualPhotoWidth - ctx.lineWidth,
+          actualPhotoHeight - ctx.lineWidth
         );
       }
     }
@@ -680,8 +973,8 @@ function renderStandardGrid(
       }
 
       if (options.borderEnabled) {
-        ctx.strokeStyle = '#CCCCCC';
-        ctx.lineWidth = Math.max(0.5, 300 / 150);
+        ctx.strokeStyle = options.borderColor || '#000000';
+        ctx.lineWidth = options.borderWidth || 2;
         const borderOffset = ctx.lineWidth / 2;
         ctx.strokeRect(
           x + borderOffset,

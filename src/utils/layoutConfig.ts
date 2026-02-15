@@ -91,7 +91,7 @@ export const LAYOUTS: Record<string, Layout> = {
     photos: 2,
     icon: '📐',
     customSpacing: true,
-    spacingType: 'vertical-apart-grid',
+    spacingType: '4x6-2photos-safe-margins-grid',
     forceGrid: true,
   },
   '4x6-2-plain': {
@@ -102,7 +102,7 @@ export const LAYOUTS: Record<string, Layout> = {
     photos: 2,
     icon: '📄',
     customSpacing: true,
-    spacingType: 'vertical-apart-plain',
+    spacingType: '4x6-2photos-safe-margins-plain',
     forceNoGrid: true,
   },
   '4x6-4': {
@@ -113,7 +113,7 @@ export const LAYOUTS: Record<string, Layout> = {
     photos: 4,
     icon: '🎴',
     customSpacing: true,
-    spacingType: 'vertical-centered',
+    spacingType: '4x6-4photos-safe-margins',
   },
   '4x6': {
     width: 4,
@@ -122,6 +122,8 @@ export const LAYOUTS: Record<string, Layout> = {
     rows: 3,
     photos: 6,
     icon: '💰',
+    customSpacing: true,
+    spacingType: '4x6-6photos-safe-margins',
   },
   '5x7': {
     width: 5,
@@ -140,6 +142,8 @@ export const LAYOUTS: Record<string, Layout> = {
     rows: 4,
     photos: 12,
     icon: '📸',
+    customSpacing: true,
+    spacingType: '6x8-grid-compact',
   },
   '8x10': {
     width: 8,
@@ -148,6 +152,8 @@ export const LAYOUTS: Record<string, Layout> = {
     rows: 5,
     photos: 20,
     icon: '💎',
+    customSpacing: true,
+    spacingType: '8x10-grid-compact',
   },
 };
 

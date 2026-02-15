@@ -110,6 +110,9 @@ export function PhotoSheet({
           brightness,
           contrast,
           backgroundColor,
+          // Border options
+          borderWidth,
+          borderColor,
           // Pass optimal layout
           optimalLayout,
         });
@@ -151,7 +154,7 @@ export function PhotoSheet({
       }
     };
     img.src = uploadedImage;
-  }, [uploadedImage, paperSize, quality, gapEnabled, borderEnabled, photoWidth, photoHeight, zoom, rotation, panX, panY, brightness, contrast, backgroundColor, optimalLayout]);
+  }, [uploadedImage, paperSize, quality, gapEnabled, borderEnabled, photoWidth, photoHeight, zoom, rotation, panX, panY, brightness, contrast, backgroundColor, borderWidth, borderColor, optimalLayout]);
 
   const handleDownloadSheet = () => {
     if (!uploadedImage) return;
@@ -175,6 +178,9 @@ export function PhotoSheet({
           brightness,
           contrast,
           backgroundColor,
+          // Border options
+          borderWidth,
+          borderColor,
           // Pass optimal layout
           optimalLayout,
         });
@@ -270,6 +276,67 @@ export function PhotoSheet({
             </div>
           </div>
         </GlassCard>
+
+        {/* Border Options - Show when borders are enabled */}
+        {borderEnabled && (
+          <GlassCard delay={0.2}>
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
+                  <FileCheck className="w-5 h-5 text-white" />
+                </div>
+                <h2 className="text-white">Border Options</h2>
+              </div>
+
+              <div className="space-y-4">
+                {/* Border Thickness */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-sm text-white/80">Thickness</label>
+                    <Badge className="bg-white/20 text-white border-white/30 text-xs">
+                      {borderWidth}px
+                    </Badge>
+                  </div>
+                  <Slider
+                    value={[borderWidth]}
+                    onValueChange={(value) => setBorderWidth(value[0])}
+                    min={1}
+                    max={10}
+                    step={1}
+                    className="mb-2"
+                  />
+                  <div className="flex justify-between text-xs text-white/60">
+                    <span>Thin</span>
+                    <span>Thick</span>
+                  </div>
+                </div>
+
+                {/* Border Color */}
+                <div>
+                  <label className="text-sm text-white/80 mb-3 block">Color</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {borderColors.map((color) => (
+                      <motion.button
+                        key={color.value}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setBorderColor(color.value)}
+                        className={`p-3 rounded-xl border-2 transition-all ${
+                          borderColor === color.value
+                            ? 'border-white bg-white/20 shadow-xl'
+                            : 'border-white/20 bg-white/5 hover:bg-white/10'
+                        }`}
+                      >
+                        <div className={`w-full h-8 rounded-lg bg-gradient-to-br ${color.gradient} mb-2 shadow-lg`} />
+                        <span className="text-xs text-white/90 font-medium">{color.label}</span>
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </GlassCard>
+        )}
 
         {/* Summary Card */}
         <motion.div

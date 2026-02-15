@@ -142,6 +142,29 @@ export function getOptimalLayout(
     };
   }
 
+  // Check specific paper sizes FIRST before generic fit calculations
+  // For 4-photo layouts on 4x6
+  if (paperSizeValue === '4x6-4' && layout.width === 4 && layout.height === 6) {
+    return {
+      cols: 2,
+      rows: 2,
+      photos: 4,
+      useCustomSpacing: true,
+      spacingType: '4x6-4photos-safe-margins',
+    };
+  }
+
+  // For 6-photo layouts on 4x6
+  if (paperSizeValue === '4x6' && layout.width === 4 && layout.height === 6) {
+    return {
+      cols: 2,
+      rows: 3,
+      photos: 6,
+      useCustomSpacing: true,
+      spacingType: '4x6-6photos-safe-margins',
+    };
+  }
+
   // For 2-photo layouts, check if landscape orientation is better
   if (fit.photos === 2 || paperSizeValue.includes('-2-')) {
     // Special case: 2.1×2.7" photos on 4×6" paper - use landscape for better fit
@@ -157,19 +180,8 @@ export function getOptimalLayout(
       rows: 2,
       photos: 2,
       useCustomSpacing: true,
-      spacingType: paperSizeValue.includes('grid') ? 'vertical-apart-grid' : 'vertical-apart-plain',
+      spacingType: paperSizeValue.includes('grid') ? '4x6-2photos-safe-margins-grid' : '4x6-2photos-safe-margins-plain',
       useLandscapeOrientation: useLandscape,
-    };
-  }
-
-  // For 4-photo layouts on 4x6
-  if (fit.photos === 4 && layout.width === 4 && layout.height === 6) {
-    return {
-      cols: fit.cols,
-      rows: fit.rows,
-      photos: fit.photos,
-      useCustomSpacing: true,
-      spacingType: 'vertical-centered',
     };
   }
 
@@ -181,6 +193,28 @@ export function getOptimalLayout(
       photos: fit.photos,
       useCustomSpacing: true,
       spacingType: 'grid-aligned',
+    };
+  }
+
+  // For 6x8 paper - use compact grid for maximum photos
+  if (paperSizeValue === '6x8' && layout.width === 6 && layout.height === 8) {
+    return {
+      cols: 3,
+      rows: 4,
+      photos: 12,
+      useCustomSpacing: true,
+      spacingType: '6x8-grid-compact',
+    };
+  }
+
+  // For 8x10 paper - use compact grid for maximum photos
+  if (paperSizeValue === '8x10' && layout.width === 8 && layout.height === 10) {
+    return {
+      cols: 4,
+      rows: 5,
+      photos: 20,
+      useCustomSpacing: true,
+      spacingType: '8x10-grid-compact',
     };
   }
 
