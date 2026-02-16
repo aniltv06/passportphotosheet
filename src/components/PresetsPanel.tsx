@@ -262,7 +262,7 @@ export function PresetsPanel({
 
             {currentSettings && (
               <div className="bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-xl border border-white/20 p-4">
-                <h4 className="text-white text-sm mb-2">Current Settings</h4>
+                <h3 className="text-white text-sm mb-2">Current Settings</h3>
                 <div className="grid grid-cols-2 gap-2 text-xs text-white/80">
                   <div>Size: {currentSettings.passportSize}</div>
                   <div>Background: {currentSettings.backgroundColor}</div>

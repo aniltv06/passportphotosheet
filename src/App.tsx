@@ -320,6 +320,46 @@ function AppContent() {
           />
         ))}
       </div>
+
+      {/* Footer with Legal Links */}
+      <footer className="relative z-10 mt-16 py-8 border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center space-y-4">
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm">
+              <a
+                href="/privacy-policy.html"
+                className="text-white/70 hover:text-white transition-colors duration-200"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Privacy Policy
+              </a>
+              <span className="text-white/30">•</span>
+              <a
+                href="/terms-conditions.html"
+                className="text-white/70 hover:text-white transition-colors duration-200"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Terms & Conditions
+              </a>
+              <span className="text-white/30">•</span>
+              <a
+                href="mailto:support@passportphotomaker.com"
+                className="text-white/70 hover:text-white transition-colors duration-200"
+              >
+                Contact Us
+              </a>
+            </div>
+            <p className="text-white/50 text-xs sm:text-sm">
+              © {new Date().getFullYear()} Passport Photo Maker. All rights reserved.
+            </p>
+            <p className="text-white/40 text-xs">
+              🔒 Your photos never leave your device. 100% client-side processing.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

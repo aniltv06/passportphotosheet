@@ -154,7 +154,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
             animate={{ opacity: 1, scale: 1 }}
             className="bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-2xl border border-white/20 p-5 text-center"
           >
-            <h4 className="text-white font-semibold mb-2">Need More Help?</h4>
+            <h3 className="text-white font-semibold mb-2">Need More Help?</h3>
             <p className="text-sm text-white/70 mb-4">
               If you're still having issues or have questions, feel free to reach out for support.
             </p>

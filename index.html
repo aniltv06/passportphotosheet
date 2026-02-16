@@ -46,9 +46,15 @@
       <!-- PWA Manifest -->
       <link rel="manifest" href="/manifest.json" />
 
-      <!-- Preconnect for Performance -->
+      <!-- DNS Prefetch & Preconnect for Performance -->
+      <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+      <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+      <!-- Performance Hints -->
+      <meta name="format-detection" content="telephone=no" />
+      <meta http-equiv="x-ua-compatible" content="ie=edge" />
 
       <!-- Schema.org Structured Data -->
       <script type="application/ld+json">

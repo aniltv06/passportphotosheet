@@ -148,7 +148,7 @@ export function AdvancedGridControls({
             <div className="pt-2">
               <div className="flex items-center gap-2 mb-3">
                 <Sliders className="w-4 h-4 text-white/70" />
-                <h4 className="text-sm text-white/90">Grid Opacity</h4>
+                <h3 className="text-sm text-white/90">Grid Opacity</h3>
                 <Badge className="ml-auto bg-white/20 text-white border-white/30 text-xs">
                   {gridOpacity}%
                 </Badge>
@@ -169,9 +169,9 @@ export function AdvancedGridControls({
 
             {/* Grid Color Selection */}
             <div className="pt-2">
-              <h4 className="text-sm text-white/90 mb-3 flex items-center gap-2">
+              <h3 className="text-sm text-white/90 mb-3 flex items-center gap-2">
                 <span>🎨</span> Grid Color
-              </h4>
+              </h3>
               <div className="grid grid-cols-3 gap-2">
                 {colorOptions.map((color) => (
                   <motion.button

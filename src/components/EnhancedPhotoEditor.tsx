@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, lazy, Suspense } from 'react';
 import { Upload, ZoomIn, RotateCw, Palette, Download, Lightbulb, ImagePlus, Sun, Contrast, RefreshCw, Keyboard, Move, Sparkles, Grid3x3, Eye, EyeOff, Wand2, QrCode, History as HistoryIcon, Camera as CameraIcon, SplitSquareVertical } from 'lucide-react';
 import { Button } from './ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
@@ -9,15 +9,25 @@ import { Badge } from './ui/badge';
 import { GlassCard } from './GlassCard';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Switch } from './ui/switch';
-import { QRCodeGenerator } from './QRCodeGenerator';
-import { HistoryPanel } from './HistoryPanel';
-import { PresetsPanel } from './PresetsPanel';
-import { BeforeAfterComparison } from './BeforeAfterComparison';
-import { CameraCapture } from './CameraCapture';
 import { PhotoSession } from '../utils/history';
 import { PhotoPreset } from '../utils/presets';
 import { PHOTO_SIZE_OPTIONS } from '../utils/layoutConfig';
-import heic2any from 'heic2any';
+
+// Lazy load heavy components for better performance
+const QRCodeGenerator = lazy(() => import('./QRCodeGenerator').then(m => ({ default: m.QRCodeGenerator })));
+const HistoryPanel = lazy(() => import('./HistoryPanel').then(m => ({ default: m.HistoryPanel })));
+const PresetsPanel = lazy(() => import('./PresetsPanel').then(m => ({ default: m.PresetsPanel })));
+const BeforeAfterComparison = lazy(() => import('./BeforeAfterComparison').then(m => ({ default: m.BeforeAfterComparison })));
+const CameraCapture = lazy(() => import('./CameraCapture').then(m => ({ default: m.CameraCapture })));
+
+// Dynamic import for heic2any (only loaded when needed)
+let heic2any: any = null;
+const loadHeic2any = async () => {
+  if (!heic2any) {
+    heic2any = (await import('heic2any')).default;
+  }
+  return heic2any;
+};
 
 interface EnhancedPhotoEditorProps {
   uploadedImage: string | null;
@@ -190,8 +200,9 @@ export function EnhancedPhotoEditor({
       let processedFile = file;
 
       if (isHEIC) {
-        // Convert HEIC to JPEG
-        const convertedBlob = await heic2any({
+        // Convert HEIC to JPEG - dynamically load heic2any
+        const heic2anyModule = await loadHeic2any();
+        const convertedBlob = await heic2anyModule({
           blob: file,
           toType: 'image/jpeg',
           quality: 0.95
@@ -1365,40 +1376,50 @@ export function EnhancedPhotoEditor({
       />
 
       {/* QR Code Generator */}
-      <QRCodeGenerator
-        isOpen={showQRCode}
-        onClose={() => setShowQRCode(false)}
-        imageUrl={uploadedImage}
-      />
+      <Suspense fallback={<div />}>
+        <QRCodeGenerator
+          isOpen={showQRCode}
+          onClose={() => setShowQRCode(false)}
+          imageUrl={uploadedImage}
+        />
+      </Suspense>
 
       {/* History Panel */}
-      <HistoryPanel
-        isOpen={showHistory}
-        onClose={() => setShowHistory(false)}
-        onLoadSession={onLoadSession}
-      />
+      <Suspense fallback={<div />}>
+        <HistoryPanel
+          isOpen={showHistory}
+          onClose={() => setShowHistory(false)}
+          onLoadSession={onLoadSession}
+        />
+      </Suspense>
 
       {/* Presets Panel */}
-      <PresetsPanel
-        isOpen={showPresets}
-        onClose={() => setShowPresets(false)}
-        onApplyPreset={onApplyPreset}
-      />
+      <Suspense fallback={<div />}>
+        <PresetsPanel
+          isOpen={showPresets}
+          onClose={() => setShowPresets(false)}
+          onApplyPreset={onApplyPreset}
+        />
+      </Suspense>
 
       {/* Before-After Comparison */}
-      <BeforeAfterComparison
-        isOpen={showComparison}
-        onClose={() => setShowComparison(false)}
-        originalImage={originalImage}
-        editedImage={uploadedImage}
-      />
+      <Suspense fallback={<div />}>
+        <BeforeAfterComparison
+          isOpen={showComparison}
+          onClose={() => setShowComparison(false)}
+          originalImage={originalImage}
+          editedImage={uploadedImage}
+        />
+      </Suspense>
 
       {/* Camera Capture */}
-      <CameraCapture
-        isOpen={showCamera}
-        onClose={() => setShowCamera(false)}
-        onCapture={setUploadedImage}
-      />
+      <Suspense fallback={<div />}>
+        <CameraCapture
+          isOpen={showCamera}
+          onClose={() => setShowCamera(false)}
+          onCapture={setUploadedImage}
+        />
+      </Suspense>
     </div>
   );
 }
