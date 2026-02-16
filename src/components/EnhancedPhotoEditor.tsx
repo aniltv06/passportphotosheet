@@ -156,6 +156,24 @@ export function EnhancedPhotoEditor({
     setIsDragging(false);
   };
 
+  // Mouse wheel zoom handler
+  const handleWheel = (e: React.WheelEvent) => {
+    if (!uploadedImage) return;
+
+    // Prevent page scroll when zooming
+    e.preventDefault();
+
+    // Determine zoom direction and amount
+    // deltaY < 0 means scroll up (zoom in), > 0 means scroll down (zoom out)
+    const zoomDelta = e.deltaY > 0 ? -5 : 5; // 5% per scroll for finer control
+
+    // Apply zoom with bounds checking
+    setZoom((prevZoom) => {
+      const newZoom = prevZoom + zoomDelta;
+      return Math.max(50, Math.min(200, newZoom));
+    });
+  };
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -972,7 +990,7 @@ export function EnhancedPhotoEditor({
                 </div>
                 <h2 className="text-white">{t.zoom}</h2>
               </div>
-              <Badge className="bg-white/20 text-white border-white/30 text-xs">+/−</Badge>
+              <Badge className="bg-white/20 text-white border-white/30 text-xs">🖱️ +/−</Badge>
             </div>
             <Slider
               value={[zoom]}
@@ -1202,9 +1220,19 @@ export function EnhancedPhotoEditor({
             </div>
             
             {/* Preview Canvas */}
-            <div className="flex items-center justify-center bg-gradient-to-br from-white/5 to-white/10 rounded-3xl p-8 sm:p-12 min-h-[500px] sm:min-h-[600px] relative overflow-hidden border border-white/20">
-              {/* Animated gradient background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 opacity-50" />
+            <div className="flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl p-8 sm:p-12 min-h-[500px] sm:min-h-[600px] relative overflow-hidden border-2 border-white/30">
+              {/* Dark checkerboard pattern background */}
+              <div className="absolute inset-0" style={{
+                backgroundImage: `
+                  linear-gradient(45deg, #1f2937 25%, transparent 25%),
+                  linear-gradient(-45deg, #1f2937 25%, transparent 25%),
+                  linear-gradient(45deg, transparent 75%, #1f2937 75%),
+                  linear-gradient(-45deg, transparent 75%, #1f2937 75%)
+                `,
+                backgroundSize: '30px 30px',
+                backgroundPosition: '0 0, 0 15px, 15px -15px, -15px 0px',
+                opacity: 0.3
+              }} />
               
               {uploadedImage ? (
                 <motion.div
@@ -1226,6 +1254,7 @@ export function EnhancedPhotoEditor({
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
                     onMouseLeave={handleMouseUp}
+                    onWheel={handleWheel}
                   >
                     {/* Photo */}
                     <div className="absolute inset-0 overflow-hidden">
