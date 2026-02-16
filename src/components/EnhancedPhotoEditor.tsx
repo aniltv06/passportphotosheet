@@ -1215,11 +1215,12 @@ export function EnhancedPhotoEditor({
                 >
                   <div
                     ref={canvasRef}
-                    className={`relative rounded-2xl overflow-hidden shadow-2xl ${isDragging ? 'cursor-grabbing scale-105' : 'cursor-grab'} transition-transform`}
+                    className={`relative overflow-hidden shadow-2xl border-4 border-indigo-400/80 ${isDragging ? 'cursor-grabbing scale-105 border-purple-400' : 'cursor-grab'} transition-all`}
                     style={{
                       width: `${previewDimensions.width}px`,
                       height: `${previewDimensions.height}px`,
                       backgroundColor: backgroundColors.find(bg => bg.value === backgroundColor)?.color || 'white',
+                      boxShadow: '0 0 30px rgba(99, 102, 241, 0.4), 0 20px 25px -5px rgba(0, 0, 0, 0.1)',
                     }}
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}

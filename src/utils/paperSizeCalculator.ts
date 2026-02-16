@@ -68,8 +68,12 @@ export function getIntelligentPaperSizes(photoSizeValue: string): PaperSizeOptio
 
     // Update description with calculated photos
     let updatedDescription = option.description;
-    if (fit.photos !== layout.photos) {
-      updatedDescription = `Fits ${fit.photos} photos (${fit.cols}×${fit.rows}) • ${layout.width}×${layout.height}"`;
+    // Don't override special layouts like 3.5x5 single centered photo
+    if (fit.photos !== layout.photos && option.value !== '3.5x5') {
+      // Calculate pixel dimensions at 300 DPI
+      const pixelWidth = Math.round(layout.width * 300);
+      const pixelHeight = Math.round(layout.height * 300);
+      updatedDescription = `${fit.cols}×${fit.rows} layout • ${pixelWidth}×${pixelHeight}px @ 300 DPI`;
     }
 
     // Add badge for best options

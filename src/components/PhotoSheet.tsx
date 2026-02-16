@@ -117,8 +117,20 @@ export function PhotoSheet({
           optimalLayout,
         });
 
-        // Scale down canvas for preview
-        const previewScale = 0.5;
+        // Scale down canvas for preview - use dynamic scaling based on paper size
+        // Larger papers need more aggressive scaling to fit in the preview area
+        let previewScale = 0.5;
+        const paperSizeArea = currentLayout.width * currentLayout.height;
+
+        // Adjust scale based on paper size
+        if (paperSizeArea >= 80) { // 8x10 and larger
+          previewScale = 0.35;
+        } else if (paperSizeArea >= 48) { // 6x8 and larger
+          previewScale = 0.4;
+        } else if (paperSizeArea >= 35) { // 5x7 and larger
+          previewScale = 0.45;
+        }
+
         const previewCanvas = document.createElement('canvas');
         previewCanvas.width = result.canvasWidth * previewScale;
         previewCanvas.height = result.canvasHeight * previewScale;
@@ -400,8 +412,25 @@ export function PhotoSheet({
             </h2>
 
             {/* Preview Area */}
-            <div className="flex items-center justify-center bg-gradient-to-br from-white/5 to-white/10 rounded-3xl p-8 min-h-[700px] relative overflow-hidden border border-white/20">
+            <div className="flex items-center justify-center bg-gradient-to-br from-white/5 to-white/10 rounded-3xl p-8 min-h-[700px] max-h-[900px] relative overflow-auto border border-white/20">
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 opacity-50" />
+
+              {/* Paper Size Badge */}
+              <div className="absolute top-6 left-6 z-20">
+                <div className="backdrop-blur-xl bg-white/20 border border-white/30 rounded-2xl px-6 py-3 shadow-2xl">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{currentPaperSizeOption.icon}</span>
+                    <div>
+                      <div className="text-white font-semibold text-sm">
+                        {currentPaperSizeOption.label}
+                      </div>
+                      <div className="text-white/70 text-xs">
+                        {currentLayout.width}×{currentLayout.height}\" • {optimalLayout.photos} photos • {quality === 'high' ? '300' : '200'} DPI
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
@@ -409,12 +438,14 @@ export function PhotoSheet({
                 transition={{ duration: 0.5 }}
                 className="relative z-10"
               >
-                <div className="bg-white shadow-2xl rounded-2xl p-4 max-w-full overflow-auto">
+                <div className="bg-white shadow-2xl">
                   <canvas
                     ref={canvasRef}
-                    className="max-w-full h-auto"
+                    className="w-full h-auto block"
                     style={{
                       imageRendering: 'high-quality',
+                      maxWidth: '100%',
+                      maxHeight: '800px',
                     }}
                   />
                 </div>
