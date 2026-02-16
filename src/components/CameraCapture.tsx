@@ -153,7 +153,7 @@ export function CameraCapture({ isOpen, onClose, onCapture }: CameraCaptureProps
           ) : capturedImage ? (
             <img
               src={capturedImage}
-              alt="Captured"
+              alt="Captured photo from camera"
               className="w-full h-full object-cover"
             />
           ) : (

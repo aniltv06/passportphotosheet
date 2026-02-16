@@ -239,7 +239,7 @@ export function QRCodeGenerator({ isOpen, onClose, imageUrl }: QRCodeGeneratorPr
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 rounded-lg overflow-hidden border-2 border-white/30">
-                        <img src={imageUrl} alt="Photo preview" className="w-full h-full object-cover" />
+                        <img src={imageUrl} alt="Photo preview thumbnail" className="w-full h-full object-cover" />
                       </div>
                       <div>
                         <Label htmlFor="includePhoto" className="text-white font-medium cursor-pointer">

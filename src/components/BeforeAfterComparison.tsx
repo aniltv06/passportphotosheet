@@ -65,7 +65,7 @@ export function BeforeAfterComparison({
                 {/* Before Image (Full) */}
                 <img
                   src={originalImage}
-                  alt="Before"
+                  alt="Original photo before editing"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
 
@@ -76,7 +76,7 @@ export function BeforeAfterComparison({
                 >
                   <img
                     src={editedImage}
-                    alt="After"
+                    alt="Edited photo with adjustments applied"
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                 </motion.div>
@@ -131,7 +131,7 @@ export function BeforeAfterComparison({
                 >
                   <img
                     src={originalImage}
-                    alt="Before"
+                    alt="Original photo before editing"
                     className="w-full h-full object-cover"
                   />
                 </motion.div>
@@ -149,7 +149,7 @@ export function BeforeAfterComparison({
                 >
                   <img
                     src={editedImage}
-                    alt="After"
+                    alt="Edited photo with adjustments applied"
                     className="w-full h-full object-cover"
                   />
                 </motion.div>

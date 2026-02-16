@@ -113,7 +113,7 @@ export function HistoryPanel({ isOpen, onClose, onLoadSession }: HistoryPanelPro
                       <div className="aspect-[3/4] bg-gradient-to-br from-indigo-500/20 to-purple-500/20 relative overflow-hidden">
                         <img
                           src={session.thumbnail}
-                          alt="Session thumbnail"
+                          alt={`Photo session from ${new Date(session.timestamp).toLocaleDateString()}`}
                           className="w-full h-full object-cover"
                         />
                         {/* Delete button */}
@@ -162,7 +162,7 @@ export function HistoryPanel({ isOpen, onClose, onLoadSession }: HistoryPanelPro
                 <div>
                   <img
                     src={selectedSession.thumbnail}
-                    alt="Preview"
+                    alt={`Session preview from ${new Date(selectedSession.timestamp).toLocaleDateString()}`}
                     className="w-full rounded-2xl shadow-2xl border border-white/20"
                   />
                 </div>

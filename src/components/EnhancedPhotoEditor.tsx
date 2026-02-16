@@ -786,6 +786,7 @@ export function EnhancedPhotoEditor({
               <Button
                 onClick={handleUploadClick}
                 disabled={isUploading}
+                aria-label={isUploading ? "Processing photo" : (uploadedImage ? "Change uploaded photo" : "Choose photo to upload")}
                 className="w-full h-32 border-2 border-dashed border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-2xl transition-all group text-white disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="flex flex-col items-center gap-3">
@@ -802,7 +803,7 @@ export function EnhancedPhotoEditor({
                         className="w-7 h-7 border-3 border-white border-t-transparent rounded-full"
                       />
                     ) : (
-                      <Upload className="w-7 h-7 text-white" />
+                      <Upload className="w-7 h-7 text-white" aria-hidden="true" />
                     )}
                   </motion.div>
                   <div>
@@ -1260,7 +1261,7 @@ export function EnhancedPhotoEditor({
                     <div className="absolute inset-0 overflow-hidden">
                       <img
                         src={uploadedImage}
-                        alt="Preview"
+                        alt="Passport photo preview with editing adjustments"
                         className="absolute top-1/2 left-1/2 object-cover pointer-events-none select-none"
                         style={{
                           transform: `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) scale(${zoom / 100}) rotate(${rotation}deg)`,

@@ -50,6 +50,14 @@ function AppContent() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {/* Skip to main content link for keyboard users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:text-gray-900 focus:px-4 focus:py-2 focus:rounded-xl focus:shadow-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      >
+        Skip to main content
+      </a>
+
       {/* Animated Background with Theme */}
       <div className={`fixed inset-0 bg-gradient-to-br ${currentTheme.gradient}`}>
         {/* Animated gradient orbs */}
@@ -156,8 +164,9 @@ function AppContent() {
                 <Button
                   onClick={() => setShowHelp(true)}
                   className="w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl"
+                  aria-label="Open help"
                 >
-                  <HelpCircle className="w-5 h-5" />
+                  <HelpCircle className="w-5 h-5" aria-hidden="true" />
                   <span className="hidden sm:inline ml-2">{t.help}</span>
                 </Button>
               </motion.div>
@@ -171,8 +180,9 @@ function AppContent() {
                 <Button
                   onClick={() => setShowSettings(true)}
                   className="w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl"
+                  aria-label="Open settings"
                 >
-                  <Settings className="w-5 h-5" />
+                  <Settings className="w-5 h-5" aria-hidden="true" />
                   <span className="hidden sm:inline ml-2">{t.settings}</span>
                 </Button>
               </motion.div>
@@ -207,7 +217,7 @@ function AppContent() {
       </div>
 
       {/* Main Content with Animation */}
-      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+      <main id="main-content" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pb-16">
         <AnimatePresence mode="wait">
           {currentStep === 1 ? (
             <motion.div
