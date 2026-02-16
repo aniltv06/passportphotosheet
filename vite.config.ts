@@ -2,9 +2,26 @@
   import { defineConfig } from 'vite';
   import react from '@vitejs/plugin-react-swc';
   import path from 'path';
+  import viteCompression from 'vite-plugin-compression';
 
   export default defineConfig({
-    plugins: [react()],
+    plugins: [
+      react(),
+      // Gzip compression for production
+      viteCompression({
+        algorithm: 'gzip',
+        ext: '.gz',
+        threshold: 10240, // Only compress files > 10KB
+        deleteOriginFile: false,
+      }),
+      // Brotli compression for production (better compression than gzip)
+      viteCompression({
+        algorithm: 'brotliCompress',
+        ext: '.br',
+        threshold: 10240,
+        deleteOriginFile: false,
+      }),
+    ],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
@@ -52,6 +69,29 @@
     build: {
       target: 'esnext',
       outDir: 'build',
+      // Code splitting for better caching and faster initial load
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // React core libraries
+            'react-vendor': ['react', 'react-dom'],
+            // Radix UI components (large)
+            'radix-ui': [
+              '@radix-ui/react-dialog',
+              '@radix-ui/react-select',
+              '@radix-ui/react-slider',
+              '@radix-ui/react-tabs',
+              '@radix-ui/react-switch',
+            ],
+            // Animation library
+            'motion': ['motion'],
+            // Image processing utilities
+            'image-utils': ['qrcode', 'heic2any'],
+          },
+        },
+      },
+      // Increase chunk size warning limit (we're intentionally splitting)
+      chunkSizeWarningLimit: 1000,
     },
     server: {
       port: 3000,
