@@ -12,10 +12,10 @@ import { generateQRCode, generateVCardString, downloadQRCode } from '../utils/qr
 interface QRCodeGeneratorProps {
   isOpen: boolean;
   onClose: () => void;
-  photoImage?: string;
+  imageUrl?: string; // Changed from photoImage to match usage
 }
 
-export function QRCodeGenerator({ isOpen, onClose, photoImage }: QRCodeGeneratorProps) {
+export function QRCodeGenerator({ isOpen, onClose, imageUrl }: QRCodeGeneratorProps) {
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -24,17 +24,86 @@ export function QRCodeGenerator({ isOpen, onClose, photoImage }: QRCodeGenerator
   const [organization, setOrganization] = useState('');
   const [website, setWebsite] = useState('');
   const [customText, setCustomText] = useState('');
+  const [includePhoto, setIncludePhoto] = useState(false);
+  const [isCompressing, setIsCompressing] = useState(false);
+
+  // Compress image to tiny thumbnail for QR code embedding
+  const compressImageForQR = async (imageUrl: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        // Create a tiny canvas (80x80 for passport photos)
+        const canvas = document.createElement('canvas');
+        const maxSize = 80; // Very small to fit in QR code
+
+        // Calculate dimensions maintaining aspect ratio
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxSize) {
+            height = (height * maxSize) / width;
+            width = maxSize;
+          }
+        } else {
+          if (height > maxSize) {
+            width = (width * maxSize) / height;
+            height = maxSize;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Could not get canvas context'));
+          return;
+        }
+
+        // Draw and compress heavily
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Use very low quality (0.3 = 30%) to minimize size
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.3);
+
+        // Extract base64 data without the data:image/jpeg;base64, prefix
+        const base64Data = compressedDataUrl.split(',')[1];
+        resolve(base64Data);
+      };
+
+      img.onerror = () => reject(new Error('Failed to load image'));
+      img.src = imageUrl;
+    });
+  };
 
   const handleGenerateVCard = async () => {
-    const vcard = generateVCardString({
-      firstName,
-      lastName,
-      email,
-      phone,
-      organization,
-    });
-    const url = await generateQRCode(vcard, 300);
-    setQrCodeUrl(url);
+    setIsCompressing(true);
+    try {
+      let photoData: string | undefined;
+
+      // Compress photo if available and user wants to include it
+      if (includePhoto && imageUrl) {
+        photoData = await compressImageForQR(imageUrl);
+      }
+
+      const vcard = generateVCardString({
+        firstName,
+        lastName,
+        email,
+        phone,
+        organization,
+        photo: photoData, // Add photo data
+      });
+
+      const url = await generateQRCode(vcard, 300);
+      setQrCodeUrl(url);
+    } catch (error) {
+      console.error('Error generating vCard with photo:', error);
+      alert('Failed to generate QR code. Try without photo or with a smaller image.');
+    } finally {
+      setIsCompressing(false);
+    }
   };
 
   const handleGenerateURL = async () => {
@@ -164,12 +233,39 @@ export function QRCodeGenerator({ isOpen, onClose, photoImage }: QRCodeGenerator
                 />
               </div>
 
+              {/* Include Photo Option */}
+              {imageUrl && (
+                <div className="bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-xl border border-white/20 p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-lg overflow-hidden border-2 border-white/30">
+                        <img src={imageUrl} alt="Photo preview" className="w-full h-full object-cover" />
+                      </div>
+                      <div>
+                        <Label htmlFor="includePhoto" className="text-white font-medium cursor-pointer">
+                          Include Photo in vCard
+                        </Label>
+                        <p className="text-xs text-white/60">80×80px compressed thumbnail</p>
+                      </div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      id="includePhoto"
+                      checked={includePhoto}
+                      onChange={(e) => setIncludePhoto(e.target.checked)}
+                      className="w-5 h-5 rounded border-white/30 bg-white/10 cursor-pointer"
+                    />
+                  </div>
+                </div>
+              )}
+
               <Button
                 onClick={handleGenerateVCard}
-                className="w-full bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white rounded-xl"
+                disabled={isCompressing}
+                className="w-full bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white rounded-xl disabled:opacity-50"
               >
                 <QrCode className="w-4 h-4 mr-2" />
-                Generate vCard QR Code
+                {isCompressing ? 'Compressing Photo...' : 'Generate vCard QR Code'}
               </Button>
             </TabsContent>
 

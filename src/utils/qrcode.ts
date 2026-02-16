@@ -9,18 +9,27 @@ export interface QRCodeData {
     organization?: string;
     url?: string;
     text?: string;
+    photo?: string; // Base64 encoded photo data
   };
 }
 
 export function generateVCardString(data: QRCodeData['data']): string {
-  return `BEGIN:VCARD
+  let vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:${data.firstName || ''} ${data.lastName || ''}
 N:${data.lastName || ''};${data.firstName || ''};;;
 EMAIL:${data.email || ''}
 TEL:${data.phone || ''}
-ORG:${data.organization || ''}
-END:VCARD`;
+ORG:${data.organization || ''}`;
+
+  // Add photo if provided
+  if (data.photo) {
+    vcard += `\nPHOTO;ENCODING=B;TYPE=JPEG:${data.photo}`;
+  }
+
+  vcard += `\nEND:VCARD`;
+
+  return vcard;
 }
 
 export function generateQRCodeDataURL(text: string, size: number = 200): Promise<string> {
