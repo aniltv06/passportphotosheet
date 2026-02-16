@@ -31,6 +31,8 @@ export interface Translations {
   dragToReposition: string;
   centerPhoto: string;
   zoom: string;
+  zoomIn: string;
+  zoomOut: string;
   rotation: string;
   brightness: string;
   contrast: string;
@@ -151,6 +153,8 @@ export const translations: Record<Language, Translations> = {
     dragToReposition: 'Drag to reposition',
     centerPhoto: 'Center Photo',
     zoom: 'Zoom',
+    zoomIn: 'Zoom In',
+    zoomOut: 'Zoom Out',
     rotation: 'Rotation',
     brightness: 'Brightness',
     contrast: 'Contrast',
@@ -262,6 +266,8 @@ export const translations: Record<Language, Translations> = {
     dragToReposition: 'Arrastra para reposicionar',
     centerPhoto: 'Centrar Foto',
     zoom: 'Zoom',
+    zoomIn: 'Acercar',
+    zoomOut: 'Alejar',
     rotation: 'Rotación',
     brightness: 'Brillo',
     contrast: 'Contraste',
@@ -373,6 +379,8 @@ export const translations: Record<Language, Translations> = {
     dragToReposition: 'Faites glisser pour repositionner',
     centerPhoto: 'Centrer Photo',
     zoom: 'Zoom',
+    zoomIn: 'Agrandir',
+    zoomOut: 'Réduire',
     rotation: 'Rotation',
     brightness: 'Luminosité',
     contrast: 'Contraste',
@@ -484,6 +492,8 @@ export const translations: Record<Language, Translations> = {
     dragToReposition: 'Ziehen zum Neupositionieren',
     centerPhoto: 'Foto Zentrieren',
     zoom: 'Zoom',
+    zoomIn: 'Vergrößern',
+    zoomOut: 'Verkleinern',
     rotation: 'Drehung',
     brightness: 'Helligkeit',
     contrast: 'Kontrast',
@@ -1040,6 +1050,8 @@ export const translations: Record<Language, Translations> = {
     dragToReposition: 'Arraste para reposicionar',
     centerPhoto: 'Centralizar Foto',
     zoom: 'Zoom',
+    zoomIn: 'Ampliar',
+    zoomOut: 'Reduzir',
     rotation: 'Rotação',
     brightness: 'Brilho',
     contrast: 'Contraste',

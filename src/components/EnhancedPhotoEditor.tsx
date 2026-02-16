@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, lazy, Suspense } from 'react';
-import { Upload, ZoomIn, RotateCw, Palette, Download, Lightbulb, ImagePlus, Sun, Contrast, RefreshCw, Keyboard, Move, Sparkles, Grid3x3, Eye, EyeOff, Wand2, QrCode, History as HistoryIcon, Camera as CameraIcon, SplitSquareVertical } from 'lucide-react';
+import { Upload, ZoomIn, ZoomOut, RotateCw, Palette, Download, Lightbulb, ImagePlus, Sun, Contrast, RefreshCw, Keyboard, Move, Sparkles, Grid3x3, Eye, EyeOff, Wand2, QrCode, History as HistoryIcon, Camera as CameraIcon, SplitSquareVertical } from 'lucide-react';
 import { Button } from './ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Slider } from './ui/slider';
@@ -84,6 +84,7 @@ export function EnhancedPhotoEditor({
   const [showTips, setShowTips] = useState(true);
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [gridType, setGridType] = useState<GridType>('center');
   const [showGrid, setShowGrid] = useState(true);
@@ -172,10 +173,11 @@ export function EnhancedPhotoEditor({
 
     // Prevent page scroll when zooming
     e.preventDefault();
+    e.stopPropagation();
 
     // Determine zoom direction and amount
     // deltaY < 0 means scroll up (zoom in), > 0 means scroll down (zoom out)
-    const zoomDelta = e.deltaY > 0 ? -5 : 5; // 5% per scroll for finer control
+    const zoomDelta = e.deltaY > 0 ? -5 : 5; // 5% per scroll for step-based control
 
     // Apply zoom with bounds checking
     setZoom((prevZoom) => {
@@ -188,6 +190,49 @@ export function EnhancedPhotoEditor({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    await processFile(file);
+
+    // Reset the input so the same file can be selected again
+    if (e.target) {
+      e.target.value = '';
+    }
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  // Drag and drop handlers
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith('image/') || file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+        await processFile(file);
+      } else {
+        alert('Please drop an image file (JPG, PNG, HEIC)');
+      }
+    }
+  };
+
+  // Extract file processing logic to reuse for both file input and drag-drop
+  const processFile = async (file: File) => {
     setIsUploading(true);
 
     try {
@@ -197,11 +242,13 @@ export function EnhancedPhotoEditor({
                      file.name.toLowerCase().endsWith('.heic') ||
                      file.name.toLowerCase().endsWith('.heif');
 
-      let processedFile = file;
+      let processedFile: Blob = file;
 
       if (isHEIC) {
-        // Convert HEIC to JPEG - dynamically load heic2any
+        // Dynamically load heic2any only when needed
         const heic2anyModule = await loadHeic2any();
+
+        // Convert HEIC to JPEG
         const convertedBlob = await heic2anyModule({
           blob: file,
           toType: 'image/jpeg',
@@ -223,129 +270,35 @@ export function EnhancedPhotoEditor({
         setIsUploading(false);
         alert('Failed to read image file. Please try again.');
       };
-      reader.readAsDataURL(processedFile as Blob);
+      reader.readAsDataURL(processedFile);
     } catch (error) {
-      console.error('Error processing image:', error);
-      setIsUploading(false);
+      console.error('Failed to process image:', error);
       alert('Failed to process image. Please try a different file.');
-    } finally {
-      // Reset the input so the same file can be selected again
-      if (e.target) {
-        e.target.value = '';
-      }
+      setIsUploading(false);
     }
   };
 
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
+  const handleLoadDemoPhoto = async () => {
+    // Randomly select one of the 9 demo photos
+    const randomIndex = Math.floor(Math.random() * 9) + 1;
+    const demoPhotoPath = `/demos/Demo${randomIndex}.png`;
 
-  const handleLoadDemoPhoto = () => {
-    // Create an anime-style SVG demo photo with white background
-    const svg = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
-        <defs>
-          <linearGradient id="hairGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:#4a5568;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#2d3748;stop-opacity:1" />
-          </linearGradient>
-          <linearGradient id="skinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:#ffe4d6;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#ffd4c1;stop-opacity:1" />
-          </linearGradient>
-          <radialGradient id="eyeShine">
-            <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
-          </radialGradient>
-        </defs>
-        
-        <!-- White Background -->
-        <rect width="400" height="500" fill="#ffffff"/>
-        
-        <!-- Neck -->
-        <rect x="150" y="380" width="100" height="120" fill="url(#skinGrad)" rx="20"/>
-        
-        <!-- Shirt/Collar -->
-        <path d="M 130 450 L 150 420 L 180 410 L 200 405 L 220 410 L 250 420 L 270 450 L 270 500 L 130 500 Z" fill="#3b82f6"/>
-        <path d="M 180 410 L 200 430 L 220 410 Z" fill="#ffffff"/>
-        
-        <!-- Head Base -->
-        <ellipse cx="200" cy="250" rx="85" ry="100" fill="url(#skinGrad)"/>
-        
-        <!-- Ears -->
-        <ellipse cx="135" cy="250" rx="15" ry="25" fill="#ffd4c1"/>
-        <ellipse cx="140" cy="250" rx="8" ry="15" fill="#ffb8a0"/>
-        <ellipse cx="265" cy="250" rx="15" ry="25" fill="#ffd4c1"/>
-        <ellipse cx="260" cy="250" rx="8" ry="15" fill="#ffb8a0"/>
-        
-        <!-- Hair Back -->
-        <ellipse cx="200" cy="170" rx="90" ry="80" fill="url(#hairGrad)"/>
-        
-        <!-- Face Details - Blush -->
-        <ellipse cx="155" cy="270" rx="20" ry="12" fill="#ffb3c1" opacity="0.4"/>
-        <ellipse cx="245" cy="270" rx="20" ry="12" fill="#ffb3c1" opacity="0.4"/>
-        
-        <!-- Eyes (Anime style - large and expressive) -->
-        <!-- Left Eye -->
-        <ellipse cx="170" cy="245" rx="18" ry="24" fill="#1e293b"/>
-        <ellipse cx="170" cy="245" rx="14" ry="20" fill="url(#eyeShine)"/>
-        <circle cx="172" cy="242" r="8" fill="#1e293b"/>
-        <circle cx="175" cy="238" r="5" fill="#ffffff"/>
-        <circle cx="168" cy="248" r="3" fill="#ffffff" opacity="0.8"/>
-        <path d="M 152 230 Q 162 225 175 227" stroke="#2d3748" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <path d="M 152 232 Q 162 228 175 230" stroke="#2d3748" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.3"/>
-        
-        <!-- Right Eye -->
-        <ellipse cx="230" cy="245" rx="18" ry="24" fill="#1e293b"/>
-        <ellipse cx="230" cy="245" rx="14" ry="20" fill="url(#eyeShine)"/>
-        <circle cx="228" cy="242" r="8" fill="#1e293b"/>
-        <circle cx="225" cy="238" r="5" fill="#ffffff"/>
-        <circle cx="232" cy="248" r="3" fill="#ffffff" opacity="0.8"/>
-        <path d="M 225 227 Q 238 225 248 230" stroke="#2d3748" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <path d="M 225 230 Q 238 228 248 232" stroke="#2d3748" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.3"/>
-        
-        <!-- Eyelashes -->
-        <path d="M 155 235 Q 152 228 150 225" stroke="#1e293b" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <path d="M 160 233 Q 158 225 157 220" stroke="#1e293b" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <path d="M 245 235 Q 248 228 250 225" stroke="#1e293b" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <path d="M 240 233 Q 242 225 243 220" stroke="#1e293b" stroke-width="2" fill="none" stroke-linecap="round"/>
-        
-        <!-- Nose (simple anime style) -->
-        <path d="M 200 260 L 197 275" stroke="#ffb8a0" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
-        
-        <!-- Mouth (cute anime smile) -->
-        <path d="M 180 295 Q 200 305 220 295" stroke="#ff6b9d" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <path d="M 185 296 Q 200 302 215 296" fill="#ff6b9d" opacity="0.2"/>
-        
-        <!-- Hair Front Strands -->
-        <path d="M 115 180 Q 110 200 115 240 L 125 245 Q 120 210 125 180 Z" fill="url(#hairGrad)"/>
-        <path d="M 285 180 Q 290 200 285 240 L 275 245 Q 280 210 275 180 Z" fill="url(#hairGrad)"/>
-        <path d="M 150 150 Q 145 180 150 200 L 160 200 Q 157 170 160 150 Z" fill="url(#hairGrad)"/>
-        <path d="M 250 150 Q 255 180 250 200 L 240 200 Q 243 170 240 150 Z" fill="url(#hairGrad)"/>
-        
-        <!-- Hair Bangs -->
-        <ellipse cx="170" cy="180" rx="25" ry="40" fill="url(#hairGrad)"/>
-        <ellipse cx="200" cy="175" rx="25" ry="45" fill="url(#hairGrad)"/>
-        <ellipse cx="230" cy="180" rx="25" ry="40" fill="url(#hairGrad)"/>
-        
-        <!-- Hair highlights -->
-        <ellipse cx="185" cy="160" rx="15" ry="25" fill="#718096" opacity="0.3"/>
-        <ellipse cx="215" cy="160" rx="12" ry="20" fill="#718096" opacity="0.3"/>
-        
-        <!-- Neck shadow -->
-        <ellipse cx="200" cy="350" rx="40" ry="8" fill="#1e293b" opacity="0.05"/>
-      </svg>
-    `;
-    
-    // Convert SVG to data URL
-    const blob = new Blob([svg], { type: 'image/svg+xml' });
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const dataUrl = event.target?.result as string;
-      setUploadedImage(dataUrl);
-      setOriginalImage(dataUrl);
-    };
-    reader.readAsDataURL(blob);
+    try {
+      // Fetch the demo photo
+      const response = await fetch(demoPhotoPath);
+      const blob = await response.blob();
+
+      // Convert to data URL
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string;
+        setUploadedImage(dataUrl);
+        setOriginalImage(dataUrl);
+      };
+      reader.readAsDataURL(blob);
+    } catch (error) {
+      console.error('Error loading demo photo:', error);
+    }
   };
 
   const handleDownloadSingle = () => {
@@ -779,7 +732,12 @@ export function EnhancedPhotoEditor({
 
         {/* Upload Area */}
         <GlassCard delay={0.1}>
-          <div className="p-6">
+          <div
+            className="p-6"
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
                 <ImagePlus className="w-5 h-5 text-white" />
@@ -798,7 +756,11 @@ export function EnhancedPhotoEditor({
                 onClick={handleUploadClick}
                 disabled={isUploading}
                 aria-label={isUploading ? "Processing photo" : (uploadedImage ? "Change uploaded photo" : "Choose photo to upload")}
-                className="w-full h-32 border-2 border-dashed border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-2xl transition-all group text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                className={`w-full h-32 border-2 border-dashed ${
+                  isDragOver
+                    ? 'border-indigo-400 bg-indigo-500/20 scale-105'
+                    : 'border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10'
+                } backdrop-blur-sm rounded-2xl transition-all group text-white disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 <div className="flex flex-col items-center gap-3">
                   <motion.div
@@ -1004,18 +966,65 @@ export function EnhancedPhotoEditor({
               </div>
               <Badge className="bg-white/20 text-white border-white/30 text-xs">🖱️ +/−</Badge>
             </div>
-            <Slider
-              value={[zoom]}
-              onValueChange={(value) => setZoom(value[0])}
-              min={50}
-              max={200}
-              step={1}
-              className="mb-3"
-            />
-            <div className="flex justify-between text-sm">
-              <span className="text-white/60">50%</span>
-              <span className="text-white font-semibold">{zoom}%</span>
-              <span className="text-white/60">200%</span>
+
+            {/* Step-based Zoom Buttons */}
+            <div className="flex items-center gap-2 mb-4">
+              <Button
+                onClick={() => setZoom(Math.max(50, zoom - 5))}
+                disabled={zoom <= 50}
+                className="flex-1 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ZoomOut className="w-4 h-4 mr-2" />
+                {t.zoomOut || 'Zoom Out'}
+              </Button>
+              <div className="px-4 py-2 bg-white/10 rounded-xl border border-white/20 min-w-[80px] text-center">
+                <span className="text-white font-semibold text-lg">{zoom}%</span>
+              </div>
+              <Button
+                onClick={() => setZoom(Math.min(200, zoom + 5))}
+                disabled={zoom >= 200}
+                className="flex-1 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ZoomIn className="w-4 h-4 mr-2" />
+                {t.zoomIn || 'Zoom In'}
+              </Button>
+            </div>
+
+            {/* Preset Zoom Levels */}
+            <div className="grid grid-cols-6 gap-2 mb-4">
+              {[50, 75, 100, 125, 150, 200].map((presetZoom) => (
+                <button
+                  key={presetZoom}
+                  onClick={() => setZoom(presetZoom)}
+                  className={`px-2 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                    zoom === presetZoom
+                      ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white shadow-lg scale-105'
+                      : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white border border-white/20'
+                  }`}
+                >
+                  {presetZoom}%
+                </button>
+              ))}
+            </div>
+
+            {/* Fine-tune Slider */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs text-white/60">
+                <span>Fine-tune</span>
+                <span>Drag slider for precise control</span>
+              </div>
+              <Slider
+                value={[zoom]}
+                onValueChange={(value) => setZoom(value[0])}
+                min={50}
+                max={200}
+                step={5}
+                className="mb-2"
+              />
+              <div className="flex justify-between text-xs text-white/60">
+                <span>50%</span>
+                <span>200%</span>
+              </div>
             </div>
           </div>
         </GlassCard>
@@ -1302,18 +1311,33 @@ export function EnhancedPhotoEditor({
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-center text-white/60 relative z-10"
+                  onClick={handleUploadClick}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  className={`text-center text-white/60 relative z-10 cursor-pointer transition-all duration-300 ${
+                    isDragOver ? 'scale-105' : 'hover:scale-102'
+                  }`}
                 >
                   <motion.div
                     animate={{ y: [0, -10, 0] }}
                     transition={{ duration: 2, repeat: Infinity }}
                   >
-                    <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-indigo-400/20 to-purple-500/20 rounded-3xl flex items-center justify-center backdrop-blur-sm border border-white/20">
-                      <Upload className="w-16 h-16 text-white/40" />
+                    <div className={`w-32 h-32 mx-auto mb-6 rounded-3xl flex items-center justify-center backdrop-blur-sm transition-all duration-300 ${
+                      isDragOver
+                        ? 'bg-gradient-to-br from-indigo-400/40 to-purple-500/40 border-2 border-indigo-400'
+                        : 'bg-gradient-to-br from-indigo-400/20 to-purple-500/20 border border-white/20'
+                    }`}>
+                      <Upload className={`w-16 h-16 transition-colors duration-300 ${
+                        isDragOver ? 'text-indigo-300' : 'text-white/40'
+                      }`} />
                     </div>
                   </motion.div>
                   <p className="text-xl mb-2 text-white">{t.uploadToStart}</p>
                   <p className="text-sm text-white/50">{t.supportedFormats}</p>
+                  {isDragOver && (
+                    <p className="text-sm text-indigo-300 mt-4 font-semibold animate-pulse">Drop your photo here</p>
+                  )}
                 </motion.div>
               )}
             </div>

@@ -11,7 +11,7 @@ import { SettingsModal } from './components/SettingsModal';
 import { HelpModal } from './components/HelpModal';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { ThemeProvider, useTheme, themes } from './contexts/ThemeContext';
-import { Camera, Stars, Settings, HelpCircle } from 'lucide-react';
+import { Camera, Stars, Settings, HelpCircle, Coffee, Linkedin } from 'lucide-react';
 import { Button } from './components/ui/button';
 
 function AppContent() {
@@ -196,7 +196,7 @@ function AppContent() {
                 animate={{ opacity: 1, x: 0 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                href="https://buymeacoffee.com/yourhandle"
+                href="https://buymeacoffee.com/NishithaAnil"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hidden lg:flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-gray-900 rounded-2xl transition-all duration-200 shadow-2xl hover:shadow-amber-500/50"
@@ -345,10 +345,30 @@ function AppContent() {
               </a>
               <span className="text-white/30">•</span>
               <a
-                href="mailto:support@passportphotomaker.com"
+                href="https://buymeacoffee.com/NishithaAnil"
+                className="text-white/70 hover:text-white transition-colors duration-200 inline-flex items-center gap-1"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Coffee className="w-3.5 h-3.5" />
+                Support
+              </a>
+              <span className="text-white/30">•</span>
+              <a
+                href="mailto:nishitha.1190@gmail.com"
                 className="text-white/70 hover:text-white transition-colors duration-200"
               >
                 Contact Us
+              </a>
+              <span className="text-white/30">•</span>
+              <a
+                href="https://www.linkedin.com/in/nishitha-anil/"
+                className="text-white/70 hover:text-white transition-colors duration-200 inline-flex items-center gap-1"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Linkedin className="w-3.5 h-3.5" />
+                LinkedIn
               </a>
             </div>
             <p className="text-white/50 text-xs sm:text-sm">

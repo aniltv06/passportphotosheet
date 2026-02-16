@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>500 - Server Error | Passport Photo Maker</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: white;
+    }
+
+    .container {
+      max-width: 600px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      padding: 60px 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .error-code {
+      font-size: 120px;
+      font-weight: bold;
+      line-height: 1;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 18px;
+      margin-bottom: 32px;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 16px 40px;
+      background: white;
+      color: #f5576c;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 30px;
+      opacity: 0.9;
+    }
+
+    .redirect-info {
+      margin-top: 24px;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <path d="M12 8v4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="12" cy="16" r="0.5" fill="white" stroke="white" stroke-width="1"/>
+    </svg>
+
+    <div class="error-code">500</div>
+    <h1>Server Error</h1>
+    <p>
+      Oops! Something went wrong on our end.
+      Our team has been notified and we're working to fix it.
+    </p>
+    <a href="/" class="btn">Go to Homepage</a>
+    <p class="redirect-info">
+      You'll be automatically redirected in <span id="countdown">5</span> seconds...
+    </p>
+  </div>
+
+  <script>
+    // Redirect to homepage after 5 seconds
+    let seconds = 5;
+    const countdownEl = document.getElementById('countdown');
+
+    const interval = setInterval(() => {
+      seconds--;
+      if (countdownEl) {
+        countdownEl.textContent = seconds;
+      }
+
+      if (seconds <= 0) {
+        clearInterval(interval);
+        window.location.href = '/';
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

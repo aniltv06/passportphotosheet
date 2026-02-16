@@ -159,7 +159,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
               If you're still having issues or have questions, feel free to reach out for support.
             </p>
             <a
-              href="mailto:support@passportphotomaker.com"
+              href="mailto:nishitha.1190@gmail.com"
               className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl transition-all"
             >
               {t.contactSupport}

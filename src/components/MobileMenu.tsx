@@ -72,7 +72,7 @@ export function MobileMenu() {
 
                 <div className="pt-4 mt-4 border-t border-gray-200">
                   <a
-                    href="https://buymeacoffee.com/yourhandle"
+                    href="https://buymeacoffee.com/NishithaAnil"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-2 px-4 py-3 bg-amber-400 hover:bg-amber-500 text-gray-900 rounded-lg transition-all duration-200 shadow-sm"

@@ -49,7 +49,7 @@ export function SupportBanner() {
 
             <div className="flex gap-3">
               <a
-                href="https://buymeacoffee.com/yourhandle"
+                href="https://buymeacoffee.com/NishithaAnil"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-orange-600 rounded-xl hover:bg-orange-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
